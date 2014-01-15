@@ -1,0 +1,1 @@
+$.example.config.templates.forms = { }
