@@ -102,8 +102,9 @@ function abstractTemplate(config) {
 }
 abstractTemplate.prototype = {
     $localization: function(key) { return this._config.localization[key]; },
-    $forms: function(key) { return this._config.forms[key]; },
-    $views: function(key) { return this._config.views[key]; },
+    $config: function(key) { return ($.exists(key)) ? this._config[key] : this._config; },
+    $forms: function(key) { return ($.exists(key)) ? this._config.forms[key] : this._config.forms; },
+    $views: function(key) { return ($.exists(key)) ? this._config.views[key] : this._config.views; },
     $render: function(template, data) { return $.str.render(template, data); },
     $renderList: function(template, dataList) {
         var rendering = "";
@@ -125,15 +126,20 @@ abstractTemplate.prototype = {
 };
 $.ku4webApp.abstractTemplate = abstractTemplate;
 
-function abstractView(mediator, responsebox, templateFactory) {
+function abstractView(mediator, responsebox, templateFactory, formFactory) {
     this._mediator = mediator;
     this._responsebox = responsebox;
     this._templateFactory = templateFactory;
+    this._formFactory = formFactory;
 }
 abstractView.prototype = {
     $mediator: function() { return this._mediator; },
     $responsebox: function() { return this._responsebox; },
-    $template: function(key) { return this._templateFactory.create(key); }
+    $template: function(key) { return this._templateFactory.create(key); },
+    $write: function(key, data) {
+        var dto = ($.exists(data.find)) ? data : $.dto(data);
+        return this._formFactory.create(key).write(dto);
+    }
 };
 $.ku4webApp.abstractView = abstractView;
 
@@ -172,6 +178,7 @@ service.prototype = {
             mediator = this._mediator;
         $.service()[config.verb]().uri(config.uri)
             .onSuccess(function(datagram){
+                var response = $.dto.parseJson(datagram).toObject();
                 if (response.isError) mediator.notify(response, config.error);
                 else mediator.notify(response.data, config.success);
             }, this)
@@ -199,15 +206,15 @@ $.ku4webApp.template = function(name, proto) {
 
 $.ku4webApp.view = function(name, proto, subscriptions) {
 
-    function view(mediator, responsebox, templateFactory) {
-        view.base.call(this, mediator, responsebox, templateFactory);
+    function view(mediator, responsebox, templateFactory, formFactory) {
+        view.base.call(this, mediator, responsebox, templateFactory, formFactory);
     }
     view.prototype = proto;
     $.Class.extend(view, abstractView);
 
     $.ku4webApp.views[name] = function(app) {
         var mediator = app.mediator,
-            _view = new view(mediator, app.responsebox, app.templateFactory);
+            _view = new view(mediator, app.responsebox, app.templateFactory, app.formFactory);
         if($.exists(subscriptions))
             $.hash(subscriptions).each(function(obj) {
                 mediator.subscribe(obj.key, _view[obj.value], _view);

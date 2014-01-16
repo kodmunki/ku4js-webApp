@@ -8,6 +8,7 @@ service.prototype = {
             mediator = this._mediator;
         $.service()[config.verb]().uri(config.uri)
             .onSuccess(function(datagram){
+                var response = $.dto.parseJson(datagram).toObject();
                 if (response.isError) mediator.notify(response, config.error);
                 else mediator.notify(response.data, config.success);
             }, this)
