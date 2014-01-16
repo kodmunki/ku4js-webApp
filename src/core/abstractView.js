@@ -10,6 +10,6 @@ abstractView.prototype = {
     },
     $mediator: function() { return this._mediator; },
     $responsebox: function() { return this._responsebox; },
-    $templateFactory: function() { return this._templateFactory; }
+    $template: function(key) { return this._templateFactory.create(key); }
 };
 $.ku4webApp.abstractView = abstractView;

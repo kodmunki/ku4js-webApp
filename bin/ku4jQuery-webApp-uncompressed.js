@@ -88,7 +88,12 @@ abstractController.prototype = {
         return validator.validate(form);
     },
     $read: function(key) { return this._formFactory.create(key).read(); },
-    $clear: function(key) { this._formFactory.create(key).clear(); return this;}
+    $clear: function(key) { this._formFactory.create(key).clear(); return this;},
+    $notify: function() {
+        var mediator = this._mediator;
+        mediator.notify.apply(mediator, arguments);
+        return this;
+    }
 };
 $.ku4webApp.abstractController = abstractController;
 
@@ -131,7 +136,7 @@ abstractView.prototype = {
     },
     $mediator: function() { return this._mediator; },
     $responsebox: function() { return this._responsebox; },
-    $templateFactory: function() { return this._templateFactory; }
+    $template: function(key) { return this._templateFactory.create(key); }
 };
 $.ku4webApp.abstractView = abstractView;
 
@@ -166,14 +171,14 @@ function service(mediator, config) {
 }
 service.prototype = {
     call: function(params) {
-        var config = this._config;
+        var config = this._config,
+            mediator = this._mediator;
         $.service()[config.verb]().uri(config.uri)
             .onSuccess(function(datagram){
-                var response = $.dto.parseJson(datagram).toObject();
-                if (response.isError) this._mediator.notify(response, config.error);
-                else this._mediator.notify(response.data, config.success);
+                if (response.isError) mediator.notify(response, config.error);
+                else mediator.notify(response.data, config.success);
             }, this)
-            .onError(function(data){ this._mediator.notify(data, config.error); }, this)
+            .onError(function(data){ mediator.notify(data, config.error); }, this)
             .call(params);
         return this;
     }

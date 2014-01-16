@@ -13,6 +13,11 @@ abstractController.prototype = {
         return validator.validate(form);
     },
     $read: function(key) { return this._formFactory.create(key).read(); },
-    $clear: function(key) { this._formFactory.create(key).clear(); return this;}
+    $clear: function(key) { this._formFactory.create(key).clear(); return this;},
+    $notify: function() {
+        var mediator = this._mediator;
+        mediator.notify.apply(mediator, arguments);
+        return this;
+    }
 };
 $.ku4webApp.abstractController = abstractController;

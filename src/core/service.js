@@ -4,14 +4,14 @@ function service(mediator, config) {
 }
 service.prototype = {
     call: function(params) {
-        var config = this._config;
+        var config = this._config,
+            mediator = this._mediator;
         $.service()[config.verb]().uri(config.uri)
             .onSuccess(function(datagram){
-                var response = $.dto.parseJson(datagram).toObject();
-                if (response.isError) this._mediator.notify(response, config.error);
-                else this._mediator.notify(response.data, config.success);
+                if (response.isError) mediator.notify(response, config.error);
+                else mediator.notify(response.data, config.success);
             }, this)
-            .onError(function(data){ this._mediator.notify(data, config.error); }, this)
+            .onError(function(data){ mediator.notify(data, config.error); }, this)
             .call(params);
         return this;
     }
