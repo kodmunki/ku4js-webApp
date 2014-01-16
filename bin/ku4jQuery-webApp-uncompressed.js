@@ -134,8 +134,9 @@ function abstractView(mediator, responsebox, templateFactory, formFactory) {
 }
 abstractView.prototype = {
     $mediator: function() { return this._mediator; },
-    $responsebox: function() { return this._responsebox; },
     $template: function(key) { return this._templateFactory.create(key); },
+    $show: function(html) { this._responsebox.show(html); },
+    $hide: function() { this._responsebox.hide(); },
     $write: function(key, data) {
         var dto = ($.exists(data.find)) ? data : $.dto(data);
         return this._formFactory.create(key).write(dto);
