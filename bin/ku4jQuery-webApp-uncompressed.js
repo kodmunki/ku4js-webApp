@@ -1,5 +1,12 @@
 (function(l){ $=l;
-$.ku4webApp = { };
+$.ku4webApp = {
+    config: {
+        templates: { }
+    },
+    templates: { },
+    controllers: { },
+    views: { }
+};
 
 function form(config) {
     form.base.call(this);
@@ -66,49 +73,31 @@ $.ku4webApp.validator = function(config) {
     return new formValidator(config);
 };
 
-/* serviceFactory must create services of type $.service
- * formFactory must create forms of type $.form
- */
-
-function abstractController(mediator, serviceFactory, formFactory) {
+function abstractController(mediator, serviceFactory, formFactory, validatorFactory) {
     this._mediator = mediator;
     this._serviceFactory = serviceFactory;
     this._formFactory = formFactory;
+    this._validatorFactory = validatorFactory;
 }
 abstractController.prototype = {
     $mediator: function() { return this._mediator; },
-    $serviceFactory: function() { return this._serviceFactory; },
-    $formFactory: function() { return this._formFactory; }
+    $service: function(name) { return this._serviceFactory.create(name); },
+    $validate: function(key) {
+        var form = this._formFactory.create(key),
+            validator = this._validatorFactory.create(key);
+        return validator.validate(form);
+    },
+    $read: function(key) { return this._formFactory.create(key).read(); },
+    $clear: function(key) { this._formFactory.create(key).clear(); return this;}
 };
-$.ku4webApp.controller = abstractController;
+$.ku4webApp.abstractController = abstractController;
 
-/* config must follow format: { action: "/service/url" }
- */
-
-function abstractService(mediator, config) {
-    this._mediator = mediator;
+function abstractTemplate(config) {
     this._config = config;
 }
-abstractService.prototype = {
-    $call: function(verb, action, success, params) {
-        $.service()[verb]().uri(this._config[action])
-            .onSuccess(function(datagram){
-                var response = $.dto.parseJson(datagram).toObject();
-                if (response.isError) this._mediator.notify(response, "error");
-                else this._mediator.notify(response.data, success);
-            }, this)
-            .onError(function(data){ this._mediator.notify(data, "error"); }, this)
-            .call(params);
-        return this;
-    }
-};
-$.ku4webApp.service = abstractService;
-
-function abstractTemplate(templates) {
-    this._templates = templates;
-}
 abstractTemplate.prototype = {
-    $templates: function() { return this._templates; },
+    $forms: function(key) { return this._config.forms[key]; },
+    $views: function(key) { return this._config.views[key]; },
     $render: function(template, data) { return $.str.render(template, data); },
     $renderList: function(template, dataList) {
         var rendering = "";
@@ -128,11 +117,7 @@ abstractTemplate.prototype = {
         return rendering;
     }
 };
-$.ku4webApp.template = abstractTemplate;
-
-/* responsebox must implement interface: show(html) hide()
- * templateFactory must create classes that inherit from baseTemplate
- */
+$.ku4webApp.abstractTemplate = abstractTemplate;
 
 function abstractView(mediator, responsebox, templateFactory) {
     this._mediator = mediator;
@@ -140,30 +125,136 @@ function abstractView(mediator, responsebox, templateFactory) {
     this._templateFactory = templateFactory;
 }
 abstractView.prototype = {
+    subscribe: function(observer, action) {
+        this._mediator.subscribe(observer, this[action], this);
+        return this;
+    },
     $mediator: function() { return this._mediator; },
     $responsebox: function() { return this._responsebox; },
     $templateFactory: function() { return this._templateFactory; }
 };
-$.ku4webApp.view = abstractView;
+$.ku4webApp.abstractView = abstractView;
 
-function abstractFormFactory(config) {
-    this._config = config;
+function app() {
+    var app = $.ku4webApp;
+    this.mediator = $.mediator();
+    this.serviceFactory = app.serviceFactory(this.mediator, app.config.services);
+    this.templateFactory = app.templateFactory(app.config.templates);
+    this.formFactory = app.formFactory(app.config.forms);
+    this.validatorFactory = app.validatorFactory(app.config.validators);
+    this.responsebox = app.responsebox(".ku4webApp-responsebox");
 }
-abstractFormFactory.prototype = {
-    $create: function(configKey) {
-        return $.ku4webApp.form(this._config[configKey]);
-    }
-};
-$.ku4webApp.formFactory = abstractFormFactory;
 
-function abstractServiceFactory(mediator, config) {
+$.ku4webApp.app = function() { return new app(); }
+
+$.ku4webApp.controller = function(name, proto) {
+
+    function controller(mediator, serviceFactory, formFactory, validatorFactory) {
+        controller.base.call(this, mediator, serviceFactory, formFactory, validatorFactory);
+    }
+    controller.prototype = proto;
+    $.Class.extend(controller, abstractController);
+
+    $.ku4webApp.controllers[name] = function(app) {
+        return new controller(app.mediator, app.serviceFactory, app.formFactory, app.validatorFactory);
+    }
+}
+
+function service(mediator, config) {
     this._mediator = mediator;
     this._config = config;
 }
-abstractServiceFactory.prototype = {
-    $mediator: function() { return this._mediator; },
-    $config: function() { return this._config; }
+service.prototype = {
+    call: function(params) {
+        var config = this._config;
+        $.service()[config.verb]().uri(config.uri)
+            .onSuccess(function(datagram){
+                var response = $.dto.parseJson(datagram).toObject();
+                if (response.isError) this._mediator.notify(response, config.error);
+                else this._mediator.notify(response.data, config.success);
+            }, this)
+            .onError(function(data){ this._mediator.notify(data, config.error); }, this)
+            .call(params);
+        return this;
+    }
+};
+$.ku4webApp.service = function(mediator, config) {
+    return new service(mediator, config);
+};
+
+$.ku4webApp.template = function(name, proto) {
+
+    function template(config) {
+        template.base.call(this, config);
+    }
+    template.prototype = proto;
+    $.Class.extend(template, abstractTemplate);
+
+    $.ku4webApp.templates[name] = function(config) {
+        return new template(config);
+    }
 }
-$.ku4webApp.serviceFactory = abstractServiceFactory;
+
+$.ku4webApp.view = function(name, proto, subscriptions) {
+
+    function view(mediator, responsebox, templateFactory) {
+        view.base.call(this, mediator, responsebox, templateFactory);
+    }
+    view.prototype = proto;
+    $.Class.extend(view, abstractView);
+
+    $.ku4webApp.views[name] = function(app) {
+        var mediator = app.mediator,
+            _view = new view(mediator, app.responsebox, app.templateFactory);
+        if($.exists(subscriptions))
+            $.hash(subscriptions).each(function(obj) {
+                mediator.subscribe(obj.key, _view[obj.value], _view);
+            });
+        return _view;
+    }
+}
+
+function formFactory(config) {
+    this._config = config;
+}
+formFactory.prototype = {
+    create: function(key) {
+        return $.ku4webApp.form(this._config[key]);
+    }
+};
+$.ku4webApp.formFactory = function(config) {
+    return new formFactory(config);
+};
+
+function serviceFactory(mediator, config) {
+    this._mediator = mediator;
+    this._config = config;
+}
+serviceFactory.prototype = {
+    create: function(key) { return $.ku4webApp.service(this._mediator, this._config[key]); }
+}
+$.ku4webApp.serviceFactory = function(mediator, config) {
+    return new serviceFactory(mediator, config);
+};
+
+function templateFactory(config) {
+    this._config = config;
+}
+templateFactory.prototype = {
+    create: function (name){ return $.ku4webApp.templates[name](this._config); }
+};
+$.ku4webApp.templateFactory = function(templates) {
+    return new templateFactory(templates);
+};
+
+function validatorFactory(config) {
+    this._config = config;
+}
+validatorFactory.prototype = {
+    create: function(key) { return $.ku4webApp.validator(this._config[key]); }
+};
+$.ku4webApp.validatorFactory = function(config) {
+    return new validatorFactory(config);
+};
 
 })(jQuery);

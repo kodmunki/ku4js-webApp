@@ -1,8 +1,9 @@
-function abstractTemplate(templates) {
-    this._templates = templates;
+function abstractTemplate(config) {
+    this._config = config;
 }
 abstractTemplate.prototype = {
-    $templates: function() { return this._templates; },
+    $forms: function(key) { return this._config.forms[key]; },
+    $views: function(key) { return this._config.views[key]; },
     $render: function(template, data) { return $.str.render(template, data); },
     $renderList: function(template, dataList) {
         var rendering = "";
@@ -22,4 +23,4 @@ abstractTemplate.prototype = {
         return rendering;
     }
 };
-$.ku4webApp.template = abstractTemplate;
+$.ku4webApp.abstractTemplate = abstractTemplate;

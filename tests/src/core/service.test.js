@@ -2,12 +2,9 @@ $(function() {
 
     module("$.ku4webApp.service");
 
-    var mediator = $.mediator(),
-        config;
-
     test("new", function() {
         expect(1);
-        ok($.tests.stubs.service(mediator, config));
+        ok($.ku4webApp.service($.mediator(), $.ku4webApp.config.services.test));
     });
 
 });

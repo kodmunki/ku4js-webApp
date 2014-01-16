@@ -1,4 +1,4 @@
-$.tests.config.validators = {
+$.ku4webApp.config.validators = {
     test: [
         {
             name: "alpha",

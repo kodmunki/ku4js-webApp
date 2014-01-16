@@ -2,16 +2,14 @@ $(function() {
 
     module("$.ku4webApp.formFactory");
 
-    var config = $.tests.config.forms;
-
     test("new", function() {
         expect(1);
-        ok($.tests.stubs.formFactory(config));
+        ok($.ku4webApp.formFactory($.ku4webApp.config.forms));
     });
 
     test("create", function() {
-        var formFactory = $.tests.stubs.formFactory(config),
-            form = formFactory.create(),
+        var formFactory = $.ku4webApp.formFactory($.ku4webApp.config.forms),
+            form = formFactory.create("test"),
             data = form.read().toObject();
         expect(0);
     });

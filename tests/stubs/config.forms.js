@@ -1,4 +1,4 @@
-$.tests.config.forms = {
+$.ku4webApp.config.forms = {
     test: [
         {
             selector: ".js-test-alpha",
@@ -45,7 +45,7 @@ $.tests.config.forms = {
         {
             selector: ".js-test-checkbox",
             type: "checkbox",
-            spec: $.spec(function(value){ console.log("value", value); return !$.isNullOrEmpty(value); }),
+            spec: $.spec(function(value){ return !$.isNullOrEmpty(value); }),
             required:true
         }
     ]
