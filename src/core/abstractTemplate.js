@@ -2,6 +2,7 @@ function abstractTemplate(config) {
     this._config = config;
 }
 abstractTemplate.prototype = {
+    $localization: function(key) { return this._config.localization[key]; },
     $forms: function(key) { return this._config.forms[key]; },
     $views: function(key) { return this._config.views[key]; },
     $render: function(template, data) { return $.str.render(template, data); },
