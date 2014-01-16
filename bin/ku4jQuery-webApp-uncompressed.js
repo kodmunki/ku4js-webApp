@@ -87,7 +87,7 @@ abstractController.prototype = {
             validator = this._validatorFactory.create(key);
         return validator.validate(form);
     },
-    $read: function(key) { return this._formFactory.create(key).read(); },
+    $read: function(key) { return this._formFactory.create(key).read().toQueryString(); },
     $clear: function(key) { this._formFactory.create(key).clear(); return this;},
     $notify: function() {
         var mediator = this._mediator;
@@ -131,10 +131,6 @@ function abstractView(mediator, responsebox, templateFactory) {
     this._templateFactory = templateFactory;
 }
 abstractView.prototype = {
-    subscribe: function(observer, action) {
-        this._mediator.subscribe(observer, this[action], this);
-        return this;
-    },
     $mediator: function() { return this._mediator; },
     $responsebox: function() { return this._responsebox; },
     $template: function(key) { return this._templateFactory.create(key); }

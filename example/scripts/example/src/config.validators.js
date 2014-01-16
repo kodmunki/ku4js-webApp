@@ -2,7 +2,7 @@ $.ku4webApp.config.validators = {
     example: [
         {
             name: "username",
-            message: "Username is invalid."
+            message: "Username is Jacob."
         },
         {
             name: "password",

@@ -22,6 +22,15 @@ $.ku4webApp.template("example", {
     }
 });
 
+$.ku4webApp.view("validator", {
+    showValidation: function() {
+        console.log("Create tooltips and display them.")
+    }
+},
+{
+    "accountInvalid": "showValidation"
+});
+
 $.ku4webApp.view("example", {
     accountFormRequested: function() {
         var template = this.$template("example");
@@ -151,7 +160,7 @@ $.ku4webApp.config.validators = {
     example: [
         {
             name: "username",
-            message: "Username is invalid."
+            message: "Username is Jacob."
         },
         {
             name: "password",
