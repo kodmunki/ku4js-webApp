@@ -6,9 +6,10 @@ service.prototype = {
     call: function(dto) {
         var config = this._config,
             mediator = this._mediator,
-            params = ($.exists(dto.toQueryString))
-                ? dto.toQueryString()
-                : $.dto(dto).toQueryString;
+            params = (!$.exists(dto)) ? "" :
+                ($.exists(dto.toQueryString))
+                    ? dto.toQueryString()
+                    : $.dto(dto).toQueryString();
 
         $.service()[config.verb]().uri(config.uri)
             .onSuccess(function(datagram){
