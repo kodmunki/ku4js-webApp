@@ -1,7 +1,8 @@
 $.ku4webApp.view("example", {
-    accountFormRequested: function() {
+    accountFormRequested: function(data) {
         var template = this.$template("example");
-        this.$responsebox().show(template.renderForm());
+        this.$show(template.renderForm());
+        this.$write("example", data);
     },
     accountCreated: function(data) {
         $(".js-validationMessages").html("Account created");
@@ -11,7 +12,7 @@ $.ku4webApp.view("example", {
         $(".js-validationMessages").html(template.renderValidation(data.messages));
     },
     createAccountCanceled: function(data) {
-        this.$responsebox().hide();
+        this.$hide();
     }
 },
 {

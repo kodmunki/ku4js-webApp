@@ -1,12 +1,13 @@
 (function(l){ $=l;
 $.ku4webApp.controller("example", {
     requestForm: function() {
-        this.$notify("accountFormRequested");
+        var account = this.$store().read("example")[0];
+        this.$notify(account, "accountFormRequested");
     },
     create: function() {
         var validation = this.$validate("example");
         if(!validation.isValid) this.$notify(validation, "accountInvalid");
-        else this.$notify("accountCreated");
+        else this.$store().create("example", this.$read("example"));
     },
     cancel: function() {
         this.$notify("createAccountCanceled");
@@ -14,27 +15,19 @@ $.ku4webApp.controller("example", {
 });
 
 $.ku4webApp.template("example", {
-    renderForm: function(data) {
-        return this.$render(this.$forms("example"), data);
+    renderForm: function() {
+        return this.$render(this.$forms("example"));
     },
     renderValidation: function(data) {
         return this.$render(this.$views("example"), data);
     }
 });
 
-$.ku4webApp.view("validator", {
-    showValidation: function() {
-        console.log("Create tooltips and display them.")
-    }
-},
-{
-    "accountInvalid": "showValidation"
-});
-
 $.ku4webApp.view("example", {
-    accountFormRequested: function() {
+    accountFormRequested: function(data) {
         var template = this.$template("example");
-        this.$responsebox().show(template.renderForm());
+        this.$show(template.renderForm());
+        this.$write("example", data);
     },
     accountCreated: function(data) {
         $(".js-validationMessages").html("Account created");
@@ -44,7 +37,7 @@ $.ku4webApp.view("example", {
         $(".js-validationMessages").html(template.renderValidation(data.messages));
     },
     createAccountCanceled: function(data) {
-        this.$responsebox().hide();
+        this.$hide();
     }
 },
 {
@@ -100,6 +93,16 @@ $.ku4webApp.config.services = {
         uri: "./response.json",
         success: "exampleSuccess",
         error: "exampleError"
+    }
+}
+
+$.ku4webApp.config.store = {
+    example: {
+        collection: "example",
+        create: "accountCreated",
+        read: "accountRead",
+        update: "accountUpdated",
+        remove: "accountRemoved"
     }
 }
 
