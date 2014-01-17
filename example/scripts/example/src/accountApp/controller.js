@@ -1,7 +1,6 @@
 $.ku4webApp.controller("example", {
     requestForm: function() {
-        var account = this.$store().read("example")[0];
-        this.$notify(account, "accountFormRequested");
+        this.$notify("accountFormRequested");
     },
     create: function() {
         var validation = this.$validate("example");
@@ -10,5 +9,9 @@ $.ku4webApp.controller("example", {
     },
     cancel: function() {
         this.$notify("createAccountCanceled");
+    },
+    listAccounts: function() {
+        var accounts = this.$store().read("example");
+        this.$notify(accounts, "accountsListed");
     }
 });

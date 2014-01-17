@@ -35,8 +35,8 @@ $.ku4webApp.config.templates.forms = {
              '<option value="3">I stumbled onto it.</option></optgroup></select>' +
              '</div>' +
 
-             '<a href="#" onclick=\"controller.create(); return false;\">Create Account</button>' +
-             '<a href="#" onclick=\"controller.cancel(); return false;\">Clear</button>' +
+             '<button href="#" onclick=\"controller.create(); return false;\">Create Account</button>' +
+             '<button href="#" onclick=\"controller.cancel(); return false;\">Cancel</button>' +
 
              '</form>'
 }

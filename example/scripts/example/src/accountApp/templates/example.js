@@ -4,5 +4,8 @@ $.ku4webApp.template("example", {
     },
     renderValidation: function(data) {
         return this.$render(this.$views("example"), data);
+    },
+    renderAccountList: function(data) {
+        return this.$renderList(this.$views("account"), data)
     }
 });

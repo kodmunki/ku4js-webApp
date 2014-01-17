@@ -1,8 +1,7 @@
 (function(l){ $=l;
 $.ku4webApp.controller("example", {
     requestForm: function() {
-        var account = this.$store().read("example")[0];
-        this.$notify(account, "accountFormRequested");
+        this.$notify("accountFormRequested");
     },
     create: function() {
         var validation = this.$validate("example");
@@ -11,6 +10,10 @@ $.ku4webApp.controller("example", {
     },
     cancel: function() {
         this.$notify("createAccountCanceled");
+    },
+    listAccounts: function() {
+        var accounts = this.$store().read("example");
+        this.$notify(accounts, "accountsListed");
     }
 });
 
@@ -20,6 +23,9 @@ $.ku4webApp.template("example", {
     },
     renderValidation: function(data) {
         return this.$render(this.$views("example"), data);
+    },
+    renderAccountList: function(data) {
+        return this.$renderList(this.$views("account"), data)
     }
 });
 
@@ -38,13 +44,18 @@ $.ku4webApp.view("example", {
     },
     createAccountCanceled: function(data) {
         this.$hide();
+    },
+    accountsListed: function(data) {
+        var template = this.$template("example");
+        $(".js-accountList").html(template.renderAccountList(data));
     }
 },
 {
     "accountFormRequested": "accountFormRequested",
     "accountCreated": "accountCreated",
     "accountInvalid": "accountInvalid",
-    "createAccountCanceled": "createAccountCanceled"
+    "createAccountCanceled": "createAccountCanceled",
+    "accountsListed": "accountsListed"
 });
 
 $.ku4webApp.config.forms = {
@@ -143,8 +154,8 @@ $.ku4webApp.config.templates.forms = {
              '<option value="3">I stumbled onto it.</option></optgroup></select>' +
              '</div>' +
 
-             '<a href="#" onclick=\"controller.create(); return false;\">Create Account</button>' +
-             '<a href="#" onclick=\"controller.cancel(); return false;\">Clear</button>' +
+             '<button href="#" onclick=\"controller.create(); return false;\">Create Account</button>' +
+             '<button href="#" onclick=\"controller.cancel(); return false;\">Cancel</button>' +
 
              '</form>'
 }
@@ -156,7 +167,18 @@ $.ku4webApp.config.templates.views = {
              '<li class="css-example-error">{{firstName}}</li>' +
              '<li class="css-example-error">{{lastName}}</li>' +
              '<li class="css-example-error">{{email}}</li>' +
-             '</ul>'
+             '</ul>',
+
+    account: '<div>' +
+                '<div><h4>Account Data</h4></div>' +
+                '<ul class="css-example-error">' +
+                 '<li class="css-example-error">{{username}}</li>' +
+                 '<li class="css-example-error">{{password}}</li>' +
+                 '<li class="css-example-error">{{firstName}}</li>' +
+                 '<li class="css-example-error">{{lastName}}</li>' +
+                 '<li class="css-example-error">{{email}}</li>' +
+             '</ul>' +
+             '</div>'
 }
 
 $.ku4webApp.config.validators = {

@@ -13,11 +13,16 @@ $.ku4webApp.view("example", {
     },
     createAccountCanceled: function(data) {
         this.$hide();
+    },
+    accountsListed: function(data) {
+        var template = this.$template("example");
+        $(".js-accountList").html(template.renderAccountList(data));
     }
 },
 {
     "accountFormRequested": "accountFormRequested",
     "accountCreated": "accountCreated",
     "accountInvalid": "accountInvalid",
-    "createAccountCanceled": "createAccountCanceled"
+    "createAccountCanceled": "createAccountCanceled",
+    "accountsListed": "accountsListed"
 });
