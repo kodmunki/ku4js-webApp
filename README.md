@@ -7,9 +7,9 @@ in conjunction with jQuery. A Web Application created with this project will con
 ajax services, local persistence that leverages HTML5 localStorage, form reading, writing and validation, and an
 incredible suite of excellent JavaScript tools that includes such excellent tools and patterns such as
  the specifcation pattern and DTO (Data Transfer Objects), brought to you by ku4jQuery-kernel and ku4jQuery-data.
+---
 
 #kodmunki™ build process
----
 
 This build process is dependent upon yuicompressor and a specific directory structure:
 
@@ -26,6 +26,7 @@ this process:
 * PROJNAME (The name of your project)
 * STARTMSG (A message to echo at start of build)
 * ENDMSG (A message to echo at end of build)
+---
 
 #Setup
 To get your project going simply follow these instructions:
@@ -39,9 +40,9 @@ To get your project going simply follow these instructions:
 7. Add a reference in the desired HTML page to the artifact in the /bin directory.
 8. Add a reference in the desired HTML page to the renamed -Application-.js file.
 9. ROCK AND ROLL!
+---
 
 #Documentation
----
 
 ##Templates
 
