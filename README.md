@@ -37,11 +37,11 @@ To get your project going simply follow these instructions:
 
 1. Copy the contents of _TEMPLATE into your project.
 2. Update the project name in the build scripts.
-3. Rename the -ProjectFiles- directory to the name that you set for the project name in #2 above.
-4. Enter your app name per the instructions found on line 3 of the -Application-.js file.
-5. Rename the -Application-.js file to a desired name.
+3. Rename the /src/-ProjectFiles- directory to the name that you set for the project name in #2 above.
+4. Enter your app name per the instructions found on line 3 of the /application/-Application-.js file.
+5. Rename the /application/-Application-.js file to a desired name.
 6. Build the application using the appropriate sh or cmd build script.
-7. Add a reference in the desired HTML page to the artifact in the /bin directory.
+7. Add a reference in the desired HTML page to _one_** of the artifacts in the /bin directory.
 8. Add a reference in the desired HTML page to the renamed -Application-.js file.
 9. ROCK AND ROLL!
 
