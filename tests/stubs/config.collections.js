@@ -1,6 +1,6 @@
-$.ku4webApp.config.store = {
+$.ku4webApp.config.collections = {
     test: {
-        collection: "test",
+        name: "test",
         create: "testCreated",
         read: "testRead",
         update: "testUpdated",

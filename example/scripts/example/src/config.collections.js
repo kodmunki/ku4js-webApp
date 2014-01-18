@@ -1,6 +1,6 @@
-$.ku4webApp.config.store = {
+$.ku4webApp.config.collections = {
     example: {
-        collection: "example",
+        name: "accounts",
         create: "accountCreated",
         read: "accountRead",
         update: "accountUpdated",

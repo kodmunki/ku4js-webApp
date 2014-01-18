@@ -8,8 +8,8 @@ $(function() {
     });
 
     test("validate invalid", function() {
-        var form = $.ku4webApp.form($.ku4webApp.config.forms.test).clear(),
-            validation = $.ku4webApp.validator($.ku4webApp.config.validators.test).validate(form);
+        var dto = $.ku4webApp.form($.ku4webApp.config.forms.test).clear().read(),
+            validation = $.ku4webApp.validator($.ku4webApp.config.validators.test).validate(dto);
         expect(9);
         ok(!validation.isValid);
         equal(validation.messages.alpha, "Alpha is invalid.");
@@ -33,8 +33,8 @@ $(function() {
         $(".js-test-select").val("0");
         $(".js-test-checkbox")[0].checked = true;
 
-        var form = $.ku4webApp.form($.ku4webApp.config.forms.test),
-            validation = $.ku4webApp.validator($.ku4webApp.config.validators.test).validate(form);
+        var dto = $.ku4webApp.form($.ku4webApp.config.forms.test).read(),
+            validation = $.ku4webApp.validator($.ku4webApp.config.validators.test).validate(dto);
 
         expect(9);
         ok(validation.isValid);

@@ -3,6 +3,7 @@ $.ku4webApp = {
         templates: { }
     },
     templates: { },
+    models: { },
     controllers: { },
     views: { }
 };

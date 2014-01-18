@@ -1,7 +1,3 @@
-/* This responsebox requires a div that is added
- * to an html page and is styled by CSS
- */
-
 function responsebox(query) {
     this._container = $(query);
     this._display = "css-responsebox-show";

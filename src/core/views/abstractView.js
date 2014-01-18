@@ -1,17 +1,13 @@
-function abstractView(mediator, responsebox, templateFactory, formFactory) {
-    this._mediator = mediator;
-    this._responsebox = responsebox;
+function abstractView(templateFactory, formFactory) {
     this._templateFactory = templateFactory;
     this._formFactory = formFactory;
 }
 abstractView.prototype = {
-    $mediator: function() { return this._mediator; },
-    $template: function(key) { return this._templateFactory.create(key); },
-    $show: function(html) { this._responsebox.show(html); },
-    $hide: function() { this._responsebox.hide(); },
-    $write: function(key, data) {
-        var dto = ($.exists(data.find)) ? data : $.dto(data);
-        return this._formFactory.create(key).write(dto);
+    $template: function(name) { return this._templateFactory.create(name); },
+    $write: function(name, data) {
+        var dto = ($.exists(data) && $.exists(data.find)) ? data : $.dto(data);
+        this._formFactory.create(name).write(dto);
+        return this;
     }
 };
 $.ku4webApp.abstractView = abstractView;

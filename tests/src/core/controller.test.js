@@ -6,31 +6,16 @@ $(function() {
 
     test("new", function() {
         expect(1);
-        ok($.ku4webApp.controllers.testController(app));
-    });
-
-    test("mediator", function() {
-        expect(1);
-        ok($.ku4webApp.controllers.testController(app).mediator());
-    });
-
-    test("service", function() {
-        expect(1);
-        ok($.ku4webApp.controllers.testController(app).service());
-    });
-
-    test("validate", function() {
-        expect(1);
-        ok($.ku4webApp.controllers.testController(app).validate());
+        ok($.ku4webApp.controllers.test(app));
     });
 
     test("read", function() {
         expect(1);
-        ok($.ku4webApp.controllers.testController(app).read());
+        ok($.ku4webApp.controllers.test(app).read());
     });
 
     test("clear", function() {
         expect(1);
-        ok($.ku4webApp.controllers.testController(app).clear().read());
+        ok($.ku4webApp.controllers.test(app).clear().read());
     });
 });

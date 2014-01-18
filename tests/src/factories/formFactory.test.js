@@ -8,10 +8,10 @@ $(function() {
     });
 
     test("create", function() {
-        var formFactory = $.ku4webApp.formFactory($.ku4webApp.config.forms),
-            form = formFactory.create("test"),
-            data = form.read().toObject();
-        expect(0);
+        var formFactory = $.ku4webApp.formFactory($.ku4webApp.config.forms);
+
+        expect(1);
+        ok(formFactory.create("test"))
     });
 
 });

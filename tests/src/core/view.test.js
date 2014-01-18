@@ -6,7 +6,7 @@ $(function() {
 
     test("new", function() {
         expect(1);
-        ok($.ku4webApp.views.testView(app));
+        ok($.ku4webApp.views.test(app));
     });
 
 });

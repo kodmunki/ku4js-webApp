@@ -1,18 +1,34 @@
 (function(l){ $=l;
 $.ku4webApp.controller("example", {
     requestForm: function() {
-        this.$notify("accountFormRequested");
-    },
-    create: function() {
-        var validation = this.$validate("example");
-        if(!validation.isValid) this.$notify(validation, "accountInvalid");
-        else this.$store().create("example", this.$read("example"));
+        this.$model("example").requestForm();
     },
     cancel: function() {
-        this.$notify("createAccountCanceled");
+        this.$model("example").cancelForm();
+    },
+    create: function() {
+        this.$model("example").createAccount(this.$read("example"));
     },
     listAccounts: function() {
-        var accounts = this.$store().read("example");
+        this.$model("example").listAccounts();
+    }
+});
+
+$.ku4webApp.model("example", {
+    requestForm: function() {
+        var data = this.$collection("example").find({"firstName": "John"})[0];
+        this.$notify(data, "accountFormRequested");
+    },
+    cancelForm: function() {
+        this.$notify("createAccountCanceled");
+    },
+    createAccount: function(dto) {
+        var validation = this.$validate(dto);
+        if(!validation.isValid) this.$notify(validation, "accountInvalid");
+        else this.$collection("example").insert(dto);
+    },
+    listAccounts: function() {
+        var accounts = this.$collection("example").find();
         this.$notify(accounts, "accountsListed");
     }
 });
@@ -32,7 +48,7 @@ $.ku4webApp.template("example", {
 $.ku4webApp.view("example", {
     accountFormRequested: function(data) {
         var template = this.$template("example");
-        this.$show(template.renderForm());
+        $(".js-responsebox").html(template.renderForm());
         this.$write("example", data);
     },
     accountCreated: function(data) {
@@ -43,7 +59,7 @@ $.ku4webApp.view("example", {
         $(".js-validationMessages").html(template.renderValidation(data.messages));
     },
     createAccountCanceled: function(data) {
-        this.$hide();
+        $(".js-responsebox").html("");
     },
     accountsListed: function(data) {
         var template = this.$template("example");
@@ -57,6 +73,16 @@ $.ku4webApp.view("example", {
     "createAccountCanceled": "createAccountCanceled",
     "accountsListed": "accountsListed"
 });
+
+$.ku4webApp.config.collections = {
+    example: {
+        name: "accounts",
+        create: "accountCreated",
+        read: "accountRead",
+        update: "accountUpdated",
+        remove: "accountRemoved"
+    }
+}
 
 $.ku4webApp.config.forms = {
     example: [
@@ -104,16 +130,6 @@ $.ku4webApp.config.services = {
         uri: "./response.json",
         success: "exampleSuccess",
         error: "exampleError"
-    }
-}
-
-$.ku4webApp.config.store = {
-    example: {
-        collection: "example",
-        create: "accountCreated",
-        read: "accountRead",
-        update: "accountUpdated",
-        remove: "accountRemoved"
     }
 }
 

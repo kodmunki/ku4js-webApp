@@ -1,23 +1,19 @@
-/* The config for a validator should contain an array of key, value pairs
- * per field that is intended to be included in the validation output.
- * Each fields config should contain a name and a message.
- */
-
-function formValidator(config) {
+function validator(config) {
     this._config = config;
 }
-formValidator.prototype = {
-    validate: function(form) {
+validator.prototype = {
+    validate: function(dto) {
         var config = this._config,
             isValid = true,
             messages = $.hash({}),
-            fields = form.fields();
+            _dto = dto || $.dto();
 
         $.list(config).each(function(item) {
             var name = item.name,
+                spec = item.spec,
                 message = item.message,
-                field = fields.find(name);
-            if(!$.exists(field) || field.isValid()) return;
+                data = _dto.find(name);
+            if(spec.isSatisfiedBy(data)) return;
             isValid = false;
             messages.add(name, message);
         });
@@ -25,5 +21,5 @@ formValidator.prototype = {
     }
 };
 $.ku4webApp.validator = function(config) {
-    return new formValidator(config);
+    return new validator(config);
 };

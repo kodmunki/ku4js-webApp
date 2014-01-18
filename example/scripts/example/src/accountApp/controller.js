@@ -1,17 +1,14 @@
 $.ku4webApp.controller("example", {
     requestForm: function() {
-        this.$notify("accountFormRequested");
-    },
-    create: function() {
-        var validation = this.$validate("example");
-        if(!validation.isValid) this.$notify(validation, "accountInvalid");
-        else this.$store().create("example", this.$read("example"));
+        this.$model("example").requestForm();
     },
     cancel: function() {
-        this.$notify("createAccountCanceled");
+        this.$model("example").cancelForm();
+    },
+    create: function() {
+        this.$model("example").createAccount(this.$read("example"));
     },
     listAccounts: function() {
-        var accounts = this.$store().read("example");
-        this.$notify(accounts, "accountsListed");
+        this.$model("example").listAccounts();
     }
 });

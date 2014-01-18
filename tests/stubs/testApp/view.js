@@ -1,3 +1,3 @@
-$.ku4webApp.view("testView", {
+$.ku4webApp.view("test", {
 
 });
