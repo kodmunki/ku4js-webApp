@@ -138,3 +138,12 @@ $(function(){
 
 });
 ```
+
+When you have successfully integrated ku4jQuery-webApp into your application you will be able to call your controller
+methods by calling "controller.yourMethod" where "yourMethod" is some method that you have created in your custom
+controller. For example, if you had implemented a controller with the method "execute" and wished to call it from
+a button you would add the following HTML into the desired location of your web application:
+
+```html
+<button onclick="controller.execute(); return false;">Execute</button>
+```
