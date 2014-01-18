@@ -7,7 +7,7 @@ $.ku4webApp.controller("example", {
         this.$model("example").cancelForm();
     },
     create: function() {
-        this.$model("example").createAccount(this.$read("example"));
+        this.$model("example").createAccount(this.$form("example").read());
     },
     listAccounts: function() {
         this.$model("example").listAccounts();
@@ -50,31 +50,33 @@ $.ku4webApp.template("example", {
 });
 
 $.ku4webApp.view("example", {
+    show: function(html) { $(".js-responsebox").addClass("css-show").html(html); return this; },
+    hide: function() { $(".js-responsebox").addClass("css-show").html("");  return this; },
+    displayList: function(accounts) { $(".js-accountList").html(accounts);  return this; },
+    hideList: function() { $(".js-accountList").html("");  return this; },
+
     accountFormRequested: function(data) {
         var template = this.$template("example");
-        $(".js-responsebox").html(template.renderForm());
+        this.show(template.renderForm()).hideList();
         this.$form("example").write(data);
     },
     accountCreated: function(data) {
-        $(".js-validationMessages").html("Account created");
+        this.show("Account created");
     },
     accountInvalid: function(data) {
         var template = this.$template("example");
         $(".js-validationMessages").html(template.renderValidation(data.messages));
     },
-    createAccountCanceled: function(data) {
-        $(".js-responsebox").html("");
-    },
     accountsListed: function(data) {
         var template = this.$template("example");
-        $(".js-accountList").html(template.renderAccountList(data));
+        this.displayList(template.renderAccountList(data)).hide();
     }
 },
 {
     "accountFormRequested": "accountFormRequested",
+    "createAccountCanceled": "hide",
     "accountCreated": "accountCreated",
     "accountInvalid": "accountInvalid",
-    "createAccountCanceled": "createAccountCanceled",
     "accountsListed": "accountsListed"
 });
 
@@ -181,16 +183,17 @@ $.ku4webApp.config.templates.views = {
         message: '<li class="css-validation-error">{{message}}</li>'
     },
 
-    account: '<div>' +
-                '<div><h4>Account Data</h4></div>' +
+    account: '<div><div><h4>{{firstName}} {{lastName}}</h4></div>' +
                 '<ul class="css-account-error">' +
-                    '<li class="css-account-error">{{username}}</li>' +
-                    '<li class="css-account-error">{{password}}</li>' +
-                    '<li class="css-account-error">{{firstName}}</li>' +
-                    '<li class="css-account-error">{{lastName}}</li>' +
-                    '<li class="css-account-error">{{email}}</li>' +
-                '</ul>' +
-             '</div>'
+                    '<li class="css-account-data">' +
+                        '<span class="css-label">Username: </span>' +
+                        '<span class="css-value">{{username}}</span></li>' +
+                    '<li class="css-account-data">' +
+                        '<span class="css-label">Password: </span>' +
+                        '<span class="css-value">{{password}}</span></li>' +
+                    '<li class="css-account-data">' +
+                        '<span class="css-label">Email: </span>' +
+                        '<span class="css-value">{{email}}</span></li></ul></div>'
 }
 
 $.ku4webApp.config.validators = {

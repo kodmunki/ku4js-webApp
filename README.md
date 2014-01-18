@@ -8,7 +8,7 @@ This project is defaulted to leverage jQuery but can be set to leverage any Java
 
 *(The following are the instructions from the build script found in the template at /_build/build.sh)*
 
-####kodmunki™ build process
+#kodmunki™ build process
 ---
 
 This build process is dependent upon yuicompressor and a specific directory structure:
@@ -26,3 +26,26 @@ this process:
 * PROJNAME (The name of your project)
 * STARTMSG (A message to echo at start of build)
 * ENDMSG (A message to echo at end of build)
+
+#Documentation
+
+The following is a list of classes and their methods. To start a new project of your own, you can copy the contents
+of /_TEMPLATE into your application. For more information check out the example project.
+
+#Templates
+
+Has access to the following protected methods
+* $localization(NAME): Retrieves the localization config named NAME if one exists
+* $config(NAME): Retrieves the template config named NAME
+* $forms(NAME): Retrieves the forms templates config named NAME (Shortcut for $config("forms")[NAME])
+* $views(NAME): Retrieves the views templates config named NAME (Shortcut for $config("views")[NAME])
+* $render(TEMPLATE, DTO): Renders the TEMPLATE using DTO data
+* $renderList(TEMPLATE, Array[DTO]): Renders TEMPLATE using DTO data for each DTO in Array
+
+```javascript
+$.ku4webApp.template("NAME", {
+    //METHODS GO HERE
+    METHOD: function() { },
+    CALLBACK: function() { }
+});
+```

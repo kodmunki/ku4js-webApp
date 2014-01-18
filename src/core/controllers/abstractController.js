@@ -4,7 +4,6 @@ function abstractController(modelFactory, formFactory) {
 }
 abstractController.prototype = {
     $model: function(name) { return this._modelFactory.create(name); },
-    $read: function(name) { return this._formFactory.create(name).read(); },
-    $clear: function(name) { this._formFactory.create(name).clear(); return this;}
+    $form: function(name) { return this._formFactory.create(name); }
 };
 $.ku4webApp.abstractController = abstractController;

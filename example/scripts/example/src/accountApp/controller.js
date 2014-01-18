@@ -6,7 +6,7 @@ $.ku4webApp.controller("example", {
         this.$model("example").cancelForm();
     },
     create: function() {
-        this.$model("example").createAccount(this.$read("example"));
+        this.$model("example").createAccount(this.$form("example").read());
     },
     listAccounts: function() {
         this.$model("example").listAccounts();

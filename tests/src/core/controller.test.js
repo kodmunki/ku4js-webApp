@@ -9,13 +9,13 @@ $(function() {
         ok($.ku4webApp.controllers.test(app));
     });
 
-    test("read", function() {
+    test("model", function() {
         expect(1);
-        ok($.ku4webApp.controllers.test(app).read());
+        ok($.ku4webApp.controllers.test(app).model());
     });
 
-    test("clear", function() {
+    test("form", function() {
         expect(1);
-        ok($.ku4webApp.controllers.test(app).clear().read());
+        ok($.ku4webApp.controllers.test(app).form());
     });
 });

@@ -1,28 +1,30 @@
 $.ku4webApp.view("example", {
+    show: function(html) { $(".js-responsebox").addClass("css-show").html(html); return this; },
+    hide: function() { $(".js-responsebox").addClass("css-show").html("");  return this; },
+    displayList: function(accounts) { $(".js-accountList").html(accounts);  return this; },
+    hideList: function() { $(".js-accountList").html("");  return this; },
+
     accountFormRequested: function(data) {
         var template = this.$template("example");
-        $(".js-responsebox").html(template.renderForm());
+        this.show(template.renderForm()).hideList();
         this.$form("example").write(data);
     },
     accountCreated: function(data) {
-        $(".js-validationMessages").html("Account created");
+        this.show("Account created");
     },
     accountInvalid: function(data) {
         var template = this.$template("example");
         $(".js-validationMessages").html(template.renderValidation(data.messages));
     },
-    createAccountCanceled: function(data) {
-        $(".js-responsebox").html("");
-    },
     accountsListed: function(data) {
         var template = this.$template("example");
-        $(".js-accountList").html(template.renderAccountList(data));
+        this.displayList(template.renderAccountList(data)).hide();
     }
 },
 {
     "accountFormRequested": "accountFormRequested",
+    "createAccountCanceled": "hide",
     "accountCreated": "accountCreated",
     "accountInvalid": "accountInvalid",
-    "createAccountCanceled": "createAccountCanceled",
     "accountsListed": "accountsListed"
 });
