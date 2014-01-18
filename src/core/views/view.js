@@ -7,11 +7,10 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
     $.Class.extend(view, abstractView);
 
     $.ku4webApp.views[name] = function(app) {
-        var mediator = app.mediator,
-            _view = new view(app.templateFactory, app.formFactory);
+        var _view = new view(app.templateFactory, app.formFactory);
         if($.exists(subscriptions))
             $.hash(subscriptions).each(function(obj) {
-                mediator.subscribe(obj.key, _view[obj.value], _view);
+                app.mediator.subscribe(obj.key, _view[obj.value], _view);
             });
         return _view;
     }

@@ -1,6 +1,6 @@
 /* Has access to the following protected methods
     $template(NAME): Retrieves the template named NAME
-    $write(NAME, DTO): Writes the DTO to the form named NAME
+    $form(NAME): Retrieves the form named NAME
  */
 
 $.ku4webApp.view("NAME", {

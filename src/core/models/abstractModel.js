@@ -7,10 +7,7 @@ function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory)
 abstractModel.prototype = {
     $collection: function(name) { return this._storeFactory.create(name); },
     $service: function(name) { return this._serviceFactory.create(name); },
-    $validate: function(key, dto) {
-        var validator = this._validatorFactory.create(key);
-        return validator.validate(dto);
-    },
+    $validator: function(name) { return this._validatorFactory.create(name); },
     $notify: function() {
         var mediator = this._mediator;
         mediator.notify.apply(mediator, arguments);

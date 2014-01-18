@@ -1,9 +1,15 @@
-function templateFactory(config) {
-    this._config = config;
-}
-templateFactory.prototype = {
-    cerate: function (key){ return $.ku4webApp.template[key](this._config); }
-};
-$.ku4webApp.templateFactory = function(templates) {
-    return new templateFactory(templates);
-};
+$(function() {
+
+    module("$.ku4webApp.templateFactory");
+
+    test("new", function() {
+        expect(1);
+        ok($.ku4webApp.templateFactory($.mediator(), $.ku4webApp.config.templates));
+    });
+
+    test("create", function() {
+        expect(1);
+        ok($.ku4webApp.templateFactory($.mediator(), $.ku4webApp.config.templates).create("test"));
+    });
+
+});

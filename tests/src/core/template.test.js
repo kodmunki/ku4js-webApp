@@ -4,7 +4,7 @@ $(function() {
 
     test("new", function() {
         expect(1);
-        ok($.ku4webApp.templates.testTemplate($.ku4webApp.config.templates));
+        ok($.ku4webApp.templates.test($.ku4webApp.config.templates));
     });
 
     test("render", function() {
@@ -16,6 +16,6 @@ $(function() {
             testValue = '<div id="myId" class="myClassName">myContent</div>';
         expect(1);
 
-        equal($.ku4webApp.templates.testTemplate($.ku4webApp.config.templates).renderDiv(data), testValue);
+        equal($.ku4webApp.templates.test($.ku4webApp.config.templates).renderDiv(data), testValue);
     });
 });

@@ -24,7 +24,7 @@ $(function() {
 
     test("validate", function() {
         expect(1);
-        ok($.ku4webApp.models.test(mediator, serviceFactory, storeFactory, validatorFactory).validate($.dto()));
+        ok($.ku4webApp.models.test(mediator, serviceFactory, storeFactory, validatorFactory).validator());
     });
 
     test("notify", function() {

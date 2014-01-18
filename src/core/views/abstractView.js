@@ -4,10 +4,6 @@ function abstractView(templateFactory, formFactory) {
 }
 abstractView.prototype = {
     $template: function(name) { return this._templateFactory.create(name); },
-    $write: function(name, data) {
-        var dto = ($.exists(data) && $.exists(data.find)) ? data : $.dto(data);
-        this._formFactory.create(name).write(dto);
-        return this;
-    }
+    $form: function(name) { return this._formFactory.create(name); }
 };
 $.ku4webApp.abstractView = abstractView;

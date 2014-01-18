@@ -23,9 +23,9 @@ $.ku4webApp.model("example", {
         this.$notify("createAccountCanceled");
     },
     createAccount: function(dto) {
-        var validation = this.$validate(dto);
-        if(!validation.isValid) this.$notify(validation, "accountInvalid");
-        else this.$collection("example").insert(dto);
+        var validation = this.$validator("example").validate(dto);
+        if(validation.isValid)  this.$collection("example").insert(dto);
+        else this.$notify(validation, "accountInvalid");
     },
     listAccounts: function() {
         var accounts = this.$collection("example").find();
@@ -38,7 +38,11 @@ $.ku4webApp.template("example", {
         return this.$render(this.$forms("example"));
     },
     renderValidation: function(data) {
-        return this.$render(this.$views("example"), data);
+        var messages = "";
+        $.hash(data).each(function(message) {
+            messages += this.$render(this.$views("validation").message, {message: message.value})
+        }, this);
+        return this.$render(this.$views("validation").container, {messages: messages});
     },
     renderAccountList: function(data) {
         return this.$renderList(this.$views("account"), data)
@@ -49,7 +53,7 @@ $.ku4webApp.view("example", {
     accountFormRequested: function(data) {
         var template = this.$template("example");
         $(".js-responsebox").html(template.renderForm());
-        this.$write("example", data);
+        this.$form("example").write(data);
     },
     accountCreated: function(data) {
         $(".js-validationMessages").html("Account created");
@@ -76,11 +80,11 @@ $.ku4webApp.view("example", {
 
 $.ku4webApp.config.collections = {
     example: {
-        name: "accounts",
-        create: "accountCreated",
-        read: "accountRead",
-        update: "accountUpdated",
-        remove: "accountRemoved"
+        name: "accounts"
+        //insert: "accountCreated",
+        //find: "accountRead",
+        //update: "accountUpdated",
+        //remove: "accountRemoved"
     }
 }
 
@@ -89,31 +93,26 @@ $.ku4webApp.config.forms = {
         {
             selector: "#username",
             type: "field",
-            spec: $.fields.specs.alphaNumeric,
             required:true
         },
         {
             selector: "#password",
             type: "field",
-            spec: $.fields.specs.alphaNumeric,
             required:true
         },
         {
             selector: "#firstName",
             type: "field",
-            spec: $.fields.specs.alpha,
             required:true
         },
         {
             selector: "#lastName",
             type: "field",
-            spec: $.fields.specs.alpha,
             required:true
         },
         {
             selector: "#email",
             type: "field",
-            spec: $.fields.specs.email,
             required:true
         },
         {
@@ -177,23 +176,20 @@ $.ku4webApp.config.templates.forms = {
 }
 
 $.ku4webApp.config.templates.views = {
-    example: '<ul class="css-example-error">' +
-             '<li class="css-example-error">{{username}}</li>' +
-             '<li class="css-example-error">{{password}}</li>' +
-             '<li class="css-example-error">{{firstName}}</li>' +
-             '<li class="css-example-error">{{lastName}}</li>' +
-             '<li class="css-example-error">{{email}}</li>' +
-             '</ul>',
+    validation: {
+        container: '<ul class="css-validation-error">{{messages}}</ul>',
+        message: '<li class="css-validation-error">{{message}}</li>'
+    },
 
     account: '<div>' +
                 '<div><h4>Account Data</h4></div>' +
-                '<ul class="css-example-error">' +
-                 '<li class="css-example-error">{{username}}</li>' +
-                 '<li class="css-example-error">{{password}}</li>' +
-                 '<li class="css-example-error">{{firstName}}</li>' +
-                 '<li class="css-example-error">{{lastName}}</li>' +
-                 '<li class="css-example-error">{{email}}</li>' +
-             '</ul>' +
+                '<ul class="css-account-error">' +
+                    '<li class="css-account-error">{{username}}</li>' +
+                    '<li class="css-account-error">{{password}}</li>' +
+                    '<li class="css-account-error">{{firstName}}</li>' +
+                    '<li class="css-account-error">{{lastName}}</li>' +
+                    '<li class="css-account-error">{{email}}</li>' +
+                '</ul>' +
              '</div>'
 }
 
@@ -201,22 +197,27 @@ $.ku4webApp.config.validators = {
     example: [
         {
             name: "username",
-            message: "Username is Jacob."
+            spec: $.fields.specs.alphaNumeric,
+            message: "Username is invalid."
         },
         {
             name: "password",
+            spec: $.fields.specs.alphaNumeric,
             message: "Password is invalid."
         },
         {
             name: "firstName",
+            spec: $.fields.specs.alpha,
             message: "First name is invalid."
         },
         {
             name: "lastName",
+            spec: $.fields.specs.alpha,
             message: "Last name is invalid."
         },
         {
             name: "email",
+            spec: $.fields.specs.email,
             message: "Email is invalid."
         }
     ]

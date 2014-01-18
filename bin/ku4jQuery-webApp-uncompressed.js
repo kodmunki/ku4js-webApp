@@ -116,10 +116,7 @@ function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory)
 abstractModel.prototype = {
     $collection: function(name) { return this._storeFactory.create(name); },
     $service: function(name) { return this._serviceFactory.create(name); },
-    $validate: function(key, dto) {
-        var validator = this._validatorFactory.create(key);
-        return validator.validate(dto);
-    },
+    $validator: function(name) { return this._validatorFactory.create(name); },
     $notify: function() {
         var mediator = this._mediator;
         mediator.notify.apply(mediator, arguments);
@@ -189,14 +186,14 @@ store.prototype = {
             collection = $.ku4store().read(config.name);
         collection.insert(dto.toObject());
         collection.save();
-        if($.exists(config.create))
+        if($.exists(config.insert))
             this._mediator.notify(collection, config.insert);
     },
     find: function(criteria) {
         var config = this._config,
             collection = $.ku4store().read(config.name),
             data = collection.find(criteria);
-        if($.exists(config.read))
+        if($.exists(config.find))
             this._mediator.notify(data, config.find);
         return data;
     },
@@ -256,11 +253,7 @@ function abstractView(templateFactory, formFactory) {
 }
 abstractView.prototype = {
     $template: function(name) { return this._templateFactory.create(name); },
-    $write: function(name, data) {
-        var dto = ($.exists(data) && $.exists(data.find)) ? data : $.dto(data);
-        this._formFactory.create(name).write(dto);
-        return this;
-    }
+    $form: function(name) { return this._formFactory.create(name); }
 };
 $.ku4webApp.abstractView = abstractView;
 
@@ -273,11 +266,10 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
     $.Class.extend(view, abstractView);
 
     $.ku4webApp.views[name] = function(app) {
-        var mediator = app.mediator,
-            _view = new view(app.templateFactory, app.formFactory);
+        var _view = new view(app.templateFactory, app.formFactory);
         if($.exists(subscriptions))
             $.hash(subscriptions).each(function(obj) {
-                mediator.subscribe(obj.key, _view[obj.value], _view);
+                app.mediator.subscribe(obj.key, _view[obj.value], _view);
             });
         return _view;
     }

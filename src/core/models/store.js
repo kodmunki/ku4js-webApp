@@ -8,14 +8,14 @@ store.prototype = {
             collection = $.ku4store().read(config.name);
         collection.insert(dto.toObject());
         collection.save();
-        if($.exists(config.create))
+        if($.exists(config.insert))
             this._mediator.notify(collection, config.insert);
     },
     find: function(criteria) {
         var config = this._config,
             collection = $.ku4store().read(config.name),
             data = collection.find(criteria);
-        if($.exists(config.read))
+        if($.exists(config.find))
             this._mediator.notify(data, config.find);
         return data;
     },

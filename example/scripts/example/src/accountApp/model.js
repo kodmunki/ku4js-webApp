@@ -7,9 +7,9 @@ $.ku4webApp.model("example", {
         this.$notify("createAccountCanceled");
     },
     createAccount: function(dto) {
-        var validation = this.$validate(dto);
-        if(!validation.isValid) this.$notify(validation, "accountInvalid");
-        else this.$collection("example").insert(dto);
+        var validation = this.$validator("example").validate(dto);
+        if(validation.isValid)  this.$collection("example").insert(dto);
+        else this.$notify(validation, "accountInvalid");
     },
     listAccounts: function() {
         var accounts = this.$collection("example").find();

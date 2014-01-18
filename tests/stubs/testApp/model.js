@@ -1,11 +1,9 @@
 $.ku4webApp.model("test", {
     service: function() { return this.$service("test"); },
     collection: function() { return this.$collection("test"); },
-    validate: function(dto) { return this.$validate("test", dto); },
+    validator: function(dto) { return this.$validator("test"); },
     notify: function(data) { this.$notify(data); return this; },
-    modelTested: function(data) {
-        this.testData = data;
-    }
+    modelTested: function(data) { this.testData = data; }
 },
 {
     "modelTested": "modelTested"

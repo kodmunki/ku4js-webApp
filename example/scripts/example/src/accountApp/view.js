@@ -2,7 +2,7 @@ $.ku4webApp.view("example", {
     accountFormRequested: function(data) {
         var template = this.$template("example");
         $(".js-responsebox").html(template.renderForm());
-        this.$write("example", data);
+        this.$form("example").write(data);
     },
     accountCreated: function(data) {
         $(".js-validationMessages").html("Account created");
