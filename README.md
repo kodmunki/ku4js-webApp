@@ -6,7 +6,9 @@ This project contains everything needed to create a compact and powerful MVC cli
 in conjunction with jQuery. A Web Application created with this project will contain html templating engines,
 ajax services, local persistence that leverages HTML5 localStorage, form reading, writing and validation, and an
 incredible suite of excellent JavaScript tools that includes such excellent tools and patterns such as
-the specifcation pattern and DTO (Data Transfer Objects), brought to you by ku4jQuery-kernel and ku4jQuery-data.
+the specifcation pattern and DTO (Data Transfer Objects), brought to you by
+[ku4jQuery-kernel](https://github.com/kodmunki/ku4jQuery-kernel) and
+[ku4jQuery-data](https://github.com/kodmunki/ku4jQuery-data).
 
 ---
 
@@ -46,7 +48,8 @@ To get your project going simply follow these instructions:
 ---
 
 #Documentation
-The following is the documentation for the template engine and the MVC application classes.
+The following is the documentation for the template engine and the MVC application classes. For further information
+check out the [example project](https://github.com/kodmunki/ku4jQuery-webApp/tree/master/example)
 
 ##Templates
 
@@ -103,7 +106,7 @@ $.ku4webApp.view("NAME", {
 });
 ```
 
-#Controllers
+##Controllers
 
 Has access to the following protected methods
 * $model(NAME): Retrieves the model named NAME
