@@ -1,10 +1,12 @@
-#ku4jQuery-_template
+#ku4jQuery-webApp
 
+kodmunki™ utilities for jQuery Web Applications.
 
-kodmunki™ utilities for jQuery (or other library) project template.
-
-This project is defaulted to leverage jQuery but can be set to leverage any JavaScript library or none at all. The template includes a build process that requires a specific project directory setup. This process is simple and convenient. It is a great way to manage a JavaScript project from Unit Testing into development and through compilation for production. This project template is the same one used for the ku4jQuery products yet is in no way dependent upon the ku4* libraries. Freeing you to chose if or when you will include a ku4* library in your project.
-
+This project contains everything needed to create a compact and powerful MVC client application using kodmunki tools
+in conjunction with jQuery. A Web Application created with this project will contain html templating engines,
+ajax services, local persistence that leverages HTML5 localStorage, form reading, writing and validation, and an
+incredible suite of excellent JavaScript tools that includes such excellent tools and patterns such as
+ the specifcation pattern and DTO (Data Transfer Objects), brought to you by ku4jQuery-kernel and ku4jQuery-data.
 
 *(The following are the instructions from the build script found in the template at /_build/build.sh)*
 
@@ -26,6 +28,19 @@ this process:
 * PROJNAME (The name of your project)
 * STARTMSG (A message to echo at start of build)
 * ENDMSG (A message to echo at end of build)
+
+#Setup
+To get your project going simply follow these instructions:
+
+1. Copy the contents of _TEMPLATE into your project.
+2. Update the project name in the build scripts.
+3. Rename the -ProjectFiles- directory to the name that you set for the project name in #2 above.
+4. Enter your app name per the instructions on found on line 3 of the -Application-.js file.
+5. Rename the -Application-.js file to a desired name.
+6. Build the application.
+7. Add a reference in the desired HTML page to the artifact in the /bin directory.
+8. Add a reference in the desired HTML page to the renamed -Application-.js file.
+9. ROCK AND ROLL!
 
 #Documentation
 
@@ -66,5 +81,35 @@ $.ku4webApp.model("NAME", {
 {
     //MEDIATOR SUBSCRIPTIONS GO HERE
     "SUBSCRIPTION": CALLBACK
+});
+```
+
+##Views
+
+Has access to the following protected methods
+* $template(NAME): Retrieves the template named NAME
+* $form(NAME): Retrieves the form named NAME
+
+```javascript
+$.ku4webApp.view("NAME", {
+    //METHODS GO HERE
+    METHOD: function() { },
+    CALLBACK: function() { }
+},
+{
+    //MEDIATOR SUBSCRIPTIONS GO HERE
+    "SUBSCRIPTION": CALLBACK
+});
+```
+
+#Controllers
+
+Has access to the following protected methods
+* $model(NAME): Retrieves the model named NAME
+* $form(NAME): Retrieves the form named NAME
+
+```javascript
+$.ku4webApp.controller("NAME", {
+    //METHODS GO HERE
 });
 ```
