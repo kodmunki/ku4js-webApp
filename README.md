@@ -41,7 +41,7 @@ To get your project going simply follow these instructions:
 4. Enter your app name per the instructions found on line 3 of the /application/-Application-.js file.
 5. Rename the /application/-Application-.js file to a desired name.
 6. Build the application using the appropriate sh or cmd build script.
-7. Add a reference in the desired HTML page to _one_** of the artifacts in the /bin directory.
+7. Add a reference in the desired HTML page to **_one_** of the artifacts in the /bin directory.
 8. Add a reference in the desired HTML page to the renamed -Application-.js file.
 9. ROCK AND ROLL!
 
