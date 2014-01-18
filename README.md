@@ -46,6 +46,7 @@ To get your project going simply follow these instructions:
 ---
 
 #Documentation
+The following is the documentation for the template engine and the MVC application classes.
 
 ##Templates
 
