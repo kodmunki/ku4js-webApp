@@ -8,8 +8,6 @@ ajax services, local persistence that leverages HTML5 localStorage, form reading
 incredible suite of excellent JavaScript tools that includes such excellent tools and patterns such as
  the specifcation pattern and DTO (Data Transfer Objects), brought to you by ku4jQuery-kernel and ku4jQuery-data.
 
-*(The following are the instructions from the build script found in the template at /_build/build.sh)*
-
 #kodmunki™ build process
 ---
 
