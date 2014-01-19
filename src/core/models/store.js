@@ -12,6 +12,7 @@ store.prototype = {
         collection.save();
         if($.exists(config.insert))
             this._mediator.notify(collection, config.insert);
+        return this;
     },
     find: function(criteria) {
         var config = this._config,
@@ -22,20 +23,21 @@ store.prototype = {
         return data;
     },
     update: function(dto) {
-        if(!$.exists(dto)) throw new Error($.str.format("Cannot insert update type: {0}", dto));
+        if(!$.exists(dto)) throw new Error($.str.format("Cannot update type: {0}", dto));
         var config = this._config,
             obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
             collection = $.ku4store().read(config.name).update({"_ku4Id": obj._ku4Id}, obj).save();
         if($.exists(config.update))
             this._mediator.notify(collection, config.update);
+        return this;
     },
     remove: function(dto) {
-        if(!$.exists(dto)) throw new Error($.str.format("Cannot insert remove type: {0}", dto));
         var config = this._config,
-            obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
+            obj = ($.exists(dto) && $.exists(dto.toObject)) ? dto.toObject() : dto,
             collection = $.ku4store().read(config.name).remove(obj).save();
         if($.exists(config.remove))
             this._mediator.notify(collection, config.remove);
+        return this;
     }
 };
 $.ku4webApp.store = function(mediator, config) {
