@@ -28,37 +28,278 @@
         </ul>
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a name="ku4jquery-webapp" class="anchor" href="#ku4jquery-webapp"><span class="octicon octicon-link"></span></a>ku4jQuery-webApp</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>kodmunki™ utilities for jQuery Web Applications.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>This project contains everything needed to create a compact and powerful MVC client application using kodmunki tools
+in conjunction with jQuery. A Web Application created with this project will contain html templating engines,
+ajax services, local persistence that leverages HTML5 localStorage, form reading, writing and validation, and an
+incredible suite of excellent JavaScript tools that includes such excellent tools and patterns such as
+the specifcation pattern and DTO (Data Transfer Objects), brought to you by
+<a href="https://github.com/kodmunki/ku4jQuery-kernel">ku4jQuery-kernel</a> and
+<a href="https://github.com/kodmunki/ku4jQuery-data">ku4jQuery-data</a>.</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<hr><h1>
+<a name="kodmunki-build-process" class="anchor" href="#kodmunki-build-process"><span class="octicon octicon-link"></span></a>kodmunki™ build process</h1>
+
+<p>This build process is dependent upon yuicompressor and a specific directory structure:</p>
+
+<ul>
+<li>root<br><ul>
+<li>_build (This build script and the yuicompressor)</li>
+<li>bin (The compiled scripts will appear here)</li>
+<li>src (All script files go here)</li>
+</ul>
+</li>
+</ul><p>The following variables found in setup () are
+expected to be changed by the developer running
+this process:</p>
+
+<ul>
+<li>LIBRARY (The library to build for or {} for none)</li>
+<li>PROJNAME (The name of your project)</li>
+<li>STARTMSG (A message to echo at start of build)</li>
+<li>ENDMSG (A message to echo at end of build)</li>
+</ul><hr><h1>
+<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a>Setup</h1>
+
+<p>To get your project going simply follow these instructions:</p>
+
+<ol>
+<li>Copy the contents of _TEMPLATE into your project.</li>
+<li>Update the project name in the build scripts.</li>
+<li>Rename the /src/-ProjectFiles- directory to the name that you set for the project name in #2 above.</li>
+<li>Enter your app name per the instructions found on line 3 of the /application/-Application-.js file.</li>
+<li>Rename the /application/-Application-.js file to a desired name.</li>
+<li>Build the application using the appropriate sh or cmd build script.</li>
+<li>Add a reference in the desired HTML page to <strong><em>one</em></strong> of the artifacts in the /bin directory.</li>
+<li>Add a reference in the desired HTML page to the renamed -Application-.js file.</li>
+<li>ROCK AND ROLL!</li>
+</ol><hr><h1>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h1>
+
+<p>The following is the documentation for the template engine and the MVC application classes. For further information
+check out the <a href="https://github.com/kodmunki/ku4jQuery-webApp/tree/master/example">example project</a></p>
+
+<h2>
+<a name="templates" class="anchor" href="#templates"><span class="octicon octicon-link"></span></a>Templates</h2>
+
+<p>Has access to the following protected methods</p>
+
+<ul>
+<li>$config(NAME): <em>Retrieves the template config named NAME.</em>
+</li>
+<li>$forms(NAME): <em>Retrieves the forms templates config named NAME (Shortcut for $config("forms")[NAME]).</em>
+</li>
+<li>$views(NAME): <em>Retrieves the views templates config named NAME (Shortcut for $config("views")[NAME]).</em>
+</li>
+<li>$render(TEMPLATE, DTO): <em>Renders the TEMPLATE using DTO data.</em>
+</li>
+<li>$renderList(TEMPLATE, Array[DTO]): <em>Renders TEMPLATE using DTO data for each DTO in Array.</em>
+</li>
+<li>$renderListWithAction(Array[DTO], FUNCTION) Calls a specified render function for each DTO in Array.
+                                          It is important that the specified action return a string value!</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="s2">"NAME"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">//METHODS GO HERE</span>
+    <span class="nx">METHOD</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">},</span>
+    <span class="nx">CALLBACK</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="models" class="anchor" href="#models"><span class="octicon octicon-link"></span></a>Models</h2>
+
+<p>Has access to the following protected methods</p>
+
+<ul>
+<li>$collection(NAME): Retrieves the collection named NAME._</li>
+<li>$service(NAME): Retrieves the service named NAME._</li>
+<li>$validator(NAME): Retrieves the validator named NAME._</li>
+<li>$notify([DATA], NAME, ...) <em>Notifies the subscribers in the list or arguments passing DATA if supplied.
+                         Calling this function without a list of subscribers will notify ALL subscribers!</em>
+</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s2">"NAME"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">//METHODS GO HERE</span>
+    <span class="nx">METHOD</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">},</span>
+    <span class="nx">CALLBACK</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">},</span>
+<span class="p">{</span>
+    <span class="c1">//MEDIATOR SUBSCRIPTIONS GO HERE</span>
+    <span class="s2">"SUBSCRIPTION"</span><span class="o">:</span> <span class="nx">CALLBACK</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="views" class="anchor" href="#views"><span class="octicon octicon-link"></span></a>Views</h2>
+
+<p>Has access to the following protected methods</p>
+
+<ul>
+<li>$template(NAME): Retrieves the template named NAME</li>
+<li>$form(NAME): Retrieves the form named NAME</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">view</span><span class="p">(</span><span class="s2">"NAME"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">//METHODS GO HERE</span>
+    <span class="nx">METHOD</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">},</span>
+    <span class="nx">CALLBACK</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">},</span>
+<span class="p">{</span>
+    <span class="c1">//MEDIATOR SUBSCRIPTIONS GO HERE</span>
+    <span class="s2">"SUBSCRIPTION"</span><span class="o">:</span> <span class="nx">CALLBACK</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="controllers" class="anchor" href="#controllers"><span class="octicon octicon-link"></span></a>Controllers</h2>
+
+<p>Has access to the following protected methods</p>
+
+<ul>
+<li>$model(NAME): Retrieves the model named NAME</li>
+<li>$form(NAME): Retrieves the form named NAME</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s2">"NAME"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">//METHODS GO HERE</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="applications-files" class="anchor" href="#applications-files"><span class="octicon octicon-link"></span></a>Applications/ files</h2>
+
+<p>These files are where you will initialize your controllers and views and expose your controller to the HTML page.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">controller</span><span class="p">;</span>
+<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">appName</span> <span class="o">=</span> <span class="s2">"[ENTER YOUR APP NAME HERE]"</span><span class="p">,</span>
+        <span class="nx">app</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">app</span><span class="p">();</span>
+    <span class="nx">controller</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">controllers</span><span class="p">[</span><span class="nx">appName</span><span class="p">](</span><span class="nx">app</span><span class="p">)</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">appName</span><span class="p">](</span><span class="nx">app</span><span class="p">);</span>
+
+<span class="cm">/*======================================================*/</span>
+
+ <span class="c1">//[Other desired views or initialization scripting HERE]</span>
+
+<span class="cm">/*======================================================*/</span>
+
+<span class="p">});</span>
+</pre></div>
+
+<p>When you have successfully integrated ku4jQuery-webApp into your application you will be able to call your controller
+methods by calling "controller.yourMethod" where "yourMethod" is some method that you have created in your custom
+controller. For example, if you had implemented a controller with the method "execute" and wished to call it from
+a button you would add the following HTML into the desired location of your web application:</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">"controller.execute(); return false;"</span><span class="nt">&gt;</span>Execute<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+
+<h2>
+<a name="configurations" class="anchor" href="#configurations"><span class="octicon octicon-link"></span></a>Configurations</h2>
+
+<p>The dependency injection of ku4jQuery-webApp is largely dependent upon the configuration files. These files are required
+for a ku4jQuery-webApp project to work successfully. They are very simple files to configure. The ones listed here
+are required and must be included in your ku4jQuery-web app. You can add more of them as you need making ku4jQuery-webApp
+<strong><em>very</em></strong> extensible! Documentation for each of the required configuration follows:</p>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="configcollections" class="anchor" href="#configcollections"><span class="octicon octicon-link"></span></a>config.collections</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>Configures the local client-side persistence callback structure.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
+<span class="cm">    //COLLECTION</span>
+<span class="cm">    NAME: {</span>
+<span class="cm">        name: "COLLECTION NAME",</span>
+<span class="cm">        insert: "ON CREATED",</span>
+<span class="cm">        find: "ON FOUND",</span>
+<span class="cm">        update: "ON UPDATED",</span>
+<span class="cm">        remove: "ON REMOVED"</span>
+<span class="cm">    }</span>
+<span class="cm">*/</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">collections</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">//ADD YOUR COLLECTIONS HERE</span>
+<span class="p">};</span>
+</pre></div>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="configservices" class="anchor" href="#configservices"><span class="octicon octicon-link"></span></a>config.services</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>Configures the ajax services</p>
+
+<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
+<span class="cm">    NAME: {</span>
+<span class="cm">        verb: "VERB",</span>
+<span class="cm">        uri: "URI",</span>
+<span class="cm">        success: "ON SUCCESS",</span>
+<span class="cm">        error: "ON ERROR"</span>
+<span class="cm">    }</span>
+<span class="cm"> */</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">services</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">//ADD YOUR SERVICES HERE</span>
+<span class="p">};</span>
+</pre></div>
 
 <h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a name="configvalidators" class="anchor" href="#configvalidators"><span class="octicon octicon-link"></span></a>config.validators</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>Configures the validation rules that your models can use to validate operation classes before they are transmitted
+to the server.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
+<span class="cm">    //VALIDATOR</span>
+<span class="cm">    NAME: [</span>
+<span class="cm">        //VALIDATION RULE 1</span>
+<span class="cm">        {</span>
+<span class="cm">            name: "DTO KEY TO VALIDATE",</span>
+<span class="cm">            spec: SPEC ($.spec),</span>
+<span class="cm">            message: "MESSAGE IF INVALID"</span>
+<span class="cm">        },</span>
+<span class="cm">        //VALIDATION RULE 2</span>
+<span class="cm">        {</span>
+<span class="cm">            name: "DTO KEY TO VALIDATE",</span>
+<span class="cm">            spec: SPEC ($.spec),</span>
+<span class="cm">            message: "MESSAGE IF INVALID"</span>
+<span class="cm">        }</span>
+<span class="cm"> */</span>
+</pre></div>
+
+<p>$.ku4webApp.config.validators = {
+    //ADD YOUR VALIDATORS HERE
+};</p>
 
 <h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a name="configtemplates" class="anchor" href="#configtemplates"><span class="octicon octicon-link"></span></a>config.templates</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>Configures the templates in your web application. config.templates.forms and config.templates.views are required
+template configurations.</p>
+
+<h4>
+<a name="configtemplatesforms" class="anchor" href="#configtemplatesforms"><span class="octicon octicon-link"></span></a>config.templates.forms</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
+<span class="cm">    NAME: 'HTML FORM FORMAT'</span>
+<span class="cm"> */</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">templates</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">//ADD YOUR FORM TEMPLATES HERE</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>$.ku4webApp.config.templates.forms = {
+    //ADD YOUR FORM TEMPLATES HERE
+};</p>
+
+<h4>
+<a name="configtemplatesviews" class="anchor" href="#configtemplatesviews"><span class="octicon octicon-link"></span></a>config.templates.views</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
+<span class="cm">    NAME: 'HTML FORMAT'</span>
+<span class="cm"> */</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">templates</span><span class="p">.</span><span class="nx">views</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">//ADD YOUR VIEW TEMPLATES HERE</span>
+<span class="p">};</span>
+</pre></div>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/kodmunki">kodmunki</a></p>
