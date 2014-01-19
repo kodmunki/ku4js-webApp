@@ -60,6 +60,8 @@ Has access to the following protected methods
 * $views(NAME): _Retrieves the views templates config named NAME (Shortcut for $config("views")[NAME])._
 * $render(TEMPLATE, DTO): _Renders the TEMPLATE using DTO data._
 * $renderList(TEMPLATE, Array[DTO]): _Renders TEMPLATE using DTO data for each DTO in Array._
+* $renderListWithAction(Array[DTO], FUNCTION) Calls a specified render function for each DTO in Array.
+                                              It is important that the specified action return a string value!
 
 ```javascript
 $.ku4webApp.template("NAME", {
@@ -74,7 +76,8 @@ Has access to the following protected methods
 * $collection(NAME): Retrieves the collection named NAME._
 * $service(NAME): Retrieves the service named NAME._
 * $validator(NAME): Retrieves the validator named NAME._
-* $notify([DATA], NAME, ...) _Notifies the subscribers in the list or arguments passing DATA if supplied. Calling this function without a list of subscribers will notify ALL subscribers!_
+* $notify([DATA], NAME, ...) _Notifies the subscribers in the list or arguments passing DATA if supplied.
+                             Calling this function without a list of subscribers will notify ALL subscribers!_
 
 ```javascript
 $.ku4webApp.model("NAME", {
