@@ -5,10 +5,10 @@ kodmunki™ utilities for jQuery Web Applications.
 This project contains everything needed to create a compact and powerful MVC client application using kodmunki tools
 in conjunction with jQuery. A Web Application created with this project will contain html templating engines,
 ajax services, local persistence that leverages HTML5 localStorage, form reading, writing and validation, and an
-incredible suite of excellent JavaScript tools that includes such excellent tools and patterns such as
-the specifcation pattern and DTO (Data Transfer Objects), brought to you by
-[ku4jQuery-kernel](https://github.com/kodmunki/ku4jQuery-kernel) and
-[ku4jQuery-data](https://github.com/kodmunki/ku4jQuery-data).
+incredible suite of excellent JavaScript tools including specifcation patterns and DTO (Data Transfer Objects),
+brought to you by [ku4jQuery-kernel](https://github.com/kodmunki/ku4jQuery-kernel) and
+[ku4jQuery-data](https://github.com/kodmunki/ku4jQuery-data). All of these technologies are rooted in SOLID OO
+principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.
 
 ---
 
