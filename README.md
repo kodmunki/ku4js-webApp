@@ -72,9 +72,9 @@ $.ku4webApp.template("NAME", {
 
 ##Models
 Has access to the following protected methods
-* $collection(NAME): Retrieves the collection named NAME._
-* $service(NAME): Retrieves the service named NAME._
-* $validator(NAME): Retrieves the validator named NAME._
+* $collection(NAME): _Retrieves the collection named NAME._
+* $service(NAME): _Retrieves the service named NAME._
+* $validator(NAME): _Retrieves the validator named NAME._
 * $notify([DATA], NAME, ...) _Notifies the subscribers in the list or arguments passing DATA if supplied.
                              Calling this function without a list of subscribers will notify ALL subscribers!_
 
