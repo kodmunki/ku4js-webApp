@@ -181,9 +181,11 @@ function store(mediator, config) {
 }
 store.prototype = {
     insert: function(dto) {
+        if(!$.exists(dto)) throw new Error($.str.format("Cannot insert invalid type: {0}", dto));
         var config = this._config,
+            obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
             collection = $.ku4store().read(config.name);
-        collection.insert(dto.toObject());
+        collection.insert(obj);
         collection.save();
         if($.exists(config.insert))
             this._mediator.notify(collection, config.insert);
@@ -197,15 +199,18 @@ store.prototype = {
         return data;
     },
     update: function(dto) {
+        if(!$.exists(dto)) throw new Error($.str.format("Cannot insert update type: {0}", dto));
         var config = this._config,
-            obj = dto.toObject(),
+            obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
             collection = $.ku4store().read(config.name).update({"_ku4Id": obj._ku4Id}, obj).save();
         if($.exists(config.update))
             this._mediator.notify(collection, config.update);
     },
     remove: function(dto) {
+        if(!$.exists(dto)) throw new Error($.str.format("Cannot insert remove type: {0}", dto));
         var config = this._config,
-            collection = $.ku4store().read(config.name).remove(dto.toObject()).save();
+            obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
+            collection = $.ku4store().read(config.name).remove(obj).save();
         if($.exists(config.remove))
             this._mediator.notify(collection, config.remove);
     }
