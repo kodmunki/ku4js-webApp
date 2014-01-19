@@ -93,8 +93,8 @@ $.ku4webApp.model("NAME", {
 ##Views
 
 Has access to the following protected methods
-* $template(NAME): Retrieves the template named NAME
-* $form(NAME): Retrieves the form named NAME
+* $template(NAME): _Retrieves the template named NAME_
+* $form(NAME): _Retrieves the form named NAME_
 
 ```javascript
 $.ku4webApp.view("NAME", {
