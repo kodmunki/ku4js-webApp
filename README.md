@@ -256,3 +256,10 @@ $.ku4webApp.config.templates.views = {
     //ADD YOUR VIEW TEMPLATES HERE
 };
 ```
+
+#Dependencies
+
+This project requires the following dependencies:
+
+* [ku4jQuery-kernel](https://github.com/kodmunki/ku4jQuery-kernel)
+* [ku4jQuery-data](https://github.com/kodmunki/ku4jQuery-data)
