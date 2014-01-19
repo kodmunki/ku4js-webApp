@@ -16,7 +16,7 @@ abstractTemplate.prototype = {
     $renderListWithAction: function(dataList, action) {
         var rendering = "";
         $.list(dataList).each(function(entity) {
-            rendering += action(entity);
+            rendering += action.call(this, entity);
         }, this);
         return rendering;
     }
