@@ -15,4 +15,6 @@
         }
  */
 
-$.ku4webApp.config.validators = { };
+$.ku4webApp.config.validators = {
+    //ADD YOUR VALIDATORS HERE
+};

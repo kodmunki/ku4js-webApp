@@ -6,4 +6,6 @@
         error: "ON ERROR"
     }
  */
-$.ku4webApp.config.services = { };
+$.ku4webApp.config.services = {
+    //ADD YOUR SERVICES HERE
+};

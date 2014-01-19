@@ -173,7 +173,9 @@ Configures the local client-side persistence callback structure.
     }
 */
 
-$.ku4webApp.config.collections = { };
+$.ku4webApp.config.collections = {
+    //ADD YOUR COLLECTIONS HERE
+};
 ```
 
 ###config.services
@@ -189,7 +191,9 @@ Configures the ajax services
         error: "ON ERROR"
     }
  */
-$.ku4webApp.config.services = { };
+$.ku4webApp.config.services = {
+    //ADD YOUR SERVICES HERE
+};
 ```
 
 ###config.validators
@@ -216,7 +220,9 @@ to the server.
  */
 ```
 
-$.ku4webApp.config.validators = { };
+$.ku4webApp.config.validators = {
+    //ADD YOUR VALIDATORS HERE
+};
 
 ###config.templates
 
@@ -231,7 +237,9 @@ template configurations.
  */
 ```
 
-$.ku4webApp.config.templates.forms = { };
+$.ku4webApp.config.templates.forms = {
+    //ADD YOUR FORM TEMPLATES HERE
+};
 
 ####config.templates.views
 
@@ -240,5 +248,7 @@ $.ku4webApp.config.templates.forms = { };
     NAME: 'HTML FORMAT'
  */
 
-$.ku4webApp.config.templates.views = { };
+$.ku4webApp.config.templates.views = {
+    //ADD YOUR VIEW TEMPLATES HERE
+};
 ```

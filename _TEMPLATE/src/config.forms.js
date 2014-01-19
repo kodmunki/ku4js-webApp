@@ -15,4 +15,6 @@
         }]
  */
 
-$.ku4webApp.config.forms = { };
+$.ku4webApp.config.forms = {
+    //ADD YOUR FORMS HERE
+};

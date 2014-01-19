@@ -9,4 +9,6 @@
     }
 */
 
-$.ku4webApp.config.collections = { };
+$.ku4webApp.config.collections = {
+    //ADD YOUR COLLECTIONS HERE
+};
