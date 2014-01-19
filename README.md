@@ -218,11 +218,10 @@ to the server.
             message: "MESSAGE IF INVALID"
         }
  */
-```
-
-$.ku4webApp.config.validators = {
+ $.ku4webApp.config.validators = {
     //ADD YOUR VALIDATORS HERE
 };
+```
 
 ###config.templates
 
