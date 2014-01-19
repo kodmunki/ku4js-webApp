@@ -54,7 +54,6 @@ check out the [example project](https://github.com/kodmunki/ku4jQuery-webApp/tre
 ##Templates
 
 Has access to the following protected methods
-* $localization(NAME): _Retrieves the localization config named NAME if one exists._
 * $config(NAME): _Retrieves the template config named NAME._
 * $forms(NAME): _Retrieves the forms templates config named NAME (Shortcut for $config("forms")[NAME])._
 * $views(NAME): _Retrieves the views templates config named NAME (Shortcut for $config("views")[NAME])._
