@@ -149,3 +149,96 @@ a button you would add the following HTML into the desired location of your web 
 ```html
 <button onclick="controller.execute(); return false;">Execute</button>
 ```
+
+##Configurations
+
+The dependency injection of ku4jQuery-webApp is largely dependent upon the configuration files. These files are required
+for a ku4jQuery-webApp project to work successfully. They are very simple files to configure. The ones listed here
+are required and must be included in your ku4jQuery-web app. You can add more of them as you need making ku4jQuery-webApp
+**_very_** extensible! Documentation for each of the required configuration follows:
+
+###config.collections
+
+Configures the local client-side persistence callback structure.
+
+```javascript
+/*
+    //COLLECTION
+    NAME: {
+        name: "COLLECTION NAME",
+        insert: "ON CREATED",
+        find: "ON FOUND",
+        update: "ON UPDATED",
+        remove: "ON REMOVED"
+    }
+*/
+
+$.ku4webApp.config.collections = { };
+```
+
+###config.services
+
+Configures the ajax services
+
+```javascript
+/*
+    NAME: {
+        verb: "VERB",
+        uri: "URI",
+        success: "ON SUCCESS",
+        error: "ON ERROR"
+    }
+ */
+$.ku4webApp.config.services = { };
+```
+
+###config.validators
+
+Configures the validation rules that your models can use to validate operation classes before they are transmitted
+to the server.
+
+```javascript
+/*
+    //VALIDATOR
+    NAME: [
+        //VALIDATION RULE 1
+        {
+            name: "DTO KEY TO VALIDATE",
+            spec: SPEC ($.spec),
+            message: "MESSAGE IF INVALID"
+        },
+        //VALIDATION RULE 2
+        {
+            name: "DTO KEY TO VALIDATE",
+            spec: SPEC ($.spec),
+            message: "MESSAGE IF INVALID"
+        }
+ */
+```
+
+$.ku4webApp.config.validators = { };
+
+###config.templates
+
+Configures the templates in your web application. config.templates.forms and config.templates.views are required
+template configurations.
+
+####config.templates.forms
+
+```javascript
+/*
+    NAME: 'HTML FORM FORMAT'
+ */
+```
+
+$.ku4webApp.config.templates.forms = { };
+
+####config.templates.views
+
+```javascript
+/*
+    NAME: 'HTML FORMAT'
+ */
+
+$.ku4webApp.config.templates.views = { };
+```
