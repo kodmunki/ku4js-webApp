@@ -17,7 +17,7 @@ service.prototype = {
                 if (response.isError && $.exists(config.error))
                     mediator.notify(response, config.error);
                 else if($.exists(config.success))
-                    mediator.notify(response.data, config.success);
+                    mediator.notify(response, config.success);
             }, this)
             .onError(function(data){
                 if($.exists(config.error))
