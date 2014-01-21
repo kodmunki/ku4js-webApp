@@ -276,10 +276,10 @@ So, as with much JavaScript development, there may be a couple of gotchas! Below
 noobs (meant respectfully) may encounter. Let's just clear those up here, and if you have further questions, please,
 send them to [support@kodmunki.com](mailto:support@kodmunki.com).
 
-1. Again, the configurations are _key_** in this solution. They make things _incredibly_** extensible but can
+1. Again, the configurations are **_key_** in this solution. They make things **_incredibly_** extensible but can
 be a source of confusion for those new IoC. The idea here is that you delegate your logic to the objects that "care"
-and _only_** when they _do_** "care". For example, your $collection may care about what it is and what it is
-supposed to do, but it only "cares" when it actually has to perform it's operation. That said, you will _certainly_**
+and **_only_** when they **_do_** "care". For example, your $collection may care about what it is and what it is
+supposed to do, but it only "cares" when it actually has to perform it's operation. That said, you will **_certainly_**
 find exceptions when you make calls to a collection via "this.$collection("[NAME]") if you have not _configured_** a
 collection in the required config "config.collections.js". If you find yourself with a "Cannot read property 'name' of
 undefined" error, for example. This likely means that you have not set up a config. In this example case, specifically,
@@ -289,9 +289,9 @@ and you should resolve your exception. Generally, this holds true for services, 
 well.
 
 2. Note that when you create a controller, model, or view, you do so with the english singular, e.g.
-$.ku4webApp._view_**("[NAME]", { /*Your methods here*/}, {/*Your listeners here*/}). When you call it after it is
+$.ku4webApp.**_view_**("[NAME]", { /*Your methods here*/}, {/*Your listeners here*/}). When you call it after it is
 instantiated, you will call it using the english plural, as it has become part of a collection of view_s_**.
-Therefore, you would call this view in your [application].js as $.ku4webApp._views_**.NAME. If misspelled you are
+Therefore, you would call this view in your [application].js as $.ku4webApp.**_views_**.NAME. If misspelled you are
 certain to run into to rather convoluted: "Uncaught TypeError: Object function (s,t,u){function l(w,v){l.base.call(this,
 w,v)}l.prototype=t;$.Class.extend(l,b);$.ku4webApp.views[s]=function(v){var w=new l(v.templateFactory,v.formFactory);if(
 $.exists(u)){$.hash(u).each(function(x){v.mediator.subscribe(x.key,w[x.value],w)})}return w}} has no method 'NAME'"
@@ -299,11 +299,11 @@ error. This is telling you that you have a missed "Plural" in your [application]
 is in progress).
 
 3. You are, certainly able to access external controllers, models, views, and templates from within the current method
-in scope, but you must ensure that you have instantiated it correctly. That is, you must pass _all_** relevant
+in scope, but you must ensure that you have instantiated it correctly. That is, you must pass **_all_** relevant
 parameters to the instance. This is only likely in an advanced development scenario with regard to templates. If you have
 questions, please, contact [support@kodmunki.com](mailto:support@kodmunki.com).
 
-4. If you find _any_** instance of an error that states, "ku4EXCEPTION @ $.MEDIATOR:" Check the call stack. You are
+4. If you find **_any_** instance of an error that states, "ku4EXCEPTION @ $.MEDIATOR:" Check the call stack. You are
 likely to have not subscribed to a notification. The mediator attempted to call it and could not find a subscriber.
 This means that the named notifier is erroneous and should, likely, be removed.
 
