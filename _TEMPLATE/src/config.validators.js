@@ -12,7 +12,7 @@
             name: "DTO KEY TO VALIDATE",
             spec: SPEC ($.spec),
             message: "MESSAGE IF INVALID"
-        }
+        }]
  */
 
 $.ku4webApp.config.validators = {

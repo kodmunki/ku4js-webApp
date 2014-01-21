@@ -52,7 +52,6 @@ The following is the documentation for the template engine and the MVC applicati
 check out the [example project](https://github.com/kodmunki/ku4jQuery-webApp/tree/master/example)
 
 ##Templates
-
 Has access to the following protected methods
 * $config(NAME): _Retrieves the template config named NAME._
 * $forms(NAME): _Retrieves the forms templates config named NAME (Shortcut for $config("forms")[NAME])._
@@ -61,6 +60,10 @@ Has access to the following protected methods
 * $renderList(TEMPLATE, Array[DTO]): _Renders TEMPLATE using DTO data for each DTO in Array._
 * $renderListWithAction(Array[DTO], FUNCTION) Calls a specified render function for each DTO in Array.
                                               It is important that the specified action return a string value!
+* Runtime instantiation requires valid templates config. _(This is a potential scenario in advanced development of an
+enterprise applications and should be heeded. For example, if you create a template for generic form fields
+specifically, i.e. $.ku4webApp.template("forms", { /*Your methods here*/ }, and want to access it from another template,
+ you will have to instantiate it on the fly and pass the local config to it: $.ku4webApp.template.forms(this.$config()))_.
 
 ```javascript
 $.ku4webApp.template("NAME", {
@@ -76,6 +79,8 @@ Has access to the following protected methods
 * $validator(NAME): _Retrieves the validator named NAME._
 * $notify([DATA], NAME, ...) _Notifies the subscribers in the list or arguments passing DATA if supplied.
                              Calling this function without a list of subscribers will notify ALL subscribers!_
+* Runtime instantiation requires a valid mediator, serviceFactory, storeFactory, and validatorFactory. _(This is a
+very unlikely scenario)_.
 
 ```javascript
 $.ku4webApp.model("NAME", {
@@ -94,6 +99,9 @@ $.ku4webApp.model("NAME", {
 Has access to the following protected methods
 * $template(NAME): _Retrieves the template named NAME_
 * $form(NAME): _Retrieves the form named NAME_
+* Runtime instantiation requires a valid templateFactory and formFactory. _(This is an absurd scenario. If you require it,
+it is likely that you need to revisit [MVC](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). If you
+find a necessary reason, please contact [support@kodmunki.com](mailto:support@kodmunki.com) to share)_.
 
 ```javascript
 $.ku4webApp.view("NAME", {
@@ -112,6 +120,10 @@ $.ku4webApp.view("NAME", {
 Has access to the following protected methods
 * $model(NAME): Retrieves the model named NAME
 * $form(NAME): Retrieves the form named NAME
+* Runtime instantiation requires a valid modelFactory and formFactory. _(This, again, is an absurd scenario. If you
+require it, it is likely that you need to revisit
+[MVC](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). If you find a necessary reason, please
+contact [support@kodmunki.com](mailto:support@kodmunki.com) to share)_.
 
 ```javascript
 $.ku4webApp.controller("NAME", {
@@ -215,7 +227,7 @@ to the server.
             name: "DTO KEY TO VALIDATE",
             spec: SPEC ($.spec),
             message: "MESSAGE IF INVALID"
-        }
+        }]
  */
  $.ku4webApp.config.validators = {
     //ADD YOUR VALIDATORS HERE
@@ -257,3 +269,40 @@ This project requires the following dependencies:
 
 * [ku4jQuery-kernel](https://github.com/kodmunki/ku4jQuery-kernel)
 * [ku4jQuery-data](https://github.com/kodmunki/ku4jQuery-data)
+
+#Gotchas!
+
+So, as with much JavaScript development, there may be a couple of gotchas! Below are listed a few of the items that
+noobs (meant respectfully) may encounter. Let's just clear those up here, and if you have further questions, please,
+send them to [support@kodmunki.com](mailto:support@kodmunki.com).
+
+1. Again, the configurations are _key_** in this solution. They make things _incredibly_** extensible but can
+be a source of confusion for those new IoC. The idea here is that you delegate your logic to the objects that "care"
+and _only_** when they _do_** "care". For example, your $collection may care about what it is and what it is
+supposed to do, but it only "cares" when it actually has to perform it's operation. That said, you will _certainly_**
+find exceptions when you make calls to a collection via "this.$collection("[NAME]") if you have not _configured_** a
+collection in the required config "config.collections.js". If you find yourself with a "Cannot read property 'name' of
+undefined" error, for example. This likely means that you have not set up a config. In this example case, specifically,
+this would indicate that you has not "config-ed" a collection that you are calling in your model. Config your collection
+in the appropriate "config.collections.js" my simply creating a "key, object" pair, i.e. "[NAME]:{ name: "[COLLECTION]"}
+and you should resolve your exception. Generally, this holds true for services, forms, validators, and templates, as
+well.
+2. Note that when you create a controller, model, or view, you do so with the english singular, e.g.
+$.ku4webApp._view_**("[NAME]", { /*Your methods here*/}, {/*Your listeners here*/}). When you call it after it is
+instantiated, you will call it using the english plural, as it has become part of a collection of view_s_**.
+Therefore, you would call this view in your [application].js as $.ku4webApp._views_**.NAME. If misspelled you are
+certain to run into to rather convoluted: "Uncaught TypeError: Object function (s,t,u){function l(w,v){l.base.call(this,
+w,v)}l.prototype=t;$.Class.extend(l,b);$.ku4webApp.views[s]=function(v){var w=new l(v.templateFactory,v.formFactory);if(
+$.exists(u)){$.hash(u).each(function(x){v.mediator.subscribe(x.key,w[x.value],w)})}return w}} has no method 'NAME'"
+error. This is telling you that you have a missed "Plural" in your [application].js (A less obfuscated exception message
+is in progress).
+3. You are, certainly able to access external controllers, models, views, and templates from within the current method
+in scope, but you must ensure that you have instantiated it correctly. That is, you must pass _all_** relevant
+parameters to the instance. This is only likely in an advanced development scenario with regard to templates. If you have
+questions, please, contact [support@kodmunki.com](mailto:support@kodmunki.com).
+4. If you find _any_** instance of an error that states, "ku4EXCEPTION @ $.MEDIATOR:" Check the call stack. You are
+likely to have not subscribed to a notification. The mediator attempted to call it and could not find a subscriber.
+This means that the named notifier is erroneous and should, likely, be removed.
+5. Along with #4 above, you could also have an exception in your callback method. Read the stack trace and your method
+implementation carefully, you will, likely, find your issue in the implementation. For further questions, contact
+[support@kodmunki.com](mailto:support@kodmunki.com).
