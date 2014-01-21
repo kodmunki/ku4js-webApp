@@ -308,5 +308,5 @@ likely to have not subscribed to a notification. The mediator attempted to call 
 This means that the named notifier is erroneous and should, likely, be removed.
 
 5. Along with #4 above, you could also have an exception in your callback method. Read the stack trace and your method
-implementation carefully, you will, likely, find your issue in the implementation. For further questions, contact
+implementation carefully, you will likely find your issue in the implementation. For further questions, contact
 [support@kodmunki.com](mailto:support@kodmunki.com).
