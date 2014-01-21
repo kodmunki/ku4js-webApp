@@ -65,8 +65,7 @@ Has access to the following protected methods
 ```javascript
 $.ku4webApp.template("NAME", {
     //METHODS GO HERE
-    METHOD: function() { },
-    CALLBACK: function() { }
+    METHOD: function() { }
 });
 ```
 
