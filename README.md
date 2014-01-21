@@ -280,7 +280,7 @@ send them to [support@kodmunki.com](mailto:support@kodmunki.com).
 be a source of confusion for those new IoC. The idea here is that you delegate your logic to the objects that "care"
 and **_only_** when they **_do_** "care". For example, your $collection may care about what it is and what it is
 supposed to do, but it only "cares" when it actually has to perform it's operation. That said, you will **_certainly_**
-find exceptions when you make calls to a collection via "this.$collection("[NAME]") if you have not _configured_** a
+find exceptions when you make calls to a collection via "this.$collection("[NAME]") if you have not **_configured_** a
 collection in the required config "config.collections.js". If you find yourself with a "Cannot read property 'name' of
 undefined" error, for example. This likely means that you have not set up a config. In this example case, specifically,
 this would indicate that you has not "config-ed" a collection that you are calling in your model. Config your collection
