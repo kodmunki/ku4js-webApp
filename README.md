@@ -290,7 +290,7 @@ well.
 
 2. Note that when you create a controller, model, or view, you do so with the english singular, e.g.
 $.ku4webApp.**_view_**("[NAME]", { /*Your methods here*/}, {/*Your listeners here*/}). When you call it after it is
-instantiated, you will call it using the english plural, as it has become part of a collection of view**_s_**.
+instantiated, you will call it using the english plural, as it has become part of a collection of **_views_**.
 Therefore, you would call this view in your [application].js as $.ku4webApp.**_views_**.NAME. If misspelled you are
 certain to run into to rather convoluted: "Uncaught TypeError: Object function (s,t,u){function l(w,v){l.base.call(this,
 w,v)}l.prototype=t;$.Class.extend(l,b);$.ku4webApp.views[s]=function(v){var w=new l(v.templateFactory,v.formFactory);if(
