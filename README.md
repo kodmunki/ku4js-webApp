@@ -287,6 +287,7 @@ this would indicate that you has not "config-ed" a collection that you are calli
 in the appropriate "config.collections.js" my simply creating a "key, object" pair, i.e. "[NAME]:{ name: "[COLLECTION]"}
 and you should resolve your exception. Generally, this holds true for services, forms, validators, and templates, as
 well.
+
 2. Note that when you create a controller, model, or view, you do so with the english singular, e.g.
 $.ku4webApp._view_**("[NAME]", { /*Your methods here*/}, {/*Your listeners here*/}). When you call it after it is
 instantiated, you will call it using the english plural, as it has become part of a collection of view_s_**.
@@ -296,13 +297,16 @@ w,v)}l.prototype=t;$.Class.extend(l,b);$.ku4webApp.views[s]=function(v){var w=ne
 $.exists(u)){$.hash(u).each(function(x){v.mediator.subscribe(x.key,w[x.value],w)})}return w}} has no method 'NAME'"
 error. This is telling you that you have a missed "Plural" in your [application].js (A less obfuscated exception message
 is in progress).
+
 3. You are, certainly able to access external controllers, models, views, and templates from within the current method
 in scope, but you must ensure that you have instantiated it correctly. That is, you must pass _all_** relevant
 parameters to the instance. This is only likely in an advanced development scenario with regard to templates. If you have
 questions, please, contact [support@kodmunki.com](mailto:support@kodmunki.com).
+
 4. If you find _any_** instance of an error that states, "ku4EXCEPTION @ $.MEDIATOR:" Check the call stack. You are
 likely to have not subscribed to a notification. The mediator attempted to call it and could not find a subscriber.
 This means that the named notifier is erroneous and should, likely, be removed.
+
 5. Along with #4 above, you could also have an exception in your callback method. Read the stack trace and your method
 implementation carefully, you will, likely, find your issue in the implementation. For further questions, contact
 [support@kodmunki.com](mailto:support@kodmunki.com).
