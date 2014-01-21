@@ -10,6 +10,5 @@
 
 $.ku4webApp.template("NAME", {
     //METHODS GO HERE
-    METHOD: function() { },
-    CALLBACK: function() { }
+    METHOD: function() { }
 });
