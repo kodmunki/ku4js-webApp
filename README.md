@@ -277,7 +277,7 @@ noobs (meant respectfully) may encounter. Let's just clear those up here, and if
 send them to [support@kodmunki.com](mailto:support@kodmunki.com).
 
 1. Again, the configurations are **_key_** in this solution. They make things **_incredibly_** extensible but can
-be a source of confusion for those new IoC. The idea here is that you delegate your logic to the objects that "care"
+be a source of confusion for those new to IoC. The idea here is that you delegate your logic to the objects that "care"
 and **_only_** when they **_do_** "care". For example, your $collection may care about what it is and what it is
 supposed to do, but it only "cares" when it actually has to perform it's operation. That said, you will **_certainly_**
 find exceptions when you make calls to a collection via "this.$collection("[NAME]") if you have not **_configured_** a
