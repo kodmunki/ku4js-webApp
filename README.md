@@ -301,7 +301,7 @@ is in progress).
 3. You are, certainly able to access external controllers, models, views, and templates from within the current method
 in scope, but you must ensure that you have instantiated it correctly. That is, you must pass **_all_** relevant
 parameters to the instance. This is only likely in an advanced development scenario with regard to templates. If you have
-questions, please, contact [support@kodmunki.com](mailto:support@kodmunki.com).
+questions, please, review the documentation above, or contact [support@kodmunki.com](mailto:support@kodmunki.com).
 
 4. If you find **_any_** instance of an error that states, "ku4EXCEPTION @ $.MEDIATOR:" Check the call stack. You are
 likely to have not subscribed to a notification. The mediator attempted to call it and could not find a subscriber.
