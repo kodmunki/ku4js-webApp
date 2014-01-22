@@ -1,3 +1,4 @@
+$.ku4webApp.__views = { };
 $.ku4webApp.view = function(name, proto, subscriptions) {
 
     function view(templateFactory, formFactory) {
@@ -11,14 +12,14 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
             message = $.str.format("Requires a valid app. app= {0}", app);
         if(!$.exists(app)) throw $.ku4exception(className, message);
 
-        if(!$.exists(this.__instance)) {
+        if(!$.exists($.ku4webApp.__views[name])) {
             var _view = new view(app.templateFactory, app.formFactory);
             if($.exists(subscriptions))
                 $.hash(subscriptions).each(function(obj) {
                     app.mediator.subscribe(obj.key, _view[obj.value], _view);
                 });
-            this.__instance = _view;
+            $.ku4webApp.__views[name] = _view;
         }
-        return this.__instance;
+        return $.ku4webApp.__views[name];
     }
 }

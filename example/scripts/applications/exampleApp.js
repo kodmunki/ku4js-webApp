@@ -4,4 +4,5 @@ $(function(){
         app = $.ku4webApp.app().throwErrors();
     controller = $.ku4webApp.controllers[appName](app)
     $.ku4webApp.views[appName](app);
+    $.ku4webApp.views.otherView(app);
 });

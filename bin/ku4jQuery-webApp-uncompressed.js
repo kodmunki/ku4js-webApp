@@ -134,6 +134,7 @@ abstractModel.prototype = {
 };
 $.ku4webApp.abstractModel = abstractModel;
 
+$.ku4webApp.__models = { };
 $.ku4webApp.model = function(name, proto, subscriptions) {
 
     function model(mediator, serviceFactory, storeFactory, validatorFactory) {
@@ -143,15 +144,15 @@ $.ku4webApp.model = function(name, proto, subscriptions) {
     $.Class.extend(model, abstractModel);
 
     $.ku4webApp.models[name] = function(mediator, serviceFactory, storeFactory, validatorFactory) {
-        if(!$.exists(this.__instance)) {
+        if(!$.exists($.ku4webApp.__models[name])) {
             var _model = new model(mediator, serviceFactory, storeFactory, validatorFactory);
             if($.exists(subscriptions))
                 $.hash(subscriptions).each(function(obj) {
                     mediator.subscribe(obj.key, _model[obj.value], _model);
                 });
-            this.__instance = _model;
+            $.ku4webApp.__models[name] = _model;
         }
-        return this.__instance;
+        return $.ku4webApp.__models[name];
     }
 }
 
@@ -287,6 +288,7 @@ abstractView.prototype = {
 };
 $.ku4webApp.abstractView = abstractView;
 
+$.ku4webApp.__views = { };
 $.ku4webApp.view = function(name, proto, subscriptions) {
 
     function view(templateFactory, formFactory) {
@@ -300,15 +302,15 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
             message = $.str.format("Requires a valid app. app= {0}", app);
         if(!$.exists(app)) throw $.ku4exception(className, message);
 
-        if(!$.exists(this.__instance)) {
+        if(!$.exists($.ku4webApp.__views[name])) {
             var _view = new view(app.templateFactory, app.formFactory);
             if($.exists(subscriptions))
                 $.hash(subscriptions).each(function(obj) {
                     app.mediator.subscribe(obj.key, _view[obj.value], _view);
                 });
-            this.__instance = _view;
+            $.ku4webApp.__views[name] = _view;
         }
-        return this.__instance;
+        return $.ku4webApp.__views[name];
     }
 }
 
