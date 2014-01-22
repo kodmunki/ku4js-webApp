@@ -1,5 +1,5 @@
 function abstractTemplate(config) {
-    this._config = config;
+    this._config = classRefcheck("templates", "config", config);
 }
 abstractTemplate.prototype = {
     $config: function(name) { return ($.exists(name)) ? this._config[name] : this._config; },

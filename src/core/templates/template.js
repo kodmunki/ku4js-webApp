@@ -7,6 +7,7 @@ $.ku4webApp.template = function(name, proto) {
     $.Class.extend(template, abstractTemplate);
 
     $.ku4webApp.templates[name] = function(config) {
-        return new template(config);
+        var _config = classRefcheck($.str.format("templates.{0}", name), "config", config);
+        return new template(_config);
     }
 }

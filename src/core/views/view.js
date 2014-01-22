@@ -7,6 +7,9 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
     $.Class.extend(view, abstractView);
 
     $.ku4webApp.views[name] = function(app) {
+        var className = $.str.format("$.ku4webApp.views.{0}", name),
+            message = $.str.format("Requires a valid app. app= {0}", app);
+        if(!$.exists(app)) throw $.ku4exception(className, message);
         var _view = new view(app.templateFactory, app.formFactory);
         if($.exists(subscriptions))
             $.hash(subscriptions).each(function(obj) {

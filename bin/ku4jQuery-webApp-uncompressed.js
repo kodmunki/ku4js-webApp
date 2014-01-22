@@ -83,9 +83,16 @@ app.prototype = {
 }
 $.ku4webApp.app = function() { return new app(); }
 
+function classRefcheck(className, propertyName, property) {
+    var _className = $.str.format("$.ku4webApp.{0}", className),
+        _message = $.str.format("Requires a valid {0}. {0}= {1}", propertyName, property);
+    if(!$.exists(property)) throw $.ku4exception(_className, _message);
+    else return property;
+}
+
 function abstractController(modelFactory, formFactory) {
-    this._modelFactory = modelFactory;
-    this._formFactory = formFactory;
+    this._modelFactory = classRefcheck("controllers", "modelFactory", modelFactory);
+    this._formFactory = classRefcheck("controllers", "formFactory", formFactory);
 }
 abstractController.prototype = {
     $model: function(name) { return this._modelFactory.create(name); },
@@ -102,15 +109,18 @@ $.ku4webApp.controller = function(name, proto) {
     $.Class.extend(controller, abstractController);
 
     $.ku4webApp.controllers[name] = function(app) {
+        var className = $.str.format("$.ku4webApp.controllers.{0}", name),
+            message = $.str.format("Requires a valid app. app= {0}", app);
+        if(!$.exists(app)) throw $.ku4exception(className, message);
         return new controller(app.modelFactory, app.formFactory, app.validatorFactory);
     }
 }
 
 function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory) {
-    this._mediator = mediator;
-    this._serviceFactory = serviceFactory;
-    this._storeFactory = storeFactory;
-    this._validatorFactory = validatorFactory;
+    this._mediator = classRefcheck("models", "mediator", mediator);
+    this._serviceFactory = classRefcheck("models", "serviceFactory", serviceFactory);
+    this._storeFactory = classRefcheck("models", "storeFactory", storeFactory);
+    this._validatorFactory = classRefcheck("models", "validatorFactory", validatorFactory);
 }
 abstractModel.prototype = {
     $collection: function(name) { return this._storeFactory.create(name); },
@@ -181,9 +191,11 @@ function store(mediator, config) {
 }
 store.prototype = {
     insert: function(dto) {
-        if(!$.exists(dto)) throw new Error($.str.format("Cannot insert invalid type: {0}", dto));
-        var config = this._config,
-            obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
+        var config = classRefcheck("Collection", "config", this._config),
+            _message = $.str.format("Cannot insert invalid type: {1} into Collection[\"{0}\"]", config.name, dto);
+        if(!$.exists(dto)) throw $.ku4exception("Collection", _message);
+
+        var obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
             collection = $.ku4store().read(config.name);
         collection.insert(obj);
         collection.save();
@@ -192,7 +204,7 @@ store.prototype = {
         return this;
     },
     find: function(criteria) {
-        var config = this._config,
+        var config = classRefcheck("Collection", "config", this._config),
             collection = $.ku4store().read(config.name),
             data = collection.find(criteria);
         if($.exists(config.find))
@@ -200,16 +212,18 @@ store.prototype = {
         return data;
     },
     update: function(dto) {
-        if(!$.exists(dto)) throw new Error($.str.format("Cannot update type: {0}", dto));
-        var config = this._config,
-            obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
+        var config = classRefcheck("Collection", "config", this._config),
+            _message = $.str.format("Cannot update type: {1} into Collection[\"{0}\"]", config.name, dto);
+        if(!$.exists(dto)) throw $.ku4exception("Collection", _message);
+
+        var obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
             collection = $.ku4store().read(config.name).update({"_ku4Id": obj._ku4Id}, obj).save();
         if($.exists(config.update))
             this._mediator.notify(collection, config.update);
         return this;
     },
     remove: function(dto) {
-        var config = this._config,
+        var config = classRefcheck("Collection", "config", this._config),
             obj = ($.exists(dto) && $.exists(dto.toObject)) ? dto.toObject() : dto,
             collection = $.ku4store().read(config.name).remove(obj).save();
         if($.exists(config.remove))
@@ -222,7 +236,7 @@ $.ku4webApp.store = function(mediator, config) {
 };
 
 function abstractTemplate(config) {
-    this._config = config;
+    this._config = classRefcheck("templates", "config", config);
 }
 abstractTemplate.prototype = {
     $config: function(name) { return ($.exists(name)) ? this._config[name] : this._config; },
@@ -255,13 +269,14 @@ $.ku4webApp.template = function(name, proto) {
     $.Class.extend(template, abstractTemplate);
 
     $.ku4webApp.templates[name] = function(config) {
-        return new template(config);
+        var _config = classRefcheck($.str.format("templates.{0}", name), "config", config);
+        return new template(_config);
     }
 }
 
 function abstractView(templateFactory, formFactory) {
-    this._templateFactory = templateFactory;
-    this._formFactory = formFactory;
+    this._templateFactory = classRefcheck("views", "templateFactory", templateFactory);
+    this._formFactory = classRefcheck("views", "formFactory", formFactory);
 }
 abstractView.prototype = {
     $template: function(name) { return this._templateFactory.create(name); },
@@ -278,6 +293,9 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
     $.Class.extend(view, abstractView);
 
     $.ku4webApp.views[name] = function(app) {
+        var className = $.str.format("$.ku4webApp.views.{0}", name),
+            message = $.str.format("Requires a valid app. app= {0}", app);
+        if(!$.exists(app)) throw $.ku4exception(className, message);
         var _view = new view(app.templateFactory, app.formFactory);
         if($.exists(subscriptions))
             $.hash(subscriptions).each(function(obj) {
