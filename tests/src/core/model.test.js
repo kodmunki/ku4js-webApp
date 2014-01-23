@@ -2,10 +2,11 @@ $(function() {
 
     module("$.ku4webApp.model");
 
-    var mediator = $.mediator(),
-        serviceFactory = $.ku4webApp.serviceFactory(mediator, $.ku4webApp.config.services),
-        storeFactory = $.ku4webApp.storeFactory(mediator, $.ku4webApp.config.collections),
-        validatorFactory = $.ku4webApp.validatorFactory($.ku4webApp.config.validators);
+    var app = $.ku4webApp_testBundle.app()  ,
+        mediator = $.mediator(),
+        serviceFactory = app.serviceFactory,
+        storeFactory = app.storeFactory,
+        validatorFactory = app.validatorFactory;
 
     test("new", function() {
         expect(1);
