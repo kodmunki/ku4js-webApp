@@ -73,6 +73,9 @@ function app() {
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
     this.mediator = mediator;
+    this.serviceFactory = serviceFactory;
+    this.storeFactory = storeFactory;
+    this.validatorFactory = validatorFactory;
     this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
