@@ -24,13 +24,14 @@ store.prototype = {
             this._mediator.notify(data, config.find);
         return data;
     },
-    update: function(dto) {
+    update: function(criteria, dto) {
         var config = classRefcheck("Collection", "config", this._config),
             _message = $.str.format("Cannot update type: {1} into Collection[\"{0}\"]", config.name, dto);
         if(!$.exists(dto)) throw $.ku4exception("Collection", _message);
 
-        var obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
-            collection = $.ku4store().read(config.name).update({"_ku4Id": obj._ku4Id}, obj).save();
+        var obj = ($.exists(dto.toObject)) ? dto.toObject() : dto;
+
+        var collection = $.ku4store().read(config.name).update(criteria, obj).save();
         if($.exists(config.update))
             this._mediator.notify(collection, config.update);
         return this;

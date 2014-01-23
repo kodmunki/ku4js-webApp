@@ -52,7 +52,7 @@ $(function() {
 
         testData.name = "newTester";
 
-        store.update(testData);
+        store.update({"_ku4Id": testData._ku4Id}, testData);
         var updateData = store.find({"_ku4Id": testData._ku4Id})[0];
         equal(updateData.name, "newTester");
         equal(updateData.value, data.value);
