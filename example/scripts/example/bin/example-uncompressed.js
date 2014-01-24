@@ -31,9 +31,6 @@ $.ku4webApp.model("example", {
         var accounts = this.$collection("example").find();
         this.$notify(accounts, "accountsListed");
     }
-},
-{
-    "" : ""
 });
 
 $.ku4webApp.view("otherView", {
@@ -52,7 +49,6 @@ $.ku4webApp.view("otherView", {
 },
 {
     "accountFormRequested": "accountFormRequested",
-    "createAccountCanceled": "hide",
     "accountCreated": "accountCreated",
     "accountInvalid": "accountInvalid",
     "accountsListed": "accountsListed"
@@ -208,7 +204,7 @@ $.ku4webApp.config.templates.views = {
         message: '<li class="css-validation-error">{{message}}</li>'
     },
 
-    account: '<div><div><h4>{{firstName}} {{lastName}}</h4></div>' +
+    account: '<div><h4>{{firstName}} {{lastName}}</h4>' +
                 '<ul class="css-account-error">' +
                     '<li class="css-account-data">' +
                         '<span class="css-label">Username: </span>' +

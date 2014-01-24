@@ -4,7 +4,7 @@ $.ku4webApp.config.templates.views = {
         message: '<li class="css-validation-error">{{message}}</li>'
     },
 
-    account: '<div><div><h4>{{firstName}} {{lastName}}</h4></div>' +
+    account: '<div><h4>{{firstName}} {{lastName}}</h4>' +
                 '<ul class="css-account-error">' +
                     '<li class="css-account-data">' +
                         '<span class="css-label">Username: </span>' +

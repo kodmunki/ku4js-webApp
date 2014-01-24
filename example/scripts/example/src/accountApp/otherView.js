@@ -14,7 +14,6 @@ $.ku4webApp.view("otherView", {
 },
 {
     "accountFormRequested": "accountFormRequested",
-    "createAccountCanceled": "hide",
     "accountCreated": "accountCreated",
     "accountInvalid": "accountInvalid",
     "accountsListed": "accountsListed"

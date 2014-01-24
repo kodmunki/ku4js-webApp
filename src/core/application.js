@@ -4,10 +4,10 @@ function app() {
         serviceFactory = app.serviceFactory(mediator, app.config.services),
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
-    this.mediator = mediator;
     this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
+    this.mediator = mediator;
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },

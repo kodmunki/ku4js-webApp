@@ -3,7 +3,8 @@ $.ku4webApp.model("test", {
     collection: function() { return this.$collection("test"); },
     validator: function(dto) { return this.$validator("test"); },
     notify: function(data) { this.$notify(data); return this; },
-    modelTested: function(data) { this.testData = data; }
+    modelTested: function(data) { this.testData = data; },
+    execute: function(data) { this.$notify(data, "executed"); }
 },
 {
     "modelTested": "modelTested"

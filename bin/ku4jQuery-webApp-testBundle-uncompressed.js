@@ -5,15 +5,15 @@ function app() {
     var app = $.ku4webApp,
         mediator = $.mediator(),
         serviceFactory = $.ku4webApp_testBundle.serviceFactory(mediator, app.config.services),
-        storeFactory = $.ku4webApp.storeFactory(mediator, app.config.collections),
-        validatorFactory = $.ku4webApp.validatorFactory(app.config.validators);
-    this.mediator = mediator;
+        storeFactory = app.storeFactory(mediator, app.config.collections),
+        validatorFactory = app.validatorFactory(app.config.validators);
     this.serviceFactory = serviceFactory;
     this.storeFactory = storeFactory;
     this.validatorFactory = validatorFactory;
     this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
+    this.mediator = mediator;
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },

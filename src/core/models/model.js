@@ -1,6 +1,4 @@
-$.ku4webApp.__models = { };
 $.ku4webApp.model = function(name, proto, subscriptions) {
-
     function model(mediator, serviceFactory, storeFactory, validatorFactory) {
         model.base.call(this, mediator, serviceFactory, storeFactory, validatorFactory);
     }
@@ -8,14 +6,15 @@ $.ku4webApp.model = function(name, proto, subscriptions) {
     $.Class.extend(model, abstractModel);
 
     $.ku4webApp.models[name] = function(mediator, serviceFactory, storeFactory, validatorFactory) {
-        if(!$.exists($.ku4webApp.__models[name])) {
-            var _model = new model(mediator, serviceFactory, storeFactory, validatorFactory);
-            if($.exists(subscriptions))
-                $.hash(subscriptions).each(function(obj) {
-                    mediator.subscribe(obj.key, _model[obj.value], _model);
-                });
-            $.ku4webApp.__models[name] = _model;
+        var _model = new model(mediator, serviceFactory, storeFactory, validatorFactory);
+        if($.exists(subscriptions)) {
+            $.hash(subscriptions).each(function(obj) {
+                var key = obj.key;
+                mediator
+                    .unsubscribe(key, name)
+                    .subscribe(key, _model[obj.value], _model, name);
+            });
         }
-        return $.ku4webApp.__models[name];
+        return _model;
     }
-}
+};

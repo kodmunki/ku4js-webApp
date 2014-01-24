@@ -15,7 +15,4 @@ $.ku4webApp.model("example", {
         var accounts = this.$collection("example").find();
         this.$notify(accounts, "accountsListed");
     }
-},
-{
-    "" : ""
 });

@@ -72,10 +72,10 @@ function app() {
         serviceFactory = app.serviceFactory(mediator, app.config.services),
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
-    this.mediator = mediator;
     this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
+    this.mediator = mediator;
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
@@ -134,9 +134,7 @@ abstractModel.prototype = {
 };
 $.ku4webApp.abstractModel = abstractModel;
 
-$.ku4webApp.__models = { };
 $.ku4webApp.model = function(name, proto, subscriptions) {
-
     function model(mediator, serviceFactory, storeFactory, validatorFactory) {
         model.base.call(this, mediator, serviceFactory, storeFactory, validatorFactory);
     }
@@ -144,17 +142,18 @@ $.ku4webApp.model = function(name, proto, subscriptions) {
     $.Class.extend(model, abstractModel);
 
     $.ku4webApp.models[name] = function(mediator, serviceFactory, storeFactory, validatorFactory) {
-        if(!$.exists($.ku4webApp.__models[name])) {
-            var _model = new model(mediator, serviceFactory, storeFactory, validatorFactory);
-            if($.exists(subscriptions))
-                $.hash(subscriptions).each(function(obj) {
-                    mediator.subscribe(obj.key, _model[obj.value], _model);
-                });
-            $.ku4webApp.__models[name] = _model;
+        var _model = new model(mediator, serviceFactory, storeFactory, validatorFactory);
+        if($.exists(subscriptions)) {
+            $.hash(subscriptions).each(function(obj) {
+                var key = obj.key;
+                mediator
+                    .unsubscribe(key, name)
+                    .subscribe(key, _model[obj.value], _model, name);
+            });
         }
-        return $.ku4webApp.__models[name];
+        return _model;
     }
-}
+};
 
 function service(mediator, config) {
     this._mediator = mediator;
