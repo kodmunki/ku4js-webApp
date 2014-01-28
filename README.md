@@ -317,7 +317,7 @@ implementation carefully, you will likely find your issue in the implementation.
 and $orderby in your find criteria? The $in query takes an object whose key is the property that you are interested in
 and an array value whose content are the values that you would like to include in the search. $orderby, on the other
 hand, takes an object whose key is the property that you are interested in and a numeric value or 1 or -1. 1 for
-ascending ordering and -1 for descendingFor example: if you had a collection of persons and wanted to find all of the
+ascending ordering and -1 for descending. For example: if you had a collection of persons and wanted to find all of the
 people whose first name was John, Linda or Larry and order them by their age in ascending order you could query from
 your model as follows:
 
