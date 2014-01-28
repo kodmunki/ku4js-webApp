@@ -359,6 +359,25 @@ This means that the named notifier is erroneous and should, likely, be removed.<
 <li><p>Along with #4 above, you could also have an exception in your callback method. Read the stack trace and your method
 implementation carefully, you will likely find your issue in the implementation. For further questions, contact
 <a href="mailto:support@kodmunki.com">support@kodmunki.com</a>.</p></li>
+</ol><h1>
+<a name="other-cool-features" class="anchor" href="#other-cool-features"><span class="octicon octicon-link"></span></a>Other cool features</h1>
+
+<ol>
+<li>Did you know that along with the simple CRUD ops of find, insert, update and remove, you can also include $in,
+and $orderby in your find criteria? The $in query takes an object whose key is the property that you are interested in
+and an array value whose content are the values that you would like to include in the search. $orderby, on the other
+hand, takes an object whose key is the property that you are interested in and a numeric value or 1 or -1. 1 for
+ascending ordering and -1 for descending. For example: if you had a collection of persons and wanted to find all of the
+people whose first name was John, Linda or Larry and order them by their age in ascending order you could query from
+your model as follows:</li>
+</ol><div class="highlight highlight-javascript"><pre>    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">$collection</span><span class="p">(</span><span class="s2">"persons"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">$in</span><span class="o">:</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="p">[</span><span class="s2">"John"</span><span class="p">,</span> <span class="s2">"Linda"</span><span class="p">,</span> <span class="s2">"Larry"</span><span class="p">]},</span> <span class="nx">$orderby</span><span class="o">:</span> <span class="p">{</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">1</span> <span class="p">}});</span>
+</pre></div>
+
+<ol>
+<li>Did you know that ku4jQuery-webApps ships with a testingBundle for you to use for your unit tests? You can see it
+at work in the example project's unit tests. For more info, check out the model, view and controller of the example
+application in this project.</li>
 </ol>
       </section>
       <footer>
