@@ -8,6 +8,7 @@ $(function() {
             serviceFactory = app.serviceFactory,
             storeFactory = app.storeFactory,
             validatorFactory = app.validatorFactory;
+
         expect(1);
         ok($.ku4webApp.models.example(mediator, serviceFactory, storeFactory, validatorFactory));
     });

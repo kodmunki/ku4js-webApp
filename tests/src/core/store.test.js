@@ -37,6 +37,32 @@ $(function() {
         store.remove();
     });
 
+    test("find in", function() {
+        var data1 = {
+                name: "test",
+                value: "data"
+            },
+            data2 = {
+                name: "otherTest",
+                value: "otherData"
+            },
+            data3 = {
+                name: "testToo",
+                value: "moreData"
+            },
+            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections.test);
+        store.insert(data1);
+        store.insert(data2);
+        store.insert(data3);
+
+        expect(3);
+        var testData = store.find({$in: {name: ["test", "testToo"]}, $orderby: {value: 1}});
+        equal(testData.length, 2);
+        equal(testData[0].value, data1.value);
+        equal(testData[1].value, data3.value);
+        store.remove();
+    });
+
     test("update", function() {
         var data = {
                 name: "test",
