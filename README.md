@@ -314,18 +314,17 @@ implementation carefully, you will likely find your issue in the implementation.
 #Other cool features
 
 1. Did you know that along with the simple CRUD ops of find, insert, update and remove, you can also include $in,
-and $orderby in your find criteria? For example: if you had a collection of persons and wanted to find all of the people
-whose first name was John, Linda or Larry and order them by their age in ascending order you could query from your
-model as follows:
+and $orderby in your find criteria? The $in query takes an object whose key is the property that you are interested in
+and an array value whose content are the values that you would like to include in the search. $orderby, on the other
+hand, takes an object whose key is the property that you are interested in and a numeric value or 1 or -1. 1 for
+ascending ordering and -1 for descendingFor example: if you had a collection of persons and wanted to find all of the
+people whose first name was John, Linda or Larry and order them by their age in ascending order you could query from
+your model as follows:
 
 ```javascript
     return this.$collection("persons")
         .find({$in: {name: ["John", "Linda", "Larry"]}, $orderby: { age: 1 }});
 ```
-
-The $in query takes an object whose key is the property that you are interested in and an array value whose content are
-the values that you would like to include in the search. $orderby, on the other hand, takes an object whose key is the
-property that you are interested in and a numeric value or 1 or -1. 1 for ascending ordering and -1 for descending
 
 2. Did you know that ku4jQuery-webApps ships with a testingBundle for you to use for your unit tests? You can see it
 at work in the example project's unit tests. For more info, check out the model, view and controller of the example
