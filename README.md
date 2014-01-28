@@ -319,7 +319,8 @@ whose first name was John, Linda or Larry and order them by their age in ascendi
 model as follows:
 
 ```javascript
-    return this.$collection("persons").find({$in: {name: ["John", "Linda", "Larry"]}, $orderby: { age: 1 }});
+    return this.$collection("persons")
+        .find({$in: {name: ["John", "Linda", "Larry"]}, $orderby: { age: 1 }});
 ```
 
 The $in query takes an object whose key is the property that you are interested in and an array value whose content are
