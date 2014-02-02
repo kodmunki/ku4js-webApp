@@ -4,6 +4,7 @@ function service(mediator, config) {
 }
 service.prototype = {
     call: function(dto) {
+        if(!$.exists(dto)) throw $.ku4exception("$.service", "Test Bundle services require a valid dto containing a 'success':true or an 'error':true key value pair.")
         var success = dto.find("success"),
             error = dto.find("error");
 
