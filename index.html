@@ -256,6 +256,25 @@ are required and must be included in your ku4jQuery-web app. You can add more of
 <span class="p">};</span>
 </pre></div>
 
+<h4>
+<a name="service-callbacks" class="anchor" href="#service-callbacks"><span class="octicon octicon-link"></span></a>Service Callbacks</h4>
+
+<p>Services leverage a datagram pattern for returned data. This allows data returned under the guise of a successful
+HTTP request, response cycle as indicated by the returned HTTP status code e.g. 200 OK to be recognized, by the client,
+as an error. This is an excellent pattern for those common instances when a REST call results in a server failure over
+a successful HTTP request, response cycle as indicated by the returned HTTP status code. To leverage this pattern, the
+developer should respond to the client request with a JSON object that contains an "isError: BOOL" key/value pair and a
+"data: DATA" key/value pair, where BOOL is true if the response data is data that pertains to a server error and DATA
+is the information pertinent to and appropriate for the related incoming request.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="p">{</span>
+    <span class="nx">isError</span><span class="o">:</span> <span class="kc">false</span> <span class="c1">//BOOL. A value of 'true' indicates an error</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nb">Object</span><span class="p">()</span> <span class="c1">//Any appropriate object value.</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><em>Remember everything in JavaScript is an Object</em></p>
+
 <h3>
 <a name="configvalidators" class="anchor" href="#configvalidators"><span class="octicon octicon-link"></span></a>config.validators</h3>
 
