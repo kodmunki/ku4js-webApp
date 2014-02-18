@@ -12,7 +12,7 @@ service.prototype = {
                     : $.dto(dto).toQueryString();
 
         $.service()[config.verb]().uri(config.uri)
-            .onSuccess(function(datagram){
+            .onSuccess(function(datagram) {
                 var response = $.dto.parseJson(datagram).toObject();
                 if (response.isError && $.exists(config.error))
                     mediator.notify(response, config.error);

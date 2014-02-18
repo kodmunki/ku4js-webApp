@@ -207,6 +207,24 @@ $.ku4webApp.config.services = {
 };
 ```
 
+####Service Callbacks
+
+Services leverage a datagram pattern for returned data. This allows data returned under the guise of a successful
+HTTP request, response cycle as indicated by the returned HTTP status code e.g. 200 OK to be recognized, by the client,
+as an error. This is an excellent pattern for those common instances when a REST call results in a server failure over
+a successful HTTP request, response cycle as indicated by the returned HTTP status code. To leverage this pattern, the
+developer should respond to the client request with a JSON object that contains an "isError: BOOL" key/value pair and a
+"data: DATA" key/value pair, where BOOL is true if the response data is data that pertains to a server error and DATA
+is the information pertinent to and appropriate for the related incoming request.
+
+```javascript
+{
+    isError: false //BOOL. A value of 'true' indicates an error
+    data: Object() //Any appropriate object value.
+}
+```
+*Remember everything in JavaScript is an Object*
+
 ###config.validators
 
 Configures the validation rules that your models can use to validate operation classes before they are transmitted
