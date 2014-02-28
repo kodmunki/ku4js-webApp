@@ -182,7 +182,7 @@ Configures the local client-side persistence callback structure.
         update: "ON UPDATED",
         remove: "ON REMOVED"
     }
-*/
+ */
 
 $.ku4webApp.config.collections = {
     //ADD YOUR COLLECTIONS HERE
@@ -225,6 +225,33 @@ is the information pertinent to and appropriate for the related incoming request
 ```
 *Remember everything in JavaScript is an Object*
 
+###config.forms
+
+Configures the forms that your controllers will read from when calling model methods that require user input, and that
+your views will write to when there is data coming from the server that should be placed into the form on load, e.g.
+when a user is editing information that they have already provided.
+
+```javascript
+/*
+    NAME: [
+        //FIRST FIELD
+        {
+            selector: "DOM SELECTOR",
+            type: "TYPE", (OPTIONS: field, select, checkbox)
+            required: BOOL
+        },
+        //SECOND FIELD
+        {
+            selector: "DOM SELECTOR",
+            type: "TYPE", (OPTIONS: field, select, checkbox)
+            required: BOOL
+        }]
+ */
+$.ku4webApp.config.forms = {
+    //ADD YOUR FORMS HERE
+};
+```
+
 ###config.validators
 
 Configures the validation rules that your models can use to validate operation classes before they are transmitted
@@ -247,7 +274,7 @@ to the server.
             message: "MESSAGE IF INVALID"
         }]
  */
- $.ku4webApp.config.validators = {
+$.ku4webApp.config.validators = {
     //ADD YOUR VALIDATORS HERE
 };
 ```
