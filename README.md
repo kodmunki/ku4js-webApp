@@ -208,23 +208,23 @@ $.ku4webApp.config.services = {
 };
 ```
 
-####Service Callbacks
+####Service processId
 
-Services leverage a datagram pattern for returned data. This allows data returned under the guise of a successful
-HTTP request, response cycle as indicated by the returned HTTP status code e.g. 200 OK to be recognized, by the client,
-as an error. This is an excellent pattern for those common instances when a REST call results in a server failure over
-a successful HTTP request, response cycle as indicated by the returned HTTP status code. To leverage this pattern, the
-developer should respond to the client request with a JSON object that contains an "isError: BOOL" key/value pair and a
-"data: DATA" key/value pair, where BOOL is true if the response data is data that pertains to a server error and DATA
-is the information pertinent to and appropriate for the related incoming request.
+Sometimes a developer retains state across service calls and in their architecture must be infomed which service call is
+responsible for making the callback. ku4webApp service calls contain a processId for developers to use in this case.
+This processId is returned when invoking the call method. This processId can be used to inform the system as to which
+service call is making a notification of its callback. When a service makes a notification of its callback it will
+notify each subscriber by passing any server data that was returned as a first argument and its processId as the second
+arguments. Note the example callback method below:
 
 ```javascript
-{
-    isError: false //BOOL. A value of 'true' indicates an error
-    data: Object() //Any appropriate object value.
-}
+function callback(serverData, processId) {
+    console.log(serverData); //This will log returned data
+    console.log(serverData); //This will log the notifying servers processId
+};
 ```
-*Remember everything in JavaScript is an Object*
+
+
 
 ###config.forms
 
