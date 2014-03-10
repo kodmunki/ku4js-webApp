@@ -2,59 +2,66 @@ $(function() {
 
     module("controller.example");
 
+    var bundle = $.ku4webAppUT.bundle(),
+        mediator = bundle.mediator(),
+        controller = bundle.controller("example");
+
     test("new", function() {
-        var app = $.ku4webApp_testBundle.app();
         expect(1);
-        ok($.ku4webApp.controllers.example(app));
+        ok(controller);
     });
 
     test("requestForm", function() {
-        var app = $.ku4webApp_testBundle.app(),
-            mediator = app.mediator,
-            controller = $.ku4webApp.controllers.example(app);
-        expect(1);
-        function assertion(data) { equal(data, null); }
-        mediator.clear().subscribe("accountFormRequested", assertion);
+        expect(5);
+        function assertion(data) {
+            equal(data.username, "username");
+            equal(data.password, "1234567");
+            equal(data.firstName, "John");
+            equal(data.lastName, "Doe");
+            equal(data.email, "john.doe@email.com");
+            mediator.unsubscribe("accountFormRequested", 1);
+        }
+        mediator.subscribe("accountFormRequested", assertion, null, 1);
         controller.requestForm();
     });
 
     test("cancel", function() {
-        var app = $.ku4webApp_testBundle.app(),
-            mediator = app.mediator,
-            controller = $.ku4webApp.controllers.example(app);
         expect(1);
-        function assertion(data) { equal(data, null); }
-        mediator.clear().subscribe("createAccountCanceled", assertion);
+        function assertion(data) {
+            equal(data, null);
+            mediator.unsubscribe("createAccountCanceled", 1);
+        }
+        mediator.subscribe("createAccountCanceled", assertion, null, 1);
         controller.cancel();
     });
 
-    test("create", function() {
-        var app = $.ku4webApp_testBundle.app(),
-            mediator = app.mediator,
-            controller = $.ku4webApp.controllers.example(app),
-            result = {
-              "isValid": false,
-              "messages": {
-                "email": "Email is invalid.",
-                "firstName": "First name is invalid.",
-                "lastName": "Last name is invalid.",
-                "password": "Password is invalid.",
-                "username": "Username is invalid."
-              }
-            };
-        expect(1);
-        function assertion(data) { deepEqual(data, result); }
-        mediator.clear().subscribe("accountInvalid", assertion);
+    test("create Invalid", function() {
+        expect(6);
+        function assertion(data) {
+            equal(data.isValid, false);
+            equal(data.messages.username, "Username is invalid.");
+            equal(data.messages.password, "Password is invalid.");
+            equal(data.messages.firstName, "First name is invalid.");
+            equal(data.messages.lastName, "Last name is invalid.");
+            equal(data.messages.email, "Email is invalid.");
+            mediator.unsubscribe("accountInvalid", 1);
+        }
+        mediator.subscribe("accountInvalid", assertion, null, 1);
         controller.create();
     });
 
     test("listAccounts", function() {
-        var app = $.ku4webApp_testBundle.app(),
-            mediator = app.mediator,
-            controller = $.ku4webApp.controllers.example(app);
-        expect(1);
-        function assertion(data) { deepEqual(data, []); }
-        mediator.clear().subscribe("accountsListed", assertion);
+        expect(5);
+        function assertion(data) {
+            var user = data[0];
+            equal(user.username, "username");
+            equal(user.password, "1234567");
+            equal(user.firstName, "John");
+            equal(user.lastName, "Doe");
+            equal(user.email, "john.doe@email.com");
+            mediator.unsubscribe("accountsListed", 1);
+        }
+        mediator.subscribe("accountsListed", assertion, null, 1);
         controller.listAccounts();
     });
 });

@@ -1,6 +1,28 @@
 (function(l){ $=l;
 $.ku4webApp_testBundle = { }
 
+$.ku4webAppUT = { };
+
+function bundle() {
+    var app = $.ku4webApp_testBundle.app();
+    this._mediator = app.mediator;
+    this._app = app;
+}
+bundle.prototype = {
+    mediator: function() { return this._mediator; },
+    model: function(name) {
+        var app = this._app;
+        return $.ku4webApp.models[name](this._mediator, app.serviceFactory, app.storeFactory, app.validatorFactory);
+    },
+    view: function(name) {
+        return $.ku4webApp.views[name](this._app);
+    },
+    controller: function(name) {
+        return $.ku4webApp.controllers[name](this._app);
+    }
+};
+$.ku4webAppUT.bundle = function() { return new bundle(); };
+
 function app() {
     var app = $.ku4webApp,
         mediator = $.mediator(),
@@ -34,12 +56,18 @@ function service(mediator, config) {
 }
 service.prototype = {
     call: function(dto) {
-        if(!$.exists(dto)) throw $.ku4exception("$.service", "Test Bundle services require a valid dto containing a 'success':[data] or an 'error':[data] key value pair.")
-        var success = dto.find("success"),
-            error = dto.find("error");
+        var obj = ($.exists(dto) && $.exists(dto.toObject)) ? dto.toObject() : dto,
+            success = ($.exists(obj)) ? obj.success : null,
+            error = ($.exists(obj)) ? obj.error : null,
+            config = this._config;
 
-        if($.exists(success)) this._mediator.notify(success, this._config.success);
-        else if($.exists(error)) this._mediator.notify(error, this._config.error);
+        if(!$.exists(config))
+            throw $.ku4exception("$.service", "Test Bundle services require a valid config containing a " +
+                                              "'success':[data] and an 'error':[data] configuration.");
+
+        if($.exists(success)) this._mediator.notify(success, config.success);
+        else if($.exists(error)) this._mediator.notify(error, config.error);
+        else this._mediator.notify(obj, config.success);
         return this;
     }
 };

@@ -160,16 +160,15 @@ function service(mediator, config) {
     this._config = config;
 }
 service.prototype = {
-    call: function(dto) {
+    call: function(params) {
         var config = this._config,
             mediator = this._mediator,
-            params = (!$.exists(dto)) ? "" :
-                ($.exists(dto.toQueryString))
-                    ? dto.toQueryString()
-                    : $.dto(dto).toQueryString();
+            svc = ($.exists(config.contentType))
+                ? $.service().contentType(config.contentType)
+                : $.service();
 
-        $.service()[config.verb]().uri(config.uri)
-            .onSuccess(function(datagram){
+        svc[config.verb]().uri(config.uri)
+            .onSuccess(function(datagram) {
                 var response = $.dto.parseJson(datagram).toObject();
                 if (response.isError && $.exists(config.error))
                     mediator.notify(response, config.error);

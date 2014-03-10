@@ -4,12 +4,18 @@ function service(mediator, config) {
 }
 service.prototype = {
     call: function(dto) {
-        if(!$.exists(dto)) throw $.ku4exception("$.service", "Test Bundle services require a valid dto containing a 'success':[data] or an 'error':[data] key value pair.")
-        var success = dto.find("success"),
-            error = dto.find("error");
+        var obj = ($.exists(dto) && $.exists(dto.toObject)) ? dto.toObject() : dto,
+            success = ($.exists(obj)) ? obj.success : null,
+            error = ($.exists(obj)) ? obj.error : null,
+            config = this._config;
 
-        if($.exists(success)) this._mediator.notify(success, this._config.success);
-        else if($.exists(error)) this._mediator.notify(error, this._config.error);
+        if(!$.exists(config))
+            throw $.ku4exception("$.service", "Test Bundle services require a valid config containing a " +
+                                              "'success':[data] and an 'error':[data] configuration.");
+
+        if($.exists(success)) this._mediator.notify(success, config.success);
+        else if($.exists(error)) this._mediator.notify(error, config.error);
+        else this._mediator.notify(obj, config.success);
         return this;
     }
 };

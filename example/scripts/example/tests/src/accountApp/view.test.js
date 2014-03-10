@@ -2,16 +2,16 @@ $(function() {
 
     module("model.example");
 
-    test("new", function() {
-        var app = $.ku4webApp_testBundle.app();
+    var bundle = $.ku4webAppUT.bundle(),
+        view = bundle.view("example");
 
+    test("new", function() {
         expect(1);
-        ok($.ku4webApp.views.example(app));
+        ok(view);
     });
 
     test("accountFormRequested", function() {
-        var app = $.ku4webApp_testBundle.app(),
-            view = $.ku4webApp.views.example(app),
+        var $dom = $(".js-responsebox"),
             data = {
                 username: "john",
                 password: "password",
@@ -22,8 +22,6 @@ $(function() {
 
         expect(5);
         view.accountFormRequested(data);
-        var $dom = $(".js-responsebox");
-
         equal($dom.find("#username").val(), data.username);
         equal($dom.find("#password").val(), data.password);
         equal($dom.find("#firstName").val(), data.firstName);
