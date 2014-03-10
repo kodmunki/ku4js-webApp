@@ -31,8 +31,7 @@ $.ku4webApp.model("example", {
         return this;
     },
     listAccounts: function() {
-        var svc = this.$service("account.list").call();
-        console.log(svc)
+        this.$service("account.list").call();
         return this;
     },
     clearAccounts: function() {
@@ -40,12 +39,11 @@ $.ku4webApp.model("example", {
         return this;
     },
     _accountCreated: function(dto) {
-        console.log("_accountCreated - ", dto)
         this.$collection("example").insert(dto);
         this.$notify(dto, "accountCreated");
     },
     _accountsListed: function(dto) {
-        console.log(dto);
+        console.log(arguments)
         var accounts = this.$collection("example").find();
         this.$notify(accounts, "accountsListed");
     }
