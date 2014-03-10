@@ -23,11 +23,10 @@ $.ku4webApp.model("example", {
         return this;
     },
     _accountCreated: function(dto) {
-        console.log("_accountCreated - ", dto)
         this.$collection("example").insert(dto);
         this.$notify(dto, "accountCreated");
     },
-    _accountsListed: function() {
+    _accountsListed: function(dto) {
         var accounts = this.$collection("example").find();
         this.$notify(accounts, "accountsListed");
     }

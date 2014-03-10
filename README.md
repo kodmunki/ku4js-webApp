@@ -198,6 +198,7 @@ Configures the ajax services
     NAME: {
         verb: "VERB",
         uri: "URI",
+        contentType: "Content-Type" //(OPTIONAL)
         success: "ON SUCCESS",
         error: "ON ERROR"
     }
