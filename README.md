@@ -220,7 +220,7 @@ arguments. Note the example callback method below:
 ```javascript
 function callback(serverData, processId) {
     console.log(serverData); //This will log returned data
-    console.log(serverData); //This will log the notifying servers processId
+    console.log(processId); //This will log the notifying servers processId
 };
 ```
 
