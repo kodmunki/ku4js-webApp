@@ -15,9 +15,8 @@ $.ku4webApp.controller("example", {
 });
 
 $.ku4webApp.model("example", {
-    requestForm: function(username) {
-        var data = this.$collection("example").find({"username": username})[0];
-        this.$notify(data, "accountFormRequested");
+    requestForm: function() {
+        this.$notify("accountFormRequested");
         return this;
     },
     cancelForm: function() {
@@ -43,16 +42,18 @@ $.ku4webApp.model("example", {
         this.$notify(dto, "accountCreated");
     },
     _accountsListed: function(dto) {
-        console.log(arguments)
         var accounts = this.$collection("example").find();
         this.$notify(accounts, "accountsListed");
+    },
+    _error: function() {
+        throw new Error("Service Exception")
     }
 },
 {
     "svc+accountCreated": "_accountCreated",
-    "svc-accountCreated": "_accountCreated",
+    "svc-accountCreated": "_error",
     "svc+accountsListed": "_accountsListed",
-    "svc-accountsListed": "_accountsListed"
+    "svc-accountsListed": "_error"
 });
 
 $.ku4webApp.view("otherView", {
@@ -113,6 +114,9 @@ $.ku4webApp.view("example", {
     accountsListed: function(data) {
         var template = this.$template("example");
         this.displayList(template.renderAccountList(data)).hide();
+    },
+    logComplete: function(data) {
+        console.log(data);
     }
 },
 {
@@ -120,7 +124,8 @@ $.ku4webApp.view("example", {
     "createAccountCanceled": "hide",
     "accountCreated": "accountCreated",
     "accountInvalid": "accountInvalid",
-    "accountsListed": "accountsListed"
+    "accountsListed": "accountsListed",
+    "serviceComplete": "logComplete"
 });
 
 $.ku4webApp.config.collections = {

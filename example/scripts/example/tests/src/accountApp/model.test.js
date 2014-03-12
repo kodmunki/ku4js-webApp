@@ -2,7 +2,7 @@ $(function() {
 
     module("model.example");
 
-    var bundle = $.ku4webAppUT.bundle(),
+    var bundle = $.ku4webAppUT.bundle().throwErrors(),
         mediator = bundle.mediator(),
         model = bundle.model("example");
 
@@ -12,13 +12,9 @@ $(function() {
     });
 
     test("requestForm", function() {
-        expect(5);
+        expect(1);
         function assertion(data) {
-            equal(data.username, "username");
-            equal(data.password, "1234567");
-            equal(data.firstName, "John");
-            equal(data.lastName, "Doe");
-            equal(data.email, "john.doe@email.com");
+            equal(data, null);
             mediator.unsubscribe("accountFormRequested", 1);
         }
         mediator.subscribe("accountFormRequested", assertion, null, 1);
@@ -38,11 +34,12 @@ $(function() {
     test("createAccount Valid", function() {
         expect(5);
         function assertion(data) {
-            equal(data.username, "username");
-            equal(data.password, "1234567");
-            equal(data.firstName, "John");
-            equal(data.lastName, "Doe");
-            equal(data.email, "john.doe@email.com");
+            var account = $.dto.parseQueryString(data).toObject();
+            equal(account.username, "username");
+            equal(account.password, "1234567");
+            equal(account.firstName, "John");
+            equal(account.lastName, "Doe");
+            equal(account.email, "john.doe@email.com");
             mediator.unsubscribe("accountCreated", 1);
         }
         mediator.subscribe("accountCreated", assertion, null, 1);
@@ -51,14 +48,7 @@ $(function() {
             password: "1234567",
             firstName: "John",
             lastName: "Doe",
-            email: "john.doe@email.com",
-            success: {
-                username: "username",
-                password: "1234567",
-                firstName: "John",
-                lastName: "Doe",
-                email: "john.doe@email.com"
-            }
+            email: "john.doe@email.com"
         }));
     });
 
@@ -76,7 +66,7 @@ $(function() {
     test("listAccounts", function() {
         expect(5);
         function assertion(data) {
-            var user = data[0];
+            var user = $.dto.parseQueryString(data[0]).toObject();
             equal(user.username, "username");
             equal(user.password, "1234567");
             equal(user.firstName, "John");

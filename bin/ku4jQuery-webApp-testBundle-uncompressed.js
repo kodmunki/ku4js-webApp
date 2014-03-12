@@ -10,6 +10,8 @@ function bundle() {
 }
 bundle.prototype = {
     mediator: function() { return this._mediator; },
+    logErrors: function() { this._mediator.logErrors(); return this; },
+    throwErrors: function() { this._mediator.throwErrors(); return this; },
     model: function(name) {
         var app = this._app;
         return $.ku4webApp.models[name](this._mediator, app.serviceFactory, app.storeFactory, app.validatorFactory);
@@ -19,6 +21,9 @@ bundle.prototype = {
     },
     controller: function(name) {
         return $.ku4webApp.controllers[name](this._app);
+    },
+    template: function(name) {
+        return this._app.templateFactory.create(name);
     }
 };
 $.ku4webAppUT.bundle = function() { return new bundle(); };
@@ -55,19 +60,17 @@ function service(mediator, config) {
     this._config = config;
 }
 service.prototype = {
-    call: function(dto) {
-        var obj = ($.exists(dto) && $.exists(dto.toObject)) ? dto.toObject() : dto,
-            success = ($.exists(obj)) ? obj.success : null,
-            error = ($.exists(obj)) ? obj.error : null,
-            config = this._config;
+    call: function(data) {
+        var config = this._config,
+            isError = /__error/.test(data);
 
         if(!$.exists(config))
             throw $.ku4exception("$.service", "Test Bundle services require a valid config containing a " +
                                               "'success':[data] and an 'error':[data] configuration.");
 
-        if($.exists(success)) this._mediator.notify(success, config.success);
-        else if($.exists(error)) this._mediator.notify(error, config.error);
-        else this._mediator.notify(obj, config.success);
+        if($.exists(config.error) && isError) this._mediator.notify(data, config.error);
+        else if($.exists(config.success)) this._mediator.notify(data, config.success);
+
         return this;
     }
 };

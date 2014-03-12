@@ -19,6 +19,9 @@ $.ku4webApp.view("example", {
     accountsListed: function(data) {
         var template = this.$template("example");
         this.displayList(template.renderAccountList(data)).hide();
+    },
+    logComplete: function(data) {
+        console.log(data);
     }
 },
 {
@@ -26,5 +29,6 @@ $.ku4webApp.view("example", {
     "createAccountCanceled": "hide",
     "accountCreated": "accountCreated",
     "accountInvalid": "accountInvalid",
-    "accountsListed": "accountsListed"
+    "accountsListed": "accountsListed",
+    "serviceComplete": "logComplete"
 });

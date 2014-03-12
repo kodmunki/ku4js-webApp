@@ -2,7 +2,7 @@ $(function() {
 
     module("controller.example");
 
-    var bundle = $.ku4webAppUT.bundle(),
+    var bundle = $.ku4webAppUT.bundle().throwErrors(),
         mediator = bundle.mediator(),
         controller = bundle.controller("example");
 
@@ -12,13 +12,9 @@ $(function() {
     });
 
     test("requestForm", function() {
-        expect(5);
+        expect(1);
         function assertion(data) {
-            equal(data.username, "username");
-            equal(data.password, "1234567");
-            equal(data.firstName, "John");
-            equal(data.lastName, "Doe");
-            equal(data.email, "john.doe@email.com");
+            equal(data, null);
             mediator.unsubscribe("accountFormRequested", 1);
         }
         mediator.subscribe("accountFormRequested", assertion, null, 1);
@@ -53,7 +49,7 @@ $(function() {
     test("listAccounts", function() {
         expect(5);
         function assertion(data) {
-            var user = data[0];
+            var user = $.dto.parseQueryString(data[0]).toObject();
             equal(user.username, "username");
             equal(user.password, "1234567");
             equal(user.firstName, "John");
@@ -64,4 +60,5 @@ $(function() {
         mediator.subscribe("accountsListed", assertion, null, 1);
         controller.listAccounts();
     });
+
 });

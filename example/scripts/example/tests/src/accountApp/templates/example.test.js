@@ -1,15 +1,17 @@
 $(function() {
 
-    module("templates.example")
+    module("templates.example");
+
+    var bundle = $.ku4webAppUT.bundle(),
+        template = bundle.template("example");
 
     test("new", function() {
         expect(1);
-        ok($.ku4webApp.templates.example($.ku4webApp.config.templates));
+        ok(template);
     });
 
     test("renderForm", function() {
-        var template = $.ku4webApp.templates.example($.ku4webApp.config.templates),
-            result = '<div class="js-validationMessages"></div>' +
+        var result = '<div class="js-validationMessages"></div>' +
                      '<form class="js-example-form css-example-form">' +
                      '<div class="css-field"><label for="username">Username</label>' +
                      '<input id="username" name="username" type="text" value=""/></div>' +
@@ -35,8 +37,7 @@ $(function() {
     });
 
     test("renderValidation", function() {
-        var template = $.ku4webApp.templates.example($.ku4webApp.config.templates),
-            data = {
+        var data = {
                 username: "Invalid must be 10 characters.",
                 password: "Invalid cannot contain special characters."
             },
@@ -49,8 +50,7 @@ $(function() {
     });
 
     test("renderAccountList", function() {
-        var template = $.ku4webApp.templates.example($.ku4webApp.config.templates),
-            data = [{
+        var data = [{
                 username: "johnUsername",
                 password: "password",
                 firstName: "John",
