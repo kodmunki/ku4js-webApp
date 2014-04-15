@@ -12,6 +12,7 @@ bundle.prototype = {
     mediator: function() { return this._mediator; },
     logErrors: function() { this._mediator.logErrors(); return this; },
     throwErrors: function() { this._mediator.throwErrors(); return this; },
+    callback: function(callback){ $.ku4webApp_testBundle.callback = callback; return this; },
     model: function(name) {
         var app = this._app;
         return $.ku4webApp.models[name](this._mediator, app.serviceFactory, app.storeFactory, app.validatorFactory);
@@ -62,14 +63,17 @@ function service(mediator, config) {
 service.prototype = {
     call: function(data) {
         var config = this._config,
-            isError = /__error/.test(data);
-
+            isError = /__error/.test(data),
+            callback = $.ku4webApp_testBundle.callback || function(data) { return data},
+            callbackData = callback(data);
         if(!$.exists(config))
             throw $.ku4exception("$.service", "Test Bundle services require a valid config containing a " +
                                               "'success':[data] and an 'error':[data] configuration.");
 
-        if($.exists(config.error) && isError) this._mediator.notify(data, config.error);
-        else if($.exists(config.success)) this._mediator.notify(data, config.success);
+        if($.exists(config.error) && isError) this._mediator.notify(callbackData, config.error);
+        else if($.exists(config.success)) this._mediator.notify(callbackData, config.success);
+
+        $.ku4webApp_testBundle.callback = function(data) { return data };
 
         return this;
     }

@@ -28,13 +28,14 @@ $(function() {
             mediator.unsubscribe("createAccountCanceled", 1);
         }
         mediator.subscribe("createAccountCanceled", assertion, null, 1);
+
         model.cancelForm();
     });
 
     test("createAccount Valid", function() {
         expect(5);
         function assertion(data) {
-            var account = $.dto.parseQueryString(data).toObject();
+            var account = data.toObject();
             equal(account.username, "username");
             equal(account.password, "1234567");
             equal(account.firstName, "John");
@@ -43,6 +44,9 @@ $(function() {
             mediator.unsubscribe("accountCreated", 1);
         }
         mediator.subscribe("accountCreated", assertion, null, 1);
+        bundle.callback(function(data){
+            return $.dto.parseQueryString(data).toJson();
+        });
         model.clearAccounts().createAccount($.dto({
             username: "username",
             password: "1234567",
@@ -66,7 +70,7 @@ $(function() {
     test("listAccounts", function() {
         expect(5);
         function assertion(data) {
-            var user = $.dto.parseQueryString(data[0]).toObject();
+            var user = data[0];
             equal(user.username, "username");
             equal(user.password, "1234567");
             equal(user.firstName, "John");

@@ -49,7 +49,7 @@ $(function() {
     test("listAccounts", function() {
         expect(5);
         function assertion(data) {
-            var user = $.dto.parseQueryString(data[0]).toObject();
+            var user = data[0];
             equal(user.username, "username");
             equal(user.password, "1234567");
             equal(user.firstName, "John");
