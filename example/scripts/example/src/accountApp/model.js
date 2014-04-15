@@ -14,8 +14,6 @@ $.ku4webApp.model("example", {
         return this;
     },
     listAccounts: function() {
-        console.log(this.$collection("example")
-                        .join("example2", "username", "username"));
         this.$service("account.list").call();
         return this;
     },
@@ -26,8 +24,6 @@ $.ku4webApp.model("example", {
     _accountCreated: function(response) {
         var dto = $.dto.parseJson(response);
         this.$collection("example").insert(dto);
-        this.$collection("example2").insert(dto);
-        this.$collection("example3").insert(dto);
         this.$notify(dto, "accountCreated");
     },
     _accountsListed: function(response) {

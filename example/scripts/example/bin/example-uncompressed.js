@@ -31,7 +31,7 @@ $.ku4webApp.model("example", {
     },
     listAccounts: function() {
         console.log(this.$collection("example")
-                        .join("example2", "username", "username"));
+                        .join("example2", "username", "username").find({"accounts.username":"username1"}));
         this.$service("account.list").call();
         return this;
     },
