@@ -1,17 +1,17 @@
-function store(mediator, config, key, join) {
+function store(mediator, config, key, collection) {
     this._mediator = mediator;
     this._config = config;
     this._key = key;
-    this._join = join;
+    this._collection = collection;
 }
 store.prototype = {
     insert: function(dto) {
-        var config = classRefcheck("Collection", "config", this._config[this._key]),
+        var config = this.__config(),
             _message = $.str.format("Cannot insert invalid type: {1} into Collection[\"{0}\"]", config.name, dto);
         if(!$.exists(dto)) throw $.ku4exception("Collection", _message);
 
         var obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
-            collection = $.ku4store().read(config.name);
+            collection = this.__collection();
         collection.insert(obj);
         collection.save();
         if($.exists(config.insert))
@@ -19,43 +19,53 @@ store.prototype = {
         return this;
     },
     find: function(criteria) {
-        var config = classRefcheck("Collection", "config", this._config[this._key]),
-            join = this._join,
-            collection = ($.exists(join))
-                ? $.ku4store().read(config.name).join($.ku4store().read(join[0]), join[1], join[2])
-                : $.ku4store().read(config.name),
+        var config = this.__config(),
+            collection = this.__collection(),
             data = collection.find(criteria);
         if($.exists(config.find))
             this._mediator.notify(data, config.find);
         return data;
     },
     update: function(criteria, dto) {
-        var config = classRefcheck("Collection", "config", this._config[this._key]),
+        var config = this.__config(),
             _message = $.str.format("Cannot update type: {1} into Collection[\"{0}\"]", config.name, dto);
         if(!$.exists(dto)) throw $.ku4exception("Collection", _message);
 
         var obj = ($.exists(dto.toObject)) ? dto.toObject() : dto;
 
-        var collection = $.ku4store().read(config.name).update(criteria, obj).save();
+        var collection = this.__collection().update(criteria, obj).save();
         if($.exists(config.update))
             this._mediator.notify(collection, config.update);
         return this;
     },
     remove: function(dto) {
-        var config = classRefcheck("Collection", "config", this._config[this._key]),
-            obj = ($.exists(dto) && $.exists(dto.toObject)) ? dto.toObject() : dto,
-            collection = $.ku4store().read(config.name).remove(obj).save();
+        var obj = ($.exists(dto) && $.exists(dto.toObject)) ? dto.toObject() : dto,
+            config = this.__config(),
+            collection = this.__collection().remove(obj).save();
         if($.exists(config.remove))
             this._mediator.notify(collection, config.remove);
         return this;
     },
     join: function() {
-        var args = $.list.parseArguments(arguments).toArray(),
-            config = this._config,
-            name = args[0],
-            confg = config[name];
-        if($.exists(confg)) args[0] = confg.name;
-        return new store(this._mediator, this._config, this._key, args);
+        var config = this._config,
+            name = arguments[0],
+            on = arguments[1],
+            equals = arguments[2],
+            collectionConfig = config[name],
+            joinName = ($.exists(collectionConfig)) ? collectionConfig.name : name,
+            collection1 = this.__collection(),
+            collection2 = $.ku4store().read(joinName),
+            join = collection1.join(collection2, on, equals),
+            join_name = join.name(),
+            newConfig = $.hash(config).replicate().add(join_name, { name: join_name }).toObject();
+        return new store(this._mediator, newConfig, join_name, join);
+    },
+    __config: function() {
+        return classRefcheck("Collection", "config", this._config[this._key]);
+    },
+    __collection: function() {
+        var collection = this._collection;
+        return ($.exists(collection)) ? collection : $.ku4store().read(this.__config().name);
     }
 };
 $.ku4webApp.store = function(mediator, config, confg) {

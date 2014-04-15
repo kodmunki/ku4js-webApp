@@ -30,6 +30,8 @@ $.ku4webApp.model("example", {
         return this;
     },
     listAccounts: function() {
+        console.log(this.$collection("example")
+                        .join("example2", "username", "username"));
         this.$service("account.list").call();
         return this;
     },
@@ -41,6 +43,7 @@ $.ku4webApp.model("example", {
         var dto = $.dto.parseJson(response);
         this.$collection("example").insert(dto);
         this.$collection("example2").insert(dto);
+        this.$collection("example3").insert(dto);
         this.$notify(dto, "accountCreated");
     },
     _accountsListed: function(response) {
@@ -140,6 +143,13 @@ $.ku4webApp.config.collections = {
     },
     example2: {
         name: "users"
+        //insert: "accountCreated",
+        //find: "accountRead",
+        //update: "accountUpdated",
+        //remove: "accountRemoved"
+    },
+    example3: {
+        name: "otherUsers"
         //insert: "accountCreated",
         //find: "accountRead",
         //update: "accountUpdated",
