@@ -28,7 +28,6 @@ $(function() {
             mediator.unsubscribe("createAccountCanceled", 1);
         }
         mediator.subscribe("createAccountCanceled", assertion, null, 1);
-
         model.cancelForm();
     });
 

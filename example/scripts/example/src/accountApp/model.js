@@ -24,6 +24,13 @@ $.ku4webApp.model("example", {
     _accountCreated: function(response) {
         var dto = $.dto.parseJson(response);
         this.$collection("example").insert(dto);
+        this.$collection("example2").insert($.dto({
+            "username": "username1",
+            "password": "pass",
+            "firstName": "jacob",
+            "lastName": "mulholland",
+            "email": "jacob@mulholland.com"
+        }));
         this.$notify(dto, "accountCreated");
     },
     _accountsListed: function(response) {
