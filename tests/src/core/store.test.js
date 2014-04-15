@@ -4,7 +4,7 @@ $(function() {
 
     test("new", function() {
         expect(1);
-        ok($.ku4webApp.store($.mediator(), $.ku4webApp.config.collections.test));
+        ok($.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test"));
     });
 
     test("insert", function() {
@@ -12,7 +12,7 @@ $(function() {
             name: "test",
             value: "data"
             },
-            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections.test);
+            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test");
         store.insert(data);
 
         expect(2);
@@ -27,7 +27,7 @@ $(function() {
             name: "test",
             value: "data"
             },
-            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections.test);
+            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test");
         store.insert(data);
 
         expect(2);
@@ -50,7 +50,7 @@ $(function() {
                 name: "testToo",
                 value: "moreData"
             },
-            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections.test);
+            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test");
         store.insert(data1);
         store.insert(data2);
         store.insert(data3);
@@ -68,7 +68,7 @@ $(function() {
                 name: "test",
                 value: "data"
             },
-            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections.test);
+            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test");
         store.insert(data);
 
         expect(4);
@@ -89,7 +89,7 @@ $(function() {
             name: "test",
             value: "data"
             },
-            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections.test);
+            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test");
         store.insert(data);
 
         expect(3);
@@ -134,17 +134,30 @@ $(function() {
             });
         $.ku4store().write(collection1).write(collection2);
 
-        var store = $.ku4webApp.store($.mediator(), { name: "collection1" }),
-            result = store.join("collection2", "id", "cid").find({
-            "collection1.name": "myName2",
-            "collection2.name": "otherName1"
-        })[0];
+        var config = {
+                test1: { name: "collection1" },
+                test2: { name: "collection2" }
+            },
+            store = $.ku4webApp.store($.mediator(), config, "test1"),
+            result1 = store.join("test2", "id", "cid").find({
+                "collection1.name": "myName2",
+                "collection2.name": "otherName1"
+            })[0],
+            result2 = store.join("collection2", "id", "cid").find({
+                "collection1.name": "myName2",
+                "collection2.name": "otherName1"
+            })[0];
 
-        expect(4);
-        equal(result["collection1.id"], 200);
-        equal(result["collection2.id"], 120);
-        equal(result["collection1.name"], "myName2");
-        equal(result["collection2.name"], "otherName1");
+        expect(8);
+        equal(result1["collection1.id"], 200);
+        equal(result1["collection2.id"], 120);
+        equal(result1["collection1.name"], "myName2");
+        equal(result1["collection2.name"], "otherName1");
+
+        equal(result2["collection1.id"], 200);
+        equal(result2["collection2.id"], 120);
+        equal(result2["collection1.name"], "myName2");
+        equal(result2["collection2.name"], "otherName1");
     });
 
 });

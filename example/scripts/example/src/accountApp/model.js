@@ -21,11 +21,13 @@ $.ku4webApp.model("example", {
         this.$collection("example").remove();
         return this;
     },
-    _accountCreated: function(dto) {
+    _accountCreated: function(response) {
+        var dto = $.dto.parseJson(response);
         this.$collection("example").insert(dto);
+        this.$collection("example2").insert(dto);
         this.$notify(dto, "accountCreated");
     },
-    _accountsListed: function(dto) {
+    _accountsListed: function(response) {
         var accounts = this.$collection("example").find();
         this.$notify(accounts, "accountsListed");
     },

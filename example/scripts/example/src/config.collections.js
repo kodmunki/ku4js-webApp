@@ -5,5 +5,12 @@ $.ku4webApp.config.collections = {
         //find: "accountRead",
         //update: "accountUpdated",
         //remove: "accountRemoved"
+    },
+    example2: {
+        name: "users"
+        //insert: "accountCreated",
+        //find: "accountRead",
+        //update: "accountUpdated",
+        //remove: "accountRemoved"
     }
 }
