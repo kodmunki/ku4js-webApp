@@ -7,33 +7,44 @@ $(function() {
         ok($.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test"));
     });
 
-    test("insert", function() {
-        var data = {
-            name: "test",
-            value: "data"
+    test("find", function() {
+        var data1 = {
+                name: "test",
+                value: "data"
             },
-            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test");
-        store.insert(data);
+            data2 = {
+                name: "test",
+                value: "data"
+            };
+        var store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test").init([data1, data2]);
+        var results = store.find({name: "test"});
 
-        expect(2);
-        var testData = store.find({name: "test"})[0];
-        equal(testData.name, data.name);
-        equal(testData.value, data.value);
+        console.log(store)
+
+        expect(5);
+        equal(results.length, 2);
+        equal(results[0].name, data1.name);
+        equal(results[0].value, data1.value);
+        equal(results[1].name, data2.name);
+        equal(results[1].value, data2.value);
         store.remove();
     });
 
-    test("find", function() {
+    test("insert", function() {
         var data = {
-            name: "test",
-            value: "data"
+                name: "test",
+                value: "data"
             },
-            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test");
-        store.insert(data);
+            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                        .insert(data).insert(data),
+            results = store.find({name: "test"});
 
-        expect(2);
-        var testData = store.find({name: "test"})[0];
-        equal(testData.name, data.name);
-        equal(testData.value, data.value);
+        expect(5);
+        equal(results.length, 2);
+        equal(results[0].name, data.name);
+        equal(results[0].value, data.value);
+        equal(results[1].name, data.name);
+        equal(results[1].value, data.value);
         store.remove();
     });
 
@@ -50,11 +61,8 @@ $(function() {
                 name: "testToo",
                 value: "moreData"
             },
-            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test");
-        store.insert(data1);
-        store.insert(data2);
-        store.insert(data3);
-
+            store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                    .insert(data1).insert(data2).insert(data3);
         expect(3);
         var testData = store.find({$in: {name: ["test", "testToo"]}, $orderby: {value: 1}});
         equal(testData.length, 2);
@@ -80,7 +88,7 @@ $(function() {
 
         store.update({"_ku4Id": testData._ku4Id}, testData);
         var updateData = store.find({"_ku4Id": testData._ku4Id})[0];
-        equal(updateData.name, "newTester");
+        equal(updateData.name, "test");
         equal(updateData.value, data.value);
     });
 

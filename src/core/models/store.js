@@ -5,26 +5,30 @@ function store(mediator, config, key, collection) {
     this._collection = collection;
 }
 store.prototype = {
-    insert: function(dto) {
-        var config = this.__config(),
-            _message = $.str.format("Cannot insert invalid type: {1} into Collection[\"{0}\"]", config.name, dto);
-        if(!$.exists(dto)) throw $.ku4exception("Collection", _message);
-
-        var obj = ($.exists(dto.toObject)) ? dto.toObject() : dto,
-            collection = this.__collection();
-        collection.insert(obj);
-        collection.save();
-        if($.exists(config.insert))
-            this._mediator.notify(collection, config.insert);
+    init: function(list) {
+        this.__collection().init(list).save();
         return this;
     },
     find: function(criteria) {
         var config = this.__config(),
-            collection = this.__collection(),
-            data = collection.find(criteria);
+            data = this.__collection().find(criteria);
+
         if($.exists(config.find))
             this._mediator.notify(data, config.find);
         return data;
+    },
+    insert: function(dto) {
+        var config = this.__config(),
+            message = $.str.format("Cannot insert invalid type: {1} into Collection[\"{0}\"]", config.name, dto),
+            collection = this.__collection();
+
+        if(!$.exists(dto)) throw $.ku4exception("Collection", message);
+        collection.insert(dto).save();
+
+        if($.exists(config.insert))
+            this._mediator.notify(collection, config.insert);
+
+        return this;
     },
     update: function(criteria, dto) {
         var config = this.__config(),
@@ -68,6 +72,6 @@ store.prototype = {
         return ($.exists(collection)) ? collection : $.ku4store().read(this.__config().name);
     }
 };
-$.ku4webApp.store = function(mediator, config, confg) {
-    return new store(mediator, config, confg);
+$.ku4webApp.store = function(mediator, config, key, collection) {
+    return new store(mediator, config, key, collection);
 };
