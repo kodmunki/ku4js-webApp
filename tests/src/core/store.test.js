@@ -19,8 +19,6 @@ $(function() {
         var store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test").init([data1, data2]);
         var results = store.find({name: "test"});
 
-        console.log(store)
-
         expect(5);
         equal(results.length, 2);
         equal(results[0].name, data1.name);
@@ -168,4 +166,25 @@ $(function() {
         equal(result2["collection2.name"], "otherName1");
     });
 
+    test("exec", function() {
+        var data1 = {
+                name: "test",
+                value: "data"
+            },
+            data2 = {
+                name: "test",
+                value: "data"
+            };
+        var store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                        .init([data1, data2]).exec(function(item) { return {"id": item.name, "value": 1}});
+        var results = store.find({name: "test"});
+
+        expect(5);
+        equal(results.length, 2);
+        equal(results[0].id, data1.name);
+        equal(results[0].value, 1);
+        equal(results[1].id, data2.name);
+        equal(results[1].value, 1);
+        store.remove();
+    });
 });

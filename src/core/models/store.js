@@ -64,6 +64,10 @@ store.prototype = {
             newConfig = $.hash(config).replicate().add(join_name, { name: join_name }).toObject();
         return new store(this._mediator, newConfig, join_name, join);
     },
+    exec: function(func) {
+        this._collection = this.__collection().exec(func);
+        return this;
+    },
     __config: function() {
         return classRefcheck("Collection", "config", this._config[this._key]);
     },
