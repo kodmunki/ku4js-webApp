@@ -6,6 +6,7 @@ function store(mediator, config, key, collection) {
 }
 store.prototype = {
     init: function(list) {
+        this._collection = null;
         this.__collection().init(list).save();
         return this;
     },
@@ -28,6 +29,10 @@ store.prototype = {
         if($.exists(config.insert))
             this._mediator.notify(collection, config.insert);
 
+        return this;
+    },
+    insertList: function(list) {
+        this.__collection().insertList(list).save();
         return this;
     },
     update: function(criteria, dto) {

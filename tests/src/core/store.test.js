@@ -176,8 +176,8 @@ $(function() {
                 value: "data"
             };
         var store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
-                        .init([data1, data2]).exec(function(item) { return {"id": item.name, "value": 1}});
-        var results = store.find({name: "test"});
+                        .insertList([data1, data2]).exec(function(item) { return {"id": item.name, "value": 1}});
+        var results = store.find();
 
         expect(5);
         equal(results.length, 2);
