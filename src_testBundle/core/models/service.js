@@ -5,9 +5,9 @@ function service(mediator, config) {
 service.prototype = {
     call: function(data) {
         var config = this._config,
-            isError = /__error/.test(data),
-            callback = $.ku4webApp_testBundle.callback || function(data) { return data; },
-            callbackData = callback(data);
+            callback = $.ku4webApp_testBundle.callback || function(data) { return data;},
+            callbackData = callback(data),
+            isError = /^__error__$/i.test(callbackData);
         if(!$.exists(config))
             throw $.ku4exception("$.service", "Test Bundle services require a valid config containing a " +
                                               "'success':[data] and an 'error':[data] configuration.");
