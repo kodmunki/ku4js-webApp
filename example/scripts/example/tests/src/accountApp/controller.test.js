@@ -3,7 +3,6 @@ $(function() {
     module("controller.example");
 
     var bundle = $.ku4webAppUT.bundle().throwErrors(),
-        mediator = bundle.mediator(),
         controller = bundle.controller("example");
 
     test("new", function() {

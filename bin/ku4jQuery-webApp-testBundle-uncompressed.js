@@ -72,8 +72,8 @@ $.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, storeFac
     var model = $.ku4webApp.models[name](mediator, serviceFactory, storeFactory, validatorFactory),
         testModel = { };
 
-    function func(data) {
-        $.ku4webApp_testBundle.onModelCall(data);
+    function func() {
+        $.ku4webApp_testBundle.onModelCall.apply(this, arguments);
         $.ku4webApp_testBundle.onModelCall = function() { return; };
     }
 
