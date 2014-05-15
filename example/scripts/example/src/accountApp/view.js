@@ -21,7 +21,7 @@ $.ku4webApp.view("example", {
         this.displayList(template.renderAccountList(data)).hide();
     },
     logComplete: function(data) {
-        console.log(data);
+        //console.log(data);
     }
 },
 {
