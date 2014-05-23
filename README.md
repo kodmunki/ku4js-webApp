@@ -1,13 +1,13 @@
-#ku4jQuery-webApp
+#ku4js-webApp
 
-kodmunki™ utilities for jQuery Web Applications.
+kodmunki™ utilities for js Web Applications.
 
 This project contains everything needed to create a compact and powerful MVC client application using kodmunki tools
-in conjunction with jQuery. A Web Application created with this project will contain html templating engines,
+for JavaScript. A Web Application created with this project will contain html templating engines,
 ajax services, local persistence that leverages HTML5 localStorage, form reading, writing and validation, and an
 incredible suite of excellent JavaScript tools including specifcation patterns and DTO (Data Transfer Objects),
-brought to you by [ku4jQuery-kernel](https://github.com/kodmunki/ku4jQuery-kernel) and
-[ku4jQuery-data](https://github.com/kodmunki/ku4jQuery-data). All of these technologies are rooted in SOLID OO
+brought to you by [ku4js-kernel](https://github.com/kodmunki/ku4js-kernel) and
+[ku4js-data](https://github.com/kodmunki/ku4js-data). All of these technologies are rooted in SOLID OO
 principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.
 
 ---
@@ -25,7 +25,6 @@ The following variables found in setup () are
 expected to be changed by the developer running
 this process:
 
-* LIBRARY (The library to build for or {} for none)
 * PROJNAME (The name of your project)
 * STARTMSG (A message to echo at start of build)
 * ENDMSG (A message to echo at end of build)
@@ -49,7 +48,7 @@ To get your project going simply follow these instructions:
 
 #Documentation
 The following is the documentation for the template engine and the MVC application classes. For further information
-check out the [example project](https://github.com/kodmunki/ku4jQuery-webApp/tree/master/example)
+check out the [example project](https://github.com/kodmunki/ku4js-webApp/tree/master/example)
 
 ##Templates
 Has access to the following protected methods
@@ -152,7 +151,7 @@ $(function(){
 });
 ```
 
-When you have successfully integrated ku4jQuery-webApp into your application you will be able to call your controller
+When you have successfully integrated ku4js-webApp into your application you will be able to call your controller
 methods by calling "controller.yourMethod" where "yourMethod" is some method that you have created in your custom
 controller. For example, if you had implemented a controller with the method "execute" and wished to call it from
 a button you would add the following HTML into the desired location of your web application:
@@ -163,9 +162,9 @@ a button you would add the following HTML into the desired location of your web 
 
 ##Configurations
 
-The dependency injection of ku4jQuery-webApp is largely dependent upon the configuration files. These files are required
-for a ku4jQuery-webApp project to work successfully. They are very simple files to configure. The ones listed here
-are required and must be included in your ku4jQuery-web app. You can add more of them as you need making ku4jQuery-webApp
+The dependency injection of ku4js-webApp is largely dependent upon the configuration files. These files are required
+for a ku4js-webApp project to work successfully. They are very simple files to configure. The ones listed here
+are required and must be included in your ku4js-web app. You can add more of them as you need making ku4js-webApp
 **_very_** extensible! Documentation for each of the required configuration follows:
 
 ###config.collections
@@ -313,8 +312,8 @@ $.ku4webApp.config.templates.views = {
 
 This project requires the following dependencies:
 
-* [ku4jQuery-kernel](https://github.com/kodmunki/ku4jQuery-kernel)
-* [ku4jQuery-data](https://github.com/kodmunki/ku4jQuery-data)
+* [ku4js-kernel](https://github.com/kodmunki/ku4js-kernel)
+* [ku4js-data](https://github.com/kodmunki/ku4js-data)
 
 #Gotchas!
 
@@ -372,6 +371,6 @@ your model as follows:
         .find({$in: {name: ["John", "Linda", "Larry"]}, $orderby: { age: 1 }});
 ```
 
-2. Did you know that ku4jQuery-webApps ships with a testingBundle for you to use for your unit tests? You can see it
+2. Did you know that ku4js-webApps ships with a testingBundle for you to use for your unit tests? You can see it
 at work in the example project's unit tests. For more info, check out the model, view and controller of the example
 application in this project.

@@ -1,4 +1,4 @@
-(function(l){ $=l;
+(function(l){
 $.ku4webApp_testBundle = { }
 
 $.ku4webAppUT = { };
@@ -134,4 +134,4 @@ $.ku4webApp_testBundle.serviceFactory = function(mediator, config) {
     return new serviceFactory(mediator, config);
 };
 
-})(jQuery);
+})();

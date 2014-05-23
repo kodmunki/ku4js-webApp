@@ -1,4 +1,4 @@
-(function(l){ $=l;
+(function(l){
 $.ku4webApp = {
     config: {
         templates: { }
@@ -413,4 +413,4 @@ $.ku4webApp.validatorFactory = function(config) {
     return new validatorFactory(config);
 };
 
-})(jQuery);
+})();
