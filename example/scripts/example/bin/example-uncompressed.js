@@ -1,4 +1,4 @@
-(function(l){ $=l;
+(function(l){
 $.ku4webApp.controller("example", {
     requestForm: function() {
         this.$model("example").requestForm();
@@ -30,10 +30,6 @@ $.ku4webApp.model("example", {
         return this;
     },
     listAccounts: function() {
-        console.log(this.$collection("example")
-                        .join("example2", "username", "username")
-                        .join("example2", "accounts.username", "username"))
-
         this.$service("account.list").call();
         return this;
     },
@@ -51,15 +47,6 @@ $.ku4webApp.model("example", {
             "lastName": "mulholland",
             "email": "jacob@mulholland.com"
         }));
-
-        /*
-            "username": "username1",
-            "password": "password1",
-            "firstName": "FirstName",
-            "lastName": "LastName",
-            "email": "email@email.com"
-         */
-
         this.$notify(dto, "accountCreated");
     },
     _accountsListed: function(response) {
@@ -137,7 +124,7 @@ $.ku4webApp.view("example", {
         this.displayList(template.renderAccountList(data)).hide();
     },
     logComplete: function(data) {
-        console.log(data);
+        //console.log(data);
     }
 },
 {
@@ -317,4 +304,4 @@ $.ku4webApp.config.validators = {
     ]
 }
 
-})(jQuery);
+})();
