@@ -1,0 +1,26 @@
+/* Model unit test template
+ */
+
+$(function() {
+
+    module("model.NAME");
+
+    var bundle = $.ku4webAppUT.bundle().throwErrors(),
+        mediator = bundle.mediator(),
+        model = bundle.model("NAME");
+
+    test("new", function() {
+        expect(1);
+        ok(model);
+    });
+
+    test("UNIT TEST NAME", function() {
+        expect(1);
+        function assertion(data) {
+            equal(data, null);
+            mediator.unsubscribe("NOTIFICATION", 1);
+        }
+        mediator.subscribe("NOTIFICATION", assertion, null, 1);
+        model.METHOD();
+    });
+});
