@@ -7,7 +7,10 @@ form.prototype = {
         var field = $[fieldConfig.type](fieldConfig.selector);
         if($.exists(fieldConfig.spec)) field.spec(fieldConfig.spec);
         if(fieldConfig.required && $.exists(field.required)) field.required();
-        this.add(field.dom().name, field);
+
+        if($.isNullOrEmpty(field.dom().name))
+            throw $.ku4exception("form", "Form requires all field DOM elements have a valid 'name' attribute");
+        else this.add(field.dom().name, field);
     }
 };
 $.Class.extend(form, $.form.Class);

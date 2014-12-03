@@ -10,4 +10,4 @@ $.ku4webApp.template = function(name, proto) {
         var _config = classRefcheck($.str.format("templates.{0}", name), "config", config);
         return new template(_config);
     }
-}
+};

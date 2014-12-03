@@ -18,7 +18,10 @@ form.prototype = {
         var field = $[fieldConfig.type](fieldConfig.selector);
         if($.exists(fieldConfig.spec)) field.spec(fieldConfig.spec);
         if(fieldConfig.required && $.exists(field.required)) field.required();
-        this.add(field.dom().name, field);
+
+        if($.isNullOrEmpty(field.dom().name))
+            throw $.ku4exception("form", "Form requires all field DOM elements have a valid 'name' attribute");
+        else this.add(field.dom().name, field);
     }
 };
 $.Class.extend(form, $.form.Class);
@@ -308,7 +311,7 @@ $.ku4webApp.template = function(name, proto) {
         var _config = classRefcheck($.str.format("templates.{0}", name), "config", config);
         return new template(_config);
     }
-}
+};
 
 function abstractView(templateFactory, formFactory) {
     this._templateFactory = classRefcheck("views", "templateFactory", templateFactory);
@@ -357,14 +360,15 @@ $.ku4webApp.formFactory = function(config) {
 };
 
 function modelFactory(mediator, serviceFactory, storeFactory, validatorFactory) {
-    this._mediator = mediator;
-    this._serviceFactory = serviceFactory;
-    this._storeFactory = storeFactory;
-    this._validatorFactory = validatorFactory;
+    var models = $.hash();
+    $.hash($.ku4webApp.models).each(function(obj){
+        models.add(obj.key, obj.value(mediator, serviceFactory, storeFactory, validatorFactory));
+    }, this);
+    this._models = models;
 }
 modelFactory.prototype = {
     create: function(name) {
-        return $.ku4webApp.models[name](this._mediator, this._serviceFactory, this._storeFactory, this._validatorFactory);
+        return this._models.find(name);
     }
 };
 $.ku4webApp.modelFactory = function(mediator, serviceFactory, storeFactory, validatorFactory) {
@@ -377,7 +381,7 @@ function serviceFactory(mediator, config) {
 }
 serviceFactory.prototype = {
     create: function(key) { return $.ku4webApp.service(this._mediator, this._config[key]); }
-}
+};
 $.ku4webApp.serviceFactory = function(mediator, config) {
     return new serviceFactory(mediator, config);
 };
