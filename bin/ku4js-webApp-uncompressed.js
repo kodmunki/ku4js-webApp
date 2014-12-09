@@ -249,11 +249,12 @@ store.prototype = {
             name = arguments[0],
             on = arguments[1],
             equals = arguments[2],
+            direction = arguments[3],
             collectionConfig = config[name],
             joinName = ($.exists(collectionConfig)) ? collectionConfig.name : name,
             collection1 = this.__collection(),
             collection2 = $.ku4store().read(joinName),
-            join = collection1.join(collection2, on, equals),
+            join = collection1.join(collection2, on, equals, direction),
             join_name = join.name(),
             newConfig = $.hash(config).replicate().add(join_name, { name: join_name }).toObject();
         return new store(this._mediator, newConfig, join_name, join);
