@@ -14,6 +14,13 @@ abstractModel.prototype = {
         this._state = new state(value);
         return this;
     },
+    $appState: function(value) {
+        //NOTE: This value corresponds  to the global app state and can and will
+        //      change the value for all models in the application!
+        if(!$.exists(value)) return __appState;
+        __appState = new state(value);
+        return this;
+    },
     $notify: function() {
         var mediator = this._mediator;
         mediator.notify.apply(mediator, arguments);

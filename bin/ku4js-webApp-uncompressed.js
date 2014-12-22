@@ -135,6 +135,13 @@ abstractModel.prototype = {
         this._state = new state(value);
         return this;
     },
+    $appState: function(value) {
+        //NOTE: This value corresponds  to the global app state and can and will
+        //      change the value for all models in the application!
+        if(!$.exists(value)) return __appState;
+        __appState = new state(value);
+        return this;
+    },
     $notify: function() {
         var mediator = this._mediator;
         mediator.notify.apply(mediator, arguments);
@@ -197,8 +204,15 @@ function state(value) {
     this._value = value;
 }
 state.prototype = {
-    is: function(value) { return this._value === value; }
+    is: function(value) { return this._value === value; },
+    checkAndSet: function(value) {
+        var isValue = this.is(value);
+        this._value = value;
+        return isValue;
+    }
 };
+
+var __appState = new state("__ku4appStarted__");
 
 function store(mediator, config, key, collection) {
     this._mediator = mediator;
