@@ -1,9 +1,10 @@
 <!DOCTYPE>
 <html>
 <head>
-  <link rel="stylesheet" href="_dependencies/qUnit.css" type="text/css"/>
-  <script type="text/javascript" src="_dependencies/jQuery.js"></script>
-  <script type="text/javascript" src="_dependencies/qUnit.js"></script>
+  <link rel="stylesheet" href="_dependencies/qunit.css" type="text/css"/>
+  <script type="text/javascript" src="_dependencies/jquery.js"></script>
+  <script type="text/javascript" src="_dependencies/jquery.mobile.js"></script>
+  <script type="text/javascript" src="_dependencies/qunit.js"></script>
   <script type="text/javascript" src="_dependencies/ku4js-kernel.js"></script>
   <script type="text/javascript" src="_dependencies/ku4js-data.js"></script>
   <script type="text/javascript" src="../bin/ku4js-webApp-uncompressed.js"></script>
@@ -52,7 +53,11 @@
          <input id="email" name="email" class="js-test-email" type="text" />
          <input id="phone" name="phone" class="js-test-phone" type="text" />
          <input id="custom" name="custom" class="js-test-custom" type="text" />
-         <select id="select" name="select" class="js-test-select">
+
+         <!-- NOTE: This "data-role" attribute is necessary to prevent jquery mobile automatic
+                    DOM rewriting. SHAME on jquery mobile for implementing their library this way,
+                    but at this time, this is what is necessary -->
+         <select id="select" name="select" class="js-test-select" data-role="none">
              <optgroup label="test">
                  <option value="">Select One</option>
                  <option value="0">zero</option>
