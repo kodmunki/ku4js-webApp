@@ -3,7 +3,6 @@ function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory)
     this._serviceFactory = classRefcheck("models", "serviceFactory", serviceFactory);
     this._storeFactory = classRefcheck("models", "storeFactory", storeFactory);
     this._validatorFactory = classRefcheck("models", "validatorFactory", validatorFactory);
-    this._navigator = classRefcheck("models", "validatorFactory", validatorFactory);
     this._state = new state();
 }
 abstractModel.prototype = {
