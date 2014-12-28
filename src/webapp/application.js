@@ -4,9 +4,11 @@ function app() {
         serviceFactory = app.serviceFactory(mediator, app.config.services),
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
+
     this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
+    this.navigator = app.navigator(this.modelFactory, app.config.hash);
     this.mediator = mediator;
 }
 app.prototype = {

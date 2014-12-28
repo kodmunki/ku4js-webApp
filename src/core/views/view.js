@@ -1,8 +1,8 @@
 $.ku4webApp.__views = { };
 $.ku4webApp.view = function(name, proto, subscriptions) {
 
-    function view(templateFactory, formFactory) {
-        view.base.call(this, templateFactory, formFactory);
+    function view(templateFactory, formFactory, navigator) {
+        view.base.call(this, templateFactory, formFactory, navigator);
     }
     view.prototype = proto;
     $.Class.extend(view, abstractView);
@@ -13,7 +13,7 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
         if(!$.exists(app)) throw $.ku4exception(className, message);
 
         if(!$.exists($.ku4webApp.__views[name])) {
-            var _view = new view(app.templateFactory, app.formFactory);
+            var _view = new view(app.templateFactory, app.formFactory, app.navigator);
             if($.exists(subscriptions))
                 $.hash(subscriptions).each(function(obj) {
                     app.mediator.subscribe(obj.key, _view[obj.value], _view);

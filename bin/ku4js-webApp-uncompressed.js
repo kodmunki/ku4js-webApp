@@ -69,30 +69,6 @@ $.ku4webApp.validator = function(config) {
     return new validator(config);
 };
 
-function app() {
-    var app = $.ku4webApp,
-        mediator = $.mediator(),
-        serviceFactory = app.serviceFactory(mediator, app.config.services),
-        storeFactory = app.storeFactory(mediator, app.config.collections),
-        validatorFactory = app.validatorFactory(app.config.validators);
-    this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
-    this.templateFactory = app.templateFactory(app.config.templates);
-    this.formFactory = app.formFactory(app.config.forms);
-    this.mediator = mediator;
-}
-app.prototype = {
-    logErrors: function() { this.mediator.logErrors(); return this; },
-    throwErrors: function() { this.mediator.throwErrors(); return this; }
-};
-$.ku4webApp.app = function() { return new app(); };
-
-function classRefcheck(className, propertyName, property) {
-    var _className = $.str.format("$.ku4webApp.{0}", className),
-        _message = $.str.format("Requires a valid {0}. {0}= {1}", propertyName, property);
-    if(!$.exists(property)) throw $.ku4exception(_className, _message);
-    else return property;
-}
-
 function abstractController(modelFactory, formFactory) {
     this._modelFactory = classRefcheck("controllers", "modelFactory", modelFactory);
     this._formFactory = classRefcheck("controllers", "formFactory", formFactory);
@@ -124,17 +100,14 @@ function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory)
     this._serviceFactory = classRefcheck("models", "serviceFactory", serviceFactory);
     this._storeFactory = classRefcheck("models", "storeFactory", storeFactory);
     this._validatorFactory = classRefcheck("models", "validatorFactory", validatorFactory);
+    this._navigator = classRefcheck("models", "validatorFactory", validatorFactory);
     this._state = new state();
 }
 abstractModel.prototype = {
     $collection: function(name) { return this._storeFactory.create(name); },
     $service: function(name) { return this._serviceFactory.create(name); },
     $validator: function(name) { return this._validatorFactory.create(name); },
-    $state: function(value) {
-        if(!$.exists(value)) return this._state;
-        this._state = new state(value);
-        return this;
-    },
+    $state: function() { return this._state; },
     $appState: function(value) {
         //NOTE: This value corresponds  to the global app state and can and will
         //      change the value for all models in the application!
@@ -202,13 +175,20 @@ $.ku4webApp.service = function(mediator, config) {
 
 function state(value) {
     this._value = value;
+    this._data = $.hash();
 }
 state.prototype = {
     is: function(value) { return this._value === value; },
-    checkAndSet: function(value) {
-        var isValue = this.is(value);
+    set: function(value) {
         this._value = value;
-        return isValue;
+        return this;
+    },
+    read: function(key) {
+        return this._data.findValue(key);
+    },
+    write: function(key, value) {
+        this._data.update(key, value);
+        return this;
     }
 };
 
@@ -302,6 +282,73 @@ $.ku4webApp.store = function(mediator, config, key, collection) {
     return new store(mediator, config, key, collection);
 };
 
+function navigator(modelFactory, config) {
+
+    var me = this;
+    function onhashchange() {
+        if(!me._isInternalChange && $.exists(config)) {
+            var confg = config[ me.read()];
+            if ($.exists(confg)) {
+                var modelName = confg.model,
+                    methodName = confg.method;
+                if ($.exists(modelName) && $.exists(methodName)) {
+                    try {
+                        var model = modelFactory.create(modelName);
+                        model[methodName]();
+                    }
+                    catch (e) {
+                        throw $.ku4exception("ku4webApp.navigator",
+                        $.str.format("Invalid configuration. model: {0}, method: {1}, \n\n error: {2}",
+                                     modelName, methodName, e.message));
+                    }
+                }
+            }
+        }
+        me._isInternalChange = false;
+    }
+
+    if($.exists(window.addEventListener))
+        window.addEventListener("hashchange", onhashchange);
+    else if($.exists(window.attachEvent))
+        window.attachEvent("onhashchange", onhashchange);
+
+    this._isInternalChange = false;
+}
+navigator.prototype = {
+    hash: function(value) {
+        return ($.exists(value)) ? this.write(value) : this.read();
+    },
+    read: function() {
+        return location.hash.substr(1);
+    },
+    write: function(value) {
+        var currentHash = this.read();
+
+        //NOTE: This check is here because onhashchange will NOT fire if the value that is written
+        //      is the same as the currentValue. Therefore we need to NOT set the isInternalChange
+        //      value because there is no "change" and the onhashchange event will NOT fire, leaving
+        //      this value in the incorrect state for a subsequent call.
+        this._isInternalChange = (currentHash == value) ? false : true;
+
+        location.hash = value;
+        return this;
+    },
+    forward: function() {
+        this._isInternalChange = true;
+        window.history.forward();
+        return this;
+    },
+    back: function() {
+        this._isInternalChange = true;
+        window.history.back();
+        return this;
+    }
+};
+
+$.ku4webApp.navigator = function(modelFactory, config) {
+    return new navigator(modelFactory, config);
+};
+
 function abstractTemplate(config) {
     this._config = classRefcheck("templates", "config", config);
 }
@@ -341,21 +388,23 @@ $.ku4webApp.template = function(name, proto) {
     }
 };
 
-function abstractView(templateFactory, formFactory) {
+function abstractView(templateFactory, formFactory, navigator) {
     this._templateFactory = classRefcheck("views", "templateFactory", templateFactory);
     this._formFactory = classRefcheck("views", "formFactory", formFactory);
+    this._navigator = classRefcheck("models", "navigator", navigator);
 }
 abstractView.prototype = {
     $template: function(name) { return this._templateFactory.create(name); },
-    $form: function(name) { return this._formFactory.create(name); }
+    $form: function(name) { return this._formFactory.create(name); },
+    $navigator: function() { return this._navigator; }
 };
 $.ku4webApp.abstractView = abstractView;
 
 $.ku4webApp.__views = { };
 $.ku4webApp.view = function(name, proto, subscriptions) {
 
-    function view(templateFactory, formFactory) {
-        view.base.call(this, templateFactory, formFactory);
+    function view(templateFactory, formFactory, navigator) {
+        view.base.call(this, templateFactory, formFactory, navigator);
     }
     view.prototype = proto;
     $.Class.extend(view, abstractView);
@@ -366,7 +415,7 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
         if(!$.exists(app)) throw $.ku4exception(className, message);
 
         if(!$.exists($.ku4webApp.__views[name])) {
-            var _view = new view(app.templateFactory, app.formFactory);
+            var _view = new view(app.templateFactory, app.formFactory, app.navigator);
             if($.exists(subscriptions))
                 $.hash(subscriptions).each(function(obj) {
                     app.mediator.subscribe(obj.key, _view[obj.value], _view);
@@ -387,10 +436,10 @@ $.ku4webApp.formFactory = function(config) {
     return new formFactory(config);
 };
 
-function modelFactory(mediator, serviceFactory, storeFactory, validatorFactory) {
+function modelFactory(mediator, serviceFactory, storeFactory, validatorFactory, navigator) {
     var models = $.hash();
     $.hash($.ku4webApp.models).each(function(obj){
-        models.add(obj.key, obj.value(mediator, serviceFactory, storeFactory, validatorFactory));
+        models.add(obj.key, obj.value(mediator, serviceFactory, storeFactory, validatorFactory, navigator));
     }, this);
     this._models = models;
 }
@@ -399,8 +448,8 @@ modelFactory.prototype = {
         return this._models.find(name);
     }
 };
-$.ku4webApp.modelFactory = function(mediator, serviceFactory, storeFactory, validatorFactory) {
-    return new modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
+$.ku4webApp.modelFactory = function(mediator, serviceFactory, storeFactory, validatorFactory, navigator) {
+    return new modelFactory(mediator, serviceFactory, storeFactory, validatorFactory, navigator);
 };
 
 function serviceFactory(mediator, config) {
@@ -444,5 +493,31 @@ validatorFactory.prototype = {
 $.ku4webApp.validatorFactory = function(config) {
     return new validatorFactory(config);
 };
+
+function app() {
+    var app = $.ku4webApp,
+        mediator = $.mediator(),
+        serviceFactory = app.serviceFactory(mediator, app.config.services),
+        storeFactory = app.storeFactory(mediator, app.config.collections),
+        validatorFactory = app.validatorFactory(app.config.validators);
+
+    this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
+    this.templateFactory = app.templateFactory(app.config.templates);
+    this.formFactory = app.formFactory(app.config.forms);
+    this.navigator = app.navigator(this.modelFactory, app.config.hash);
+    this.mediator = mediator;
+}
+app.prototype = {
+    logErrors: function() { this.mediator.logErrors(); return this; },
+    throwErrors: function() { this.mediator.throwErrors(); return this; }
+};
+$.ku4webApp.app = function() { return new app(); };
+
+function classRefcheck(className, propertyName, property) {
+    var _className = $.str.format("$.ku4webApp.{0}", className),
+        _message = $.str.format("Requires a valid {0}. {0}= {1}", propertyName, property);
+    if(!$.exists(property)) throw $.ku4exception(_className, _message);
+    else return property;
+}
 
 })();
