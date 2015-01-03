@@ -298,9 +298,7 @@ function navigator(modelFactory, config) {
                         model[methodName]();
                     }
                     catch (e) {
-                        throw $.ku4exception("ku4webApp.navigator",
-                        $.str.format("Invalid configuration. model: {0}, method: {1}, \\error: {2}",
-                                     modelName, methodName, e.message));
+                        return;
                     }
                 }
             }
