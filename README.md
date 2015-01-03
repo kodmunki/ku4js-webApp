@@ -51,14 +51,17 @@ The following is the documentation for the template engine and the MVC applicati
 check out the [example project](https://github.com/kodmunki/ku4js-webApp/tree/master/example)
 
 ##Templates
-Has access to the following protected methods
-* $config(NAME): _Retrieves the template config named NAME._
-* $forms(NAME): _Retrieves the forms templates config named NAME (Shortcut for $config("forms")[NAME])._
-* $views(NAME): _Retrieves the views templates config named NAME (Shortcut for $config("views")[NAME])._
-* $render(TEMPLATE, DTO): _Renders the TEMPLATE using DTO data._
-* $renderList(TEMPLATE, Array[DTO]): _Renders TEMPLATE using DTO data for each DTO in Array._
-* $renderListWithAction(Array[DTO], FUNCTION) Calls a specified render function for each DTO in Array.
-                                              It is important that the specified action return a string value!
+Has access to the following protected methods and properties:
+
+| API | Return | Description |
+| --- | --- | --- |
+| $config(name:_String_) | config | Retrieves the template config named "name". |
+| $forms(name:_String_) | config | Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]). |
+| $views(name:_String_) | config | Retrieves the views templates config named "name" (Shortcut for $config("views")[name]). |
+| $render(template:_String_, data:_{}_) | String | Renders the template using object literal or dto data. |
+| $renderList(template:_String_, array:_Array<dto>_) |  | Renders template using object literal or dto data for each dto in array. |
+| $renderListWithAction(array:_Array<dto>_, func:_Function_) |  | Calls a specified render function for each dto in array. It is important that the specified action return a string value! |
+
 * Runtime instantiation requires valid templates config. _(This is a potential scenario in advanced development of an
 enterprise applications and should be heeded. For example, if you create a template for generic form fields
 specifically, i.e. $.ku4webApp.template("forms", { /*Your methods here*/ }, and want to access it from another template,
@@ -72,12 +75,17 @@ $.ku4webApp.template("NAME", {
 ```
 
 ##Models
-Has access to the following protected methods
-* $collection(NAME): _Retrieves the collection named NAME._
-* $service(NAME): _Retrieves the service named NAME._
-* $validator(NAME): _Retrieves the validator named NAME._
-* $notify([DATA], NAME, ...) _Notifies the subscribers in the list or arguments passing DATA if supplied.
-                             Calling this function without a list of subscribers will notify ALL subscribers!_
+Has access to the following protected methods and properties:
+
+| API | Return | Description |
+| --- | --- | --- |
+| $collection(name:_String_) |  | Retrieves the collection named "name". |
+| $service(name:_String_) |  | Retrieves the service named "name". |
+| $validator(name:_String_) |  | Retrieves the validator named "name". |
+| $state() |  | Retrieves the local state machine. |
+| $appState() |  | Retrieves the global state machine. |
+| $notify(data:_Object_, NAME, ...) |  | Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify _all_ subscribers!|
+
 * Runtime instantiation requires a valid mediator, serviceFactory, storeFactory, and validatorFactory. _(This is a
 very unlikely scenario)_.
 
@@ -95,9 +103,14 @@ $.ku4webApp.model("NAME", {
 
 ##Views
 
-Has access to the following protected methods
-* $template(NAME): _Retrieves the template named NAME_
-* $form(NAME): _Retrieves the form named NAME_
+Has access to the following protected methods and properties:
+
+| API | Return | Description |
+| --- | --- | --- |
+| $template(name:_String_) | template | Retrieves the template named "name". |
+| $form(name:_String_) | form | Retrieves the form named "name". |
+| $navigator() | navigator | Retrieves the global navigator. |
+
 * Runtime instantiation requires a valid templateFactory and formFactory. _(This is an absurd scenario. If you require it,
 it is likely that you need to revisit [MVC](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). If you
 find a necessary reason, please contact [support@kodmunki.com](mailto:support@kodmunki.com) to share)_.
@@ -116,13 +129,15 @@ $.ku4webApp.view("NAME", {
 
 ##Controllers
 
-Has access to the following protected methods
-* $model(NAME): Retrieves the model named NAME
-* $form(NAME): Retrieves the form named NAME
-* Runtime instantiation requires a valid modelFactory and formFactory. _(This, again, is an absurd scenario. If you
-require it, it is likely that you need to revisit
-[MVC](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). If you find a necessary reason, please
-contact [support@kodmunki.com](mailto:support@kodmunki.com) to share)_.
+Has access to the following protected methods and properties:
+
+| API | Return | Description |
+| --- | --- | --- |
+| $model(name:_String_) | model | Retrieves the model named "name". |
+| $form(name:_String_) | form | Retrieves the form named "name". |
+| $navigator() | navigator | Retrieves the global navigator. |
+
+* Runtime instantiation requires a valid modelFactory and formFactory.
 
 ```javascript
 $.ku4webApp.controller("NAME", {
