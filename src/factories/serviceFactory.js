@@ -1,9 +1,14 @@
 function serviceFactory(mediator, config) {
-    this._mediator = mediator;
-    this._config = config;
+    var services = $.hash();
+    $.hash(config).each(function(obj){
+        services.add(obj.key, $.ku4webApp.service(mediator, obj.value));
+    }, this);
+    this._services = services;
 }
 serviceFactory.prototype = {
-    create: function(key) { return $.ku4webApp.service(this._mediator, this._config[key]); }
+    create: function(name) {
+        return this._services.find(name);
+    }
 };
 $.ku4webApp.serviceFactory = function(mediator, config) {
     return new serviceFactory(mediator, config);

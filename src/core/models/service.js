@@ -1,16 +1,9 @@
 function service(mediator, config) {
     this._mediator = mediator;
     this._config = config;
-    this._noCache = false;
-}
-service.prototype = {
-    noCache: function() { this._noCache = true; return this; },
-    call: function(params) {
-        var config = this._config,
-            mediator = this._mediator,
-            service = $.service()[config.verb]().uri(config.uri);
+
+    var service = $.service()[config.verb]().uri(config.uri);
         service.contentType(config.contentType);
-        if(this._noCache) service.noCache();
         service.onSuccess(function(data) {
                 if($.exists(config.success))
                     mediator.notify(data, service.processId(), config.success);
@@ -18,10 +11,15 @@ service.prototype = {
             .onError(function(data){
                 if($.exists(config.error))
                     mediator.notify(data, service.processId(), config.error);
-            }, this)
-            .call(params);
-        return service;
-    }
+            }, this);
+
+    this._service = service;
+}
+service.prototype = {
+    cache: function() { this._service.cache(); return this; },
+    noCache: function() { this._service.noCache(); return this; },
+    abort: function() { this._service.abort(); return this; },
+    call: function(params) { this._service.call(params); return this; }
 };
 $.ku4webApp.service = function(mediator, config) {
     return new service(mediator, config);
