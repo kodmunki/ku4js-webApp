@@ -59,8 +59,8 @@ Has access to the following protected methods and properties:
 | $forms(name:_String_) | config | Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]). |
 | $views(name:_String_) | config | Retrieves the views templates config named "name" (Shortcut for $config("views")[name]). |
 | $render(template:_String_, data:_{}_) | String | Renders the template using object literal or dto data. |
-| $renderList(template:_String_, array:_Array<dto>_) |  | Renders template using object literal or dto data for each dto in array. |
-| $renderListWithAction(array:_Array<dto>_, func:_Function_) |  | Calls a specified render function for each dto in array. It is important that the specified action return a string value! |
+| $renderList(template:_String_, array:_Array<dto>_) | String | Renders template using object literal or dto data for each dto in array. |
+| $renderListWithAction(array:_Array<dto>_, func:_Function_) | String | Calls a specified render function for each dto in array. It is important that the specified action return a string value! |
 
 * Runtime instantiation requires valid templates config. _(This is a potential scenario in advanced development of an
 enterprise applications and should be heeded. For example, if you create a template for generic form fields
@@ -79,12 +79,12 @@ Has access to the following protected methods and properties:
 
 | API | Return | Description |
 | --- | --- | --- |
-| $collection(name:_String_) |  | Retrieves the collection named "name". |
-| $service(name:_String_) |  | Retrieves the service named "name". |
-| $validator(name:_String_) |  | Retrieves the validator named "name". |
-| $state() |  | Retrieves the local state machine. |
-| $appState() |  | Retrieves the global state machine. |
-| $notify(data:_Object_, NAME, ...) |  | Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify _all_ subscribers!|
+| $collection(name:_String_) | collection | Retrieves the collection named "name". |
+| $service(name:_String_) | service | Retrieves the service named "name". |
+| $validator(name:_String_) | validator | Retrieves the validator named "name". |
+| $state() | state | Retrieves the local state machine. |
+| $appState() | state | Retrieves the global state machine. |
+| $notify(data:_Object_, NAME, ...) | void | Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify _all_ subscribers!|
 
 * Runtime instantiation requires a valid mediator, serviceFactory, storeFactory, and validatorFactory. _(This is a
 very unlikely scenario)_.
