@@ -6,6 +6,7 @@ form.prototype = {
     _add: function(fieldConfig) {
         var field = $[fieldConfig.type](fieldConfig.selector);
         if($.exists(fieldConfig.spec)) field.spec(fieldConfig.spec);
+        if($.exists(fieldConfig.maxDims)) field.maxDims(fieldConfig.maxDims);
         if(fieldConfig.required && $.exists(field.required)) field.required();
 
         if($.isNullOrEmpty(field.dom().name))
