@@ -1,17 +1,21 @@
-function service(mediator, config) {
+function service(mediator, name, config) {
     this._mediator = mediator;
     this._config = config;
 
-    var service = $.service()[config.verb]().uri(config.uri);
+    var service = $.service(name)[config.verb]().uri(config.uri);
         service.contentType(config.contentType);
-        service.onSuccess(function(data) {
-                if($.exists(config.success))
-                    mediator.notify(data, service.processId(), config.success);
-            }, this)
-            .onError(function(data){
-                if($.exists(config.error))
-                    mediator.notify(data, service.processId(), config.error);
-            }, this);
+
+        if($.exists(config.success)) service.onSuccess(function(data) {
+            mediator.notify(data, service.processId(), config.success);
+        }, this, config.success);
+
+        if($.exists(config.error)) service.onError(function(data){
+            mediator.notify(data, service.processId(), config.error);
+        }, this, config.success);
+
+        if($.exists(config.complete)) service.onError(function(data){
+            mediator.notify(data, service.processId(), config.complete);
+        }, this, config.complete);
 
     this._service = service;
 }
@@ -21,6 +25,6 @@ service.prototype = {
     abort: function() { this._service.abort(); return this; },
     call: function(params) { this._service.call(params); return this; }
 };
-$.ku4webApp.service = function(mediator, config) {
-    return new service(mediator, config);
+$.ku4webApp.service = function(mediator, name, config) {
+    return new service(mediator, name, config);
 };

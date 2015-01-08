@@ -1,7 +1,7 @@
 function serviceFactory(mediator, config) {
     var services = $.hash();
     $.hash(config).each(function(obj){
-        services.add(obj.key, $.ku4webApp.service(mediator, obj.value));
+        services.add(obj.key, $.ku4webApp.service(mediator, obj.key, obj.value));
     }, this);
     this._services = services;
 }

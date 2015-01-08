@@ -136,30 +136,43 @@ $.ku4webApp.model = function(name, proto, subscriptions) {
         var _model = new model(mediator, serviceFactory, storeFactory, validatorFactory);
         if($.exists(subscriptions)) {
             $.hash(subscriptions).each(function(obj) {
-                var key = obj.key;
-                mediator
-                    .unsubscribe(key, name)
-                    .subscribe(key, _model[obj.value], _model, name);
+                var key = obj.key,
+                    value = obj.value,
+                    id = $.str.format("ku4webApp.model.{0}_{1}", name, key),
+                    method = _model[value];
+
+                try {
+                    mediator
+                        .unsubscribe(key, id)
+                        .subscribe(key, method, _model, id);
+                }
+                catch(e) {
+                    throw $.ku4exception("$.ku4webApp.model", $.str.format("$.ku4webApp.model.{0} cannot subscribe to mediator with name: {1} or method: {2}.\n\nmessage:{3}\n\n", name, key, value, e.message));
+                }
             });
         }
         return _model;
     }
 };
 
-function service(mediator, config) {
+function service(mediator, name, config) {
     this._mediator = mediator;
     this._config = config;
 
-    var service = $.service()[config.verb]().uri(config.uri);
+    var service = $.service(name)[config.verb]().uri(config.uri);
         service.contentType(config.contentType);
-        service.onSuccess(function(data) {
-                if($.exists(config.success))
-                    mediator.notify(data, service.processId(), config.success);
-            }, this)
-            .onError(function(data){
-                if($.exists(config.error))
-                    mediator.notify(data, service.processId(), config.error);
-            }, this);
+
+        if($.exists(config.success)) service.onSuccess(function(data) {
+            mediator.notify(data, service.processId(), config.success);
+        }, this, config.success);
+
+        if($.exists(config.error)) service.onError(function(data){
+            mediator.notify(data, service.processId(), config.error);
+        }, this, config.success);
+
+        if($.exists(config.complete)) service.onError(function(data){
+            mediator.notify(data, service.processId(), config.complete);
+        }, this, config.complete);
 
     this._service = service;
 }
@@ -169,8 +182,8 @@ service.prototype = {
     abort: function() { this._service.abort(); return this; },
     call: function(params) { this._service.call(params); return this; }
 };
-$.ku4webApp.service = function(mediator, config) {
-    return new service(mediator, config);
+$.ku4webApp.service = function(mediator, name, config) {
+    return new service(mediator, name, config);
 };
 
 function state(value) {
@@ -286,7 +299,7 @@ function navigator(modelFactory, config) {
 
     var me = this;
     function onhashchange() {
-        if(!me._isInternalChange && $.exists(config)) {
+        if(!me._notify && $.exists(config)) {
             var confg = config[ me.read()];
             if ($.exists(confg)) {
                 var modelName = confg.model,
@@ -302,7 +315,7 @@ function navigator(modelFactory, config) {
                 }
             }
         }
-        me._isInternalChange = false;
+        me._notify = false;
     }
 
     if($.exists(window.addEventListener))
@@ -310,23 +323,23 @@ function navigator(modelFactory, config) {
     else if($.exists(window.attachEvent))
         window.attachEvent("onhashchange", onhashchange);
 
-    this._isInternalChange = false;
+    this._notify = false;
 }
 navigator.prototype = {
     hash: function(value) {
-        return ($.exists(value)) ? this.write(value) : this.read();
+        return ($.exists(value)) ? this.write(value, true) : this.read();
     },
     read: function() {
         return location.hash.substr(1);
     },
-    write: function(value) {
+    write: function(value, mute) {
         var currentHash = this.read();
 
         //NOTE: This check is here because onhashchange will NOT fire if the value that is written
         //      is the same as the currentValue. Therefore we need to NOT set the isInternalChange
         //      value because there is no "change" and the onhashchange event will NOT fire, leaving
         //      this value in the incorrect state for a subsequent call.
-        this._isInternalChange = (currentHash == value) ? false : true;
+        this._notify = (!mute && currentHash == value) ? false : true;
 
         location.hash = value;
         return this;
@@ -414,13 +427,25 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
             var _view = new view(app.templateFactory, app.formFactory, app.navigator);
             if($.exists(subscriptions))
                 $.hash(subscriptions).each(function(obj) {
-                    app.mediator.subscribe(obj.key, _view[obj.value], _view);
+                    var key = obj.key,
+                        value = obj.value,
+                        id = $.str.format("ku4webApp.view_{0}_{1}", name, key),
+                        method = _view[value];
+
+                    try {
+                        app.mediator
+                            .unsubscribe(key, id)
+                            .subscribe(key, method, _view, id);
+                    }
+                    catch(e) {
+                        throw $.ku4exception("$.ku4webApp.view", $.str.format("$.ku4webApp.view.{0} cannot subscribe to mediator with name: {1} or key: {2}.\n\nmessage:{3}\n\n", name, key, value, e.message));
+                    }
                 });
             $.ku4webApp.__views[name] = _view;
         }
         return $.ku4webApp.__views[name];
     }
-}
+};
 
 function formFactory(config) {
     this._config = config;
@@ -451,7 +476,7 @@ $.ku4webApp.modelFactory = function(mediator, serviceFactory, storeFactory, vali
 function serviceFactory(mediator, config) {
     var services = $.hash();
     $.hash(config).each(function(obj){
-        services.add(obj.key, $.ku4webApp.service(mediator, obj.value));
+        services.add(obj.key, $.ku4webApp.service(mediator, obj.key, obj.value));
     }, this);
     this._services = services;
 }
@@ -495,9 +520,10 @@ $.ku4webApp.validatorFactory = function(config) {
     return new validatorFactory(config);
 };
 
-function app() {
-    var app = $.ku4webApp,
-        mediator = $.mediator(),
+function app(name) {
+    var _name = name || $.uid(),
+        app = $.ku4webApp,
+        mediator = $.mediator("ku4webApp_" + _name),
         serviceFactory = app.serviceFactory(mediator, app.config.services),
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
@@ -512,7 +538,7 @@ app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
     throwErrors: function() { this.mediator.throwErrors(); return this; }
 };
-$.ku4webApp.app = function() { return new app(); };
+$.ku4webApp.app = function(name) { return new app(name); };
 
 function classRefcheck(className, propertyName, property) {
     var _className = $.str.format("$.ku4webApp.{0}", className),

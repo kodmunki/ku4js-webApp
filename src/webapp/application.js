@@ -1,6 +1,7 @@
-function app() {
-    var app = $.ku4webApp,
-        mediator = $.mediator(),
+function app(name) {
+    var _name = name || $.uid(),
+        app = $.ku4webApp,
+        mediator = $.mediator("ku4webApp_" + _name),
         serviceFactory = app.serviceFactory(mediator, app.config.services),
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
@@ -15,7 +16,7 @@ app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
     throwErrors: function() { this.mediator.throwErrors(); return this; }
 };
-$.ku4webApp.app = function() { return new app(); };
+$.ku4webApp.app = function(name) { return new app(name); };
 
 function classRefcheck(className, propertyName, property) {
     var _className = $.str.format("$.ku4webApp.{0}", className),
