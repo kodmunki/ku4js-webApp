@@ -11,7 +11,7 @@ $.ku4webApp.model = function(name, proto, subscriptions) {
             $.hash(subscriptions).each(function(obj) {
                 var key = obj.key,
                     value = obj.value,
-                    id = $.str.format("ku4webApp.model.{0}_{1}", name, key),
+                    id = $.str.format("ku4webApp.model.{0}_{1}", name, value),
                     method = _model[value];
 
                 try {

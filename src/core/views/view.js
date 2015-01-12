@@ -18,7 +18,7 @@ $.ku4webApp.view = function(name, proto, subscriptions) {
                 $.hash(subscriptions).each(function(obj) {
                     var key = obj.key,
                         value = obj.value,
-                        id = $.str.format("ku4webApp.view_{0}_{1}", name, key),
+                        id = $.str.format("ku4webApp.view_{0}_{1}", name, value),
                         method = _view[value];
 
                     try {
