@@ -1,1 +1,1 @@
-$.ku4webApp_testBundle = { }
+$.ku4webApp_testBundle = { };

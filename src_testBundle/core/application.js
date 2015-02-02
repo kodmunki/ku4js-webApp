@@ -7,20 +7,18 @@ function app() {
     this.validatorFactory = app.validatorFactory(app.config.validators);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
-
     this.prodModel();
-
     this.navigator = app.navigator(this.modelFactory, app.config.hash);
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
     throwErrors: function() { this.mediator.throwErrors(); return this; },
     stubModel: function() {
-        this.modelFactory = $.ku4webApp_testBundle.modelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
+        this.modelFactory = $.ku4webApp_testBundle.stubModelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
         return this;
     },
     prodModel: function() {
-        this.modelFactory = $.ku4webApp.modelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
+        this.modelFactory = $.ku4webApp_testBundle.testModelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
         return this;
     }
 };

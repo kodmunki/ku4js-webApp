@@ -1,5 +1,5 @@
 (function(l){
-$.ku4webApp_testBundle = { }
+$.ku4webApp_testBundle = { };
 
 $.ku4webAppUT = { };
 
@@ -41,20 +41,18 @@ function app() {
     this.validatorFactory = app.validatorFactory(app.config.validators);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
-
     this.prodModel();
-
     this.navigator = app.navigator(this.modelFactory, app.config.hash);
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
     throwErrors: function() { this.mediator.throwErrors(); return this; },
     stubModel: function() {
-        this.modelFactory = $.ku4webApp_testBundle.modelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
+        this.modelFactory = $.ku4webApp_testBundle.stubModelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
         return this;
     },
     prodModel: function() {
-        this.modelFactory = $.ku4webApp.modelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
+        this.modelFactory = $.ku4webApp_testBundle.testModelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
         return this;
     }
 };
@@ -110,19 +108,19 @@ $.ku4webApp_testBundle.service = function(mediator, config) {
     return new service(mediator, config);
 };
 
-function modelFactory(mediator, serviceFactory, storeFactory, validatorFactory) {
+function testModelFactory(mediator, serviceFactory, storeFactory, validatorFactory) {
     this._mediator = mediator;
     this._serviceFactory = serviceFactory;
     this._storeFactory = storeFactory;
     this._validatorFactory = validatorFactory;
 }
-modelFactory.prototype = {
+testModelFactory.prototype = {
     create: function(name) {
-        return $.ku4webApp_testBundle.model(name, this._mediator, this._serviceFactory, this._storeFactory, this._validatorFactory);
+        return $.ku4webApp.models[name](this._mediator, this._serviceFactory, this._storeFactory, this._validatorFactory);
     }
 };
-$.ku4webApp_testBundle.modelFactory = function(mediator, serviceFactory, storeFactory, validatorFactory) {
-    return new modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
+$.ku4webApp_testBundle.testModelFactory = function(mediator, serviceFactory, storeFactory, validatorFactory) {
+    return new testModelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
 };
 
 function serviceFactory(mediator, config) {
@@ -134,6 +132,21 @@ serviceFactory.prototype = {
 };
 $.ku4webApp_testBundle.serviceFactory = function(mediator, config) {
     return new serviceFactory(mediator, config);
+};
+
+function stubModelFactory(mediator, serviceFactory, storeFactory, validatorFactory) {
+    this._mediator = mediator;
+    this._serviceFactory = serviceFactory;
+    this._storeFactory = storeFactory;
+    this._validatorFactory = validatorFactory;
+}
+stubModelFactory.prototype = {
+    create: function(name) {
+        return $.ku4webApp_testBundle.model(name, this._mediator, this._serviceFactory, this._storeFactory, this._validatorFactory);
+    }
+};
+$.ku4webApp_testBundle.stubModelFactory = function(mediator, serviceFactory, storeFactory, validatorFactory) {
+    return new stubModelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
 };
 
 })();
