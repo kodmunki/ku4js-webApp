@@ -2,15 +2,23 @@
 $.ku4webApp.controller("example", {
     requestForm: function() {
         this.$model("example").requestForm();
+        return this;
     },
     cancel: function() {
         this.$model("example").cancelForm();
+        return this;
     },
     create: function() {
         this.$model("example").createAccount(this.$form("example").read());
+        return this;
+    },
+    clear: function() {
+        this.$form("example").clear();
+        return this;
     },
     listAccounts: function() {
         this.$model("example").listAccounts();
+        return this;
     }
 });
 
@@ -185,38 +193,6 @@ $.ku4webApp.config.forms = {
             type: "select",
             required:false
         }
-    ],
-    exampleResponseBox: [
-        {
-            selector: "#responsebox_username",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_password",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_firstName",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_lastName",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_email",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_reco",
-            type: "select",
-            required:false
-        }
     ]
 };
 
@@ -251,31 +227,31 @@ $.ku4webApp.config.templates.forms = {
              '<form class="js-example-form css-example-form">' +
              '<div class="css-field">' +
              '<label for="username">Username</label>' +
-             '<input id="responsebox_username" name="username" type="text" value=""/></div>' +
+             '<input id="username" name="username" type="text" value=""/></div>' +
 
              '<div class="css-field">' +
              '<label for="password">Password</label>' +
-             '<input id="responsebox_password" name="password" type="password" value=""/>' +
+             '<input id="password" name="password" type="password" value=""/>' +
              '</div>' +
 
              '<div class="css-field">' +
              '<label for="firstName">First name</label>' +
-             '<input id="responsebox_firstName" name="firstName" type="text" value=""/>' +
+             '<input id="firstName" name="firstName" type="text" value=""/>' +
              '</div>' +
 
              '<div class="css-field">' +
              '<label for="lastName">Last name</label>' +
-             '<input id="responsebox_lastName" name="lastName" type="text" value=""/>' +
+             '<input id="lastName" name="lastName" type="text" value=""/>' +
              '</div>' +
 
              '<div class="css-field">' +
              '<label for="email">Email</label>' +
-             '<input id="responsebox_email" name="email" type="text" value=""/>' +
+             '<input id="email" name="email" type="text" value=""/>' +
              '</div>' +
 
              '<div class="css-field">' +
              '<label for="reco">Who recommended this site?</label>' +
-             '<select id="responsebox_reco" name="reco">' +
+             '<select id="reco" name="reco">' +
              '<optgroup label="Desire">' +
              '<option value="0">Advertisement.</option>' +
              '<option value="1">Google.</option>' +
@@ -287,7 +263,7 @@ $.ku4webApp.config.templates.forms = {
              '<button href="#" onclick=\"controller.cancel(); return false;\">Cancel</button>' +
 
              '</form>'
-}
+};
 
 $.ku4webApp.config.templates.views = {
     validation: {
@@ -306,7 +282,7 @@ $.ku4webApp.config.templates.views = {
                     '<li class="css-account-data">' +
                         '<span class="css-label">Email: </span>' +
                         '<span class="css-value">{{email}}</span></li></ul></div>'
-}
+};
 
 $.ku4webApp.config.validators = {
     example: [

@@ -35,9 +35,9 @@ $(function() {
             equal(dto.find("firstName"), "");
             equal(dto.find("lastName"), "");
             equal(dto.find("email"), "");
-            equal(dto.find("reco"), "0");
+            equal(dto.find("reco"), "");
         });
-        controller.create();
+        controller.clear().create();
     });
 
     test("listAccounts", function() {

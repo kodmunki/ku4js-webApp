@@ -15,4 +15,4 @@ $.ku4webApp.config.templates.views = {
                     '<li class="css-account-data">' +
                         '<span class="css-label">Email: </span>' +
                         '<span class="css-value">{{email}}</span></li></ul></div>'
-}
+};

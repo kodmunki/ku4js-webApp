@@ -27,8 +27,4 @@ $(function() {
         equal(data.lastName, $("#lastName").val());
         equal(data.email, $("#email").val());
     });
-
-    //test("accountCreated", function() { });
-    //test("accountInvalid", function() { });
-    //test("accountListed", function() { });
 });

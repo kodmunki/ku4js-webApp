@@ -30,37 +30,5 @@ $.ku4webApp.config.forms = {
             type: "select",
             required:false
         }
-    ],
-    exampleResponseBox: [
-        {
-            selector: "#responsebox_username",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_password",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_firstName",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_lastName",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_email",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#responsebox_reco",
-            type: "select",
-            required:false
-        }
     ]
 };
