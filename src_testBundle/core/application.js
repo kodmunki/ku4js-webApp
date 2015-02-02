@@ -9,6 +9,8 @@ function app() {
     this.formFactory = app.formFactory(app.config.forms);
 
     this.prodModel();
+
+    this.navigator = app.navigator(this.modelFactory, app.config.hash);
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
@@ -21,9 +23,9 @@ app.prototype = {
         this.modelFactory = $.ku4webApp.modelFactory(this.mediator, this.serviceFactory, this.storeFactory, this.validatorFactory);
         return this;
     }
-
 };
 $.ku4webApp_testBundle.app = function() { return new app(); };
+
 
 function classRefcheck(className, propertyName, property) {
     var _className = $.str.format("$.ku4webApp.{0}", className),

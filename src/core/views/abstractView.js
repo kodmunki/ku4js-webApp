@@ -1,7 +1,7 @@
 function abstractView(templateFactory, formFactory, navigator) {
     this._templateFactory = classRefcheck("views", "templateFactory", templateFactory);
     this._formFactory = classRefcheck("views", "formFactory", formFactory);
-    this._navigator = classRefcheck("models", "navigator", navigator);
+    this._navigator = classRefcheck("views", "navigator", navigator);
     this._state = new state();
 }
 abstractView.prototype = {

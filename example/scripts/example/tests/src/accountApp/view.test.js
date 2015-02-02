@@ -1,6 +1,6 @@
 $(function() {
 
-    module("model.example");
+    module("view.example");
 
     var bundle = $.ku4webAppUT.bundle(),
         view = bundle.view("example");
@@ -11,8 +11,7 @@ $(function() {
     });
 
     test("accountFormRequested", function() {
-        var $dom = $(".js-responsebox"),
-            data = {
+        var data = {
                 username: "john",
                 password: "password",
                 firstName: "john",
@@ -22,13 +21,11 @@ $(function() {
 
         expect(5);
         view.accountFormRequested(data);
-        equal($dom.find("#username").val(), data.username);
-        equal($dom.find("#password").val(), data.password);
-        equal($dom.find("#firstName").val(), data.firstName);
-        equal($dom.find("#lastName").val(), data.lastName);
-        equal($dom.find("#email").val(), data.email);
-
-        $dom.remove();
+        equal(data.username, $("#username").val());
+        equal(data.password, $("#password").val());
+        equal(data.firstName, $("#firstName").val());
+        equal(data.lastName, $("#lastName").val());
+        equal(data.email, $("#email").val());
     });
 
     //test("accountCreated", function() { });
