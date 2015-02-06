@@ -1,22 +1,12 @@
 function navigator(modelFactory, config) {
 
+    this._modelFactory = modelFactory;
+    this._config = config;
+    this._notify = true;
+
     var me = this;
     function onhashchange() {
-        if(me.read() == "ku4#") return;
-        if(me._notify && $.exists(config)) {
-            var confg = config[me.read()];
-            if ($.exists(confg)) {
-                var modelName = confg.model,
-                    methodName = confg.method;
-                if ($.exists(modelName) && $.exists(methodName)) {
-                    try {
-                        var model = modelFactory.create(modelName);
-                        model[methodName]();
-                    }
-                    catch (e) { }
-                }
-            }
-        }
+        if(me._notify) me.execute(me.read());
         me._notify = true;
     }
 
@@ -24,8 +14,6 @@ function navigator(modelFactory, config) {
         window.addEventListener("hashchange", onhashchange);
     else if($.exists(window.attachEvent))
         window.attachEvent("onhashchange", onhashchange);
-
-    this._notify = true;
 }
 navigator.prototype = {
 
@@ -59,6 +47,35 @@ navigator.prototype = {
     back: function() {
         window.history.back();
         return this;
+    },
+    execute: function(value) {
+        var config = this._config;
+        if(!$.exists(config)) return;
+
+        var confg = config[value];
+        if (!$.exists(confg)) return;
+
+        var modelName = confg.model,
+            methodName = confg.method,
+            modelFactory =  this._modelFactory;
+
+        if ($.exists(modelName) && $.exists(methodName)) {
+            try {
+                var model = modelFactory.create(modelName);
+                model[methodName]();
+            }
+            catch (e) { /* Fail silently */ }
+        }
+        return this;
+    },
+    executeOrDefault: function(value, dflt) {
+        var config = this._config;
+        if(!$.exists(config)) return;
+
+        var confg = config[value];
+        return ($.exists(confg))
+            ? this.execute(confg)
+            : this.execute(config[dflt]);
     }
 };
 

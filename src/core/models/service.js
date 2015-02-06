@@ -22,6 +22,8 @@ function service(mediator, name, config) {
 service.prototype = {
     cache: function() { this._service.cache(); return this; },
     noCache: function() { this._service.noCache(); return this; },
+    lock: function() { this._service.lock(); return this; },
+    unlock: function() { this._service.unlock(); return this; },
     abort: function() { this._service.abort(); return this; },
     call: function(params) { this._service.call(params); return this; }
 };
