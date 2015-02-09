@@ -9,7 +9,7 @@ function app(name) {
     this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
-    this.navigator = app.navigator(this.modelFactory, app.config.hash);
+    this.navigator = app.navigator(this.modelFactory, app.config.navigator);
     this.mediator = mediator;
 }
 app.prototype = {

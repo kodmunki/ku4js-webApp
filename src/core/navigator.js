@@ -16,6 +16,9 @@ function navigator(modelFactory, config) {
         window.attachEvent("onhashchange", onhashchange);
 }
 navigator.prototype = {
+    hashEquals: function(value) {
+        return this.read() == value;
+    },
 
     //NOTE: Writing the hash using this method will NOT cause a "hash" config
     //      method call. That is, there is NO notification

@@ -196,7 +196,7 @@ $.ku4webApp.config.forms = {
     ]
 };
 
-$.ku4webApp.config.hash = {
+$.ku4webApp.config.navigator = {
 
     "example": {
         model: "example",

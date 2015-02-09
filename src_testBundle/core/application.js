@@ -8,7 +8,7 @@ function app() {
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
     this.prodModel();
-    this.navigator = app.navigator(this.modelFactory, app.config.hash);
+    this.navigator = app.navigator(this.modelFactory, app.config.navigator);
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
