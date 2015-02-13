@@ -375,9 +375,7 @@ navigator.prototype = {
         if(!$.exists(config)) return;
 
         var confg = config[value];
-        return ($.exists(confg))
-            ? this.execute(confg)
-            : this.execute(config[dflt]);
+        return ($.exists(confg)) ? this.execute(value) : this.execute(dflt);
     }
 };
 
