@@ -30,8 +30,9 @@ $(function() {
 
     test("notify", function() {
         var model = $.ku4webApp.models.test(mediator, serviceFactory, storeFactory, validatorFactory);
-        model.notify("DATA");
+        model.notify(null, "DATA");
         expect(1);
+
         ok(model.testData, "DATA");
     });
 });

@@ -6,15 +6,15 @@ function service(mediator, name, config) {
         service.contentType(config.contentType);
 
         if($.exists(config.success)) service.onSuccess(function(data) {
-            mediator.notify(data, service.processId(), config.success);
+            mediator.notify(config.success, data, service.processId());
         }, this, config.success);
 
         if($.exists(config.error)) service.onError(function(data){
-            mediator.notify(data, service.processId(), config.error);
+            mediator.notify(config.error, data, service.processId());
         }, this, config.success);
 
         if($.exists(config.complete)) service.onError(function(data){
-            mediator.notify(data, service.processId(), config.complete);
+            mediator.notify(config.complete, data, service.processId());
         }, this, config.complete);
 
     this._service = service;

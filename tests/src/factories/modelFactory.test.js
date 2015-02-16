@@ -28,9 +28,7 @@ $(function() {
 
         expect(2);
         ok(modelFactory.create("test"));
-        mediator.subscribe("executed", function(data) {
-            equal(data, 1);
-        });
+        mediator.subscribe("executed", function(data) { equal(data, 1); });
 
         model.execute(1);
     });

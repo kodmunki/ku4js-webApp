@@ -163,15 +163,15 @@ function service(mediator, name, config) {
         service.contentType(config.contentType);
 
         if($.exists(config.success)) service.onSuccess(function(data) {
-            mediator.notify(data, service.processId(), config.success);
+            mediator.notify(config.success, data, service.processId());
         }, this, config.success);
 
         if($.exists(config.error)) service.onError(function(data){
-            mediator.notify(data, service.processId(), config.error);
+            mediator.notify(config.error, data, service.processId());
         }, this, config.success);
 
         if($.exists(config.complete)) service.onError(function(data){
-            mediator.notify(data, service.processId(), config.complete);
+            mediator.notify(config.complete, data, service.processId());
         }, this, config.complete);
 
     this._service = service;
@@ -226,7 +226,7 @@ store.prototype = {
             data = this.__collection().find(criteria);
 
         if($.exists(config.find))
-            this._mediator.notify(data, config.find);
+            this._mediator.notify(config.find, data);
         return data;
     },
     insert: function(dto) {
@@ -238,7 +238,7 @@ store.prototype = {
         collection.insert(dto).save();
 
         if($.exists(config.insert))
-            this._mediator.notify(collection, config.insert);
+            this._mediator.notify(config.insert, collection);
 
         return this;
     },
@@ -255,7 +255,7 @@ store.prototype = {
 
         var collection = this.__collection().update(criteria, obj).save();
         if($.exists(config.update))
-            this._mediator.notify(collection, config.update);
+            this._mediator.notify(config.update, collection);
         return this;
     },
     remove: function(dto) {
@@ -263,7 +263,7 @@ store.prototype = {
             config = this.__config(),
             collection = this.__collection().remove(obj).save();
         if($.exists(config.remove))
-            this._mediator.notify(collection, config.remove);
+            this._mediator.notify(config.remove, collection);
         return this;
     },
     join: function() {

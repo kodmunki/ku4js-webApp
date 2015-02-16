@@ -15,7 +15,7 @@ store.prototype = {
             data = this.__collection().find(criteria);
 
         if($.exists(config.find))
-            this._mediator.notify(data, config.find);
+            this._mediator.notify(config.find, data);
         return data;
     },
     insert: function(dto) {
@@ -27,7 +27,7 @@ store.prototype = {
         collection.insert(dto).save();
 
         if($.exists(config.insert))
-            this._mediator.notify(collection, config.insert);
+            this._mediator.notify(config.insert, collection);
 
         return this;
     },
@@ -44,7 +44,7 @@ store.prototype = {
 
         var collection = this.__collection().update(criteria, obj).save();
         if($.exists(config.update))
-            this._mediator.notify(collection, config.update);
+            this._mediator.notify(config.update, collection);
         return this;
     },
     remove: function(dto) {
@@ -52,7 +52,7 @@ store.prototype = {
             config = this.__config(),
             collection = this.__collection().remove(obj).save();
         if($.exists(config.remove))
-            this._mediator.notify(collection, config.remove);
+            this._mediator.notify(config.remove, collection);
         return this;
     },
     join: function() {
