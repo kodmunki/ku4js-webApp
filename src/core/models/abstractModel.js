@@ -1,6 +1,7 @@
-function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory) {
+function abstractModel(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
     this._mediator = classRefcheck("models", "mediator", mediator);
     this._serviceFactory = classRefcheck("models", "serviceFactory", serviceFactory);
+    this._socketFactory = classRefcheck("models", "socketFactory", socketFactory);
     this._storeFactory = classRefcheck("models", "storeFactory", storeFactory);
     this._validatorFactory = classRefcheck("models", "validatorFactory", validatorFactory);
     this._state = new state();
@@ -8,6 +9,7 @@ function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory)
 abstractModel.prototype = {
     $collection: function(name) { return this._storeFactory.create(name); },
     $service: function(name) { return this._serviceFactory.create(name); },
+    $socket: function(name) { return this._socketFactory.create(name); },
     $validator: function(name) { return this._validatorFactory.create(name); },
     $state: function() { return this._state; },
     $appState: function(value) {

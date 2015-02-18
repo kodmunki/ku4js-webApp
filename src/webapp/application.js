@@ -3,10 +3,11 @@ function app(name) {
         app = $.ku4webApp,
         mediator = $.mediator("ku4webApp_" + _name),
         serviceFactory = app.serviceFactory(mediator, app.config.services),
+        socketFactory = app.socketFactory(mediator, app.config.sockets),
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
 
-    this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
+    this.modelFactory = app.modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
     this.navigator = app.navigator(this.modelFactory, app.config.navigator);

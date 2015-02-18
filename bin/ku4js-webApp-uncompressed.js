@@ -98,9 +98,10 @@ $.ku4webApp.controller = function(name, proto) {
     }
 };
 
-function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory) {
+function abstractModel(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
     this._mediator = classRefcheck("models", "mediator", mediator);
     this._serviceFactory = classRefcheck("models", "serviceFactory", serviceFactory);
+    this._socketFactory = classRefcheck("models", "socketFactory", socketFactory);
     this._storeFactory = classRefcheck("models", "storeFactory", storeFactory);
     this._validatorFactory = classRefcheck("models", "validatorFactory", validatorFactory);
     this._state = new state();
@@ -108,6 +109,7 @@ function abstractModel(mediator, serviceFactory, storeFactory, validatorFactory)
 abstractModel.prototype = {
     $collection: function(name) { return this._storeFactory.create(name); },
     $service: function(name) { return this._serviceFactory.create(name); },
+    $socket: function(name) { return this._socketFactory.create(name); },
     $validator: function(name) { return this._validatorFactory.create(name); },
     $state: function() { return this._state; },
     $appState: function(value) {
@@ -126,14 +128,14 @@ abstractModel.prototype = {
 $.ku4webApp.abstractModel = abstractModel;
 
 $.ku4webApp.model = function(name, proto, subscriptions) {
-    function model(mediator, serviceFactory, storeFactory, validatorFactory) {
-        model.base.call(this, mediator, serviceFactory, storeFactory, validatorFactory);
+    function model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+        model.base.call(this, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
     }
     model.prototype = proto;
     $.Class.extend(model, abstractModel);
 
-    $.ku4webApp.models[name] = function(mediator, serviceFactory, storeFactory, validatorFactory) {
-        var _model = new model(mediator, serviceFactory, storeFactory, validatorFactory);
+    $.ku4webApp.models[name] = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+        var _model = new model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
         if($.exists(subscriptions)) {
             $.hash(subscriptions).each(function(obj) {
                 var key = obj.key,
@@ -186,6 +188,33 @@ service.prototype = {
 };
 $.ku4webApp.service = function(mediator, name, config) {
     return new service(mediator, name, config);
+};
+
+var __ku4socket;
+function socketInstance() {
+    if($.isUndefined(__ku4socket)) __ku4socket = ($.exists(io)) ? io() : null;
+    return __ku4socket;
+}
+function socket(mediator, config) {
+
+    if(!$.exists(config.event)) throw new Error("Invalid socket event configuration");
+
+    this._event = config.event;
+
+    var socket = socketInstance();
+    if($.exists(config.success))
+        socket.on(this._event, function(data) { mediator.notify(config.success, data); });
+    if($.exists(config.error))
+        socket.on("error", function(data) { mediator.notify(config.error, data); });
+}
+socket.prototype = {
+    call: function(data) {
+        console.log(socketInstance(), this._event, data)
+         socketInstance().emit(this._event, data);
+     }
+};
+$.ku4webApp.socket = function(mediator, config) {
+    return new socket(mediator, config);
 };
 
 function state(value) {
@@ -484,20 +513,18 @@ $.ku4webApp.formFactory = function(config) {
     return new formFactory(config);
 };
 
-function modelFactory(mediator, serviceFactory, storeFactory, validatorFactory) {
+function modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
     var models = $.hash();
     $.hash($.ku4webApp.models).each(function(obj){
-        models.add(obj.key, obj.value(mediator, serviceFactory, storeFactory, validatorFactory));
+        models.add(obj.key, obj.value(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory));
     }, this);
     this._models = models;
 }
 modelFactory.prototype = {
-    create: function(name) {
-        return this._models.find(name);
-    }
+    create: function(name) { return this._models.find(name); }
 };
-$.ku4webApp.modelFactory = function(mediator, serviceFactory, storeFactory, validatorFactory) {
-    return new modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
+$.ku4webApp.modelFactory = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+    return new modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
 };
 
 function serviceFactory(mediator, config) {
@@ -514,6 +541,22 @@ serviceFactory.prototype = {
 };
 $.ku4webApp.serviceFactory = function(mediator, config) {
     return new serviceFactory(mediator, config);
+};
+
+function socketFactory(mediator, config) {
+    var sockets = $.hash();
+
+    $.hash(config).each(function(obj){
+        sockets.add(obj.key, $.ku4webApp.socket(mediator, obj.value));
+    }, this);
+
+    this._sockets = sockets;
+}
+socketFactory.prototype = {
+    create: function(name) { return this._sockets.find(name); }
+};
+$.ku4webApp.socketFactory = function(mediator, config) {
+    return new socketFactory(mediator, config);
 };
 
 function storeFactory(mediator, config) {
@@ -552,10 +595,11 @@ function app(name) {
         app = $.ku4webApp,
         mediator = $.mediator("ku4webApp_" + _name),
         serviceFactory = app.serviceFactory(mediator, app.config.services),
+        socketFactory = app.socketFactory(mediator, app.config.sockets),
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
 
-    this.modelFactory = app.modelFactory(mediator, serviceFactory, storeFactory, validatorFactory);
+    this.modelFactory = app.modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
     this.navigator = app.navigator(this.modelFactory, app.config.navigator);
