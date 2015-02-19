@@ -29,7 +29,7 @@
       </header>
       <section>
         <h1>
-<a name="ku4js-webapp" class="anchor" href="#ku4js-webapp"><span class="octicon octicon-link"></span></a>ku4js-webApp</h1>
+<a id="ku4js-webapp" class="anchor" href="#ku4js-webapp" aria-hidden="true"><span class="octicon octicon-link"></span></a>ku4js-webApp</h1>
 
 <p>kodmunki™ utilities for js Web Applications.</p>
 
@@ -41,19 +41,27 @@ brought to you by <a href="https://github.com/kodmunki/ku4js-kernel">ku4js-kerne
 <a href="https://github.com/kodmunki/ku4js-data">ku4js-data</a>. All of these technologies are rooted in SOLID OO
 principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.</p>
 
-<hr><h1>
-<a name="kodmunki-build-process" class="anchor" href="#kodmunki-build-process"><span class="octicon octicon-link"></span></a>kodmunki™ build process</h1>
+<p><img src="http://www.kodmunki.com/media/logo-large.png%20=80x" alt=""></p>
+
+<hr>
+
+<h1>
+<a id="kodmunki-build-process" class="anchor" href="#kodmunki-build-process" aria-hidden="true"><span class="octicon octicon-link"></span></a>kodmunki™ build process</h1>
 
 <p>This build process is dependent upon yuicompressor and a specific directory structure:</p>
 
 <ul>
-<li>root<br><ul>
+<li>root<br>
+
+<ul>
 <li>_build (This build script and the yuicompressor)</li>
 <li>bin (The compiled scripts will appear here)</li>
 <li>src (All script files go here)</li>
 </ul>
 </li>
-</ul><p>The following variables found in setup () are
+</ul>
+
+<p>The following variables found in setup () are
 expected to be changed by the developer running
 this process:</p>
 
@@ -61,8 +69,12 @@ this process:</p>
 <li>PROJNAME (The name of your project)</li>
 <li>STARTMSG (A message to echo at start of build)</li>
 <li>ENDMSG (A message to echo at end of build)</li>
-</ul><hr><h1>
-<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a>Setup</h1>
+</ul>
+
+<hr>
+
+<h1>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h1>
 
 <p>To get your project going simply follow these instructions:</p>
 
@@ -76,140 +88,260 @@ this process:</p>
 <li>Add a reference in the desired HTML page to <strong><em>one</em></strong> of the artifacts in the /bin directory.</li>
 <li>Add a reference in the desired HTML page to the renamed -Application-.js file.</li>
 <li>ROCK AND ROLL!</li>
-</ol><hr><h1>
-<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h1>
+</ol>
+
+<hr>
+
+<h1>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
 
 <p>The following is the documentation for the template engine and the MVC application classes. For further information
 check out the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/example">example project</a></p>
 
 <h2>
-<a name="templates" class="anchor" href="#templates"><span class="octicon octicon-link"></span></a>Templates</h2>
+<a id="templates" class="anchor" href="#templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Templates</h2>
 
-<p>Has access to the following protected methods</p>
+<p>Has access to the following protected methods and properties:</p>
+
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Return</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$config(name:<em>String</em>)</td>
+<td>config</td>
+<td>Retrieves the template config named "name".</td>
+</tr>
+<tr>
+<td>$forms(name:<em>String</em>)</td>
+<td>config</td>
+<td>Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]).</td>
+</tr>
+<tr>
+<td>$views(name:<em>String</em>)</td>
+<td>config</td>
+<td>Retrieves the views templates config named "name" (Shortcut for $config("views")[name]).</td>
+</tr>
+<tr>
+<td>$render(template:<em>String</em>, data:<em>{}</em>)</td>
+<td>String</td>
+<td>Renders the template using object literal or dto data.</td>
+</tr>
+<tr>
+<td>$renderList(template:<em>String</em>, array:<em>Array</em>)</td>
+<td>String</td>
+<td>Renders template using object literal or dto data for each dto in array.</td>
+</tr>
+<tr>
+<td>$renderListWithAction(array:<em>Array</em>, func:<em>Function</em>)</td>
+<td>String</td>
+<td>Calls a specified render function for each dto in array. It is important that the specified action return a string value!</td>
+</tr>
+</tbody>
+</table>
 
 <ul>
-<li>$config(NAME): <em>Retrieves the template config named NAME.</em>
-</li>
-<li>$forms(NAME): <em>Retrieves the forms templates config named NAME (Shortcut for $config("forms")[NAME]).</em>
-</li>
-<li>$views(NAME): <em>Retrieves the views templates config named NAME (Shortcut for $config("views")[NAME]).</em>
-</li>
-<li>$render(TEMPLATE, DTO): <em>Renders the TEMPLATE using DTO data.</em>
-</li>
-<li>$renderList(TEMPLATE, Array[DTO]): <em>Renders TEMPLATE using DTO data for each DTO in Array.</em>
-</li>
-<li>$renderListWithAction(Array[DTO], FUNCTION) Calls a specified render function for each DTO in Array.
-                                          It is important that the specified action return a string value!</li>
 <li>Runtime instantiation requires valid templates config. <em>(This is a potential scenario in advanced development of an
 enterprise applications and should be heeded. For example, if you create a template for generic form fields
 specifically, i.e. $.ku4webApp.template("forms", { /<em>Your methods here</em>/ }, and want to access it from another template,
 you will have to instantiate it on the fly and pass the local config to it: $.ku4webApp.template.forms(this.$config()))</em>.</li>
-</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="s2">"NAME"</span><span class="p">,</span> <span class="p">{</span>
-    <span class="c1">//METHODS GO HERE</span>
-    <span class="nx">METHOD</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
-<span class="p">});</span>
-</pre></div>
+</ul>
+
+<div class="highlight highlight-javascript"><pre>$.ku4webApp.template(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
+    <span class="pl-c">//METHODS GO HERE</span>
+    <span class="pl-en">METHOD</span>: <span class="pl-st">function</span>() { }
+});</pre></div>
 
 <h2>
-<a name="models" class="anchor" href="#models"><span class="octicon octicon-link"></span></a>Models</h2>
+<a id="models" class="anchor" href="#models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Models</h2>
 
-<p>Has access to the following protected methods</p>
+<p>Has access to the following protected methods and properties:</p>
+
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Return</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$collection(name:<em>String</em>)</td>
+<td>collection</td>
+<td>Retrieves the collection named "name".</td>
+</tr>
+<tr>
+<td>$service(name:<em>String</em>)</td>
+<td>service</td>
+<td>Retrieves the service named "name".</td>
+</tr>
+<tr>
+<td>$socket(name:<em>String</em>)</td>
+<td>service</td>
+<td>Retrieves the socket named "name". <em>(requires socket.io -- not included)</em>
+</td>
+</tr>
+<tr>
+<td>$validator(name:<em>String</em>)</td>
+<td>validator</td>
+<td>Retrieves the validator named "name".</td>
+</tr>
+<tr>
+<td>$state()</td>
+<td>state</td>
+<td>Retrieves the local state machine.</td>
+</tr>
+<tr>
+<td>$appState()</td>
+<td>state</td>
+<td>Retrieves the global state machine.</td>
+</tr>
+<tr>
+<td>$notify(data:<em>Object</em>, NAME, ...)</td>
+<td>void</td>
+<td>Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify <em>all</em> subscribers!</td>
+</tr>
+</tbody>
+</table>
 
 <ul>
-<li>$collection(NAME): <em>Retrieves the collection named NAME.</em>
-</li>
-<li>$service(NAME): <em>Retrieves the service named NAME.</em>
-</li>
-<li>$validator(NAME): <em>Retrieves the validator named NAME.</em>
-</li>
-<li>$notify([DATA], NAME, ...) <em>Notifies the subscribers in the list or arguments passing DATA if supplied.
-                         Calling this function without a list of subscribers will notify ALL subscribers!</em>
-</li>
 <li>Runtime instantiation requires a valid mediator, serviceFactory, storeFactory, and validatorFactory. <em>(This is a
 very unlikely scenario)</em>.</li>
-</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s2">"NAME"</span><span class="p">,</span> <span class="p">{</span>
-    <span class="c1">//METHODS GO HERE</span>
-    <span class="nx">METHOD</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">},</span>
-    <span class="nx">CALLBACK</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
-<span class="p">},</span>
-<span class="p">{</span>
-    <span class="c1">//MEDIATOR SUBSCRIPTIONS GO HERE</span>
-    <span class="s2">"SUBSCRIPTION"</span><span class="o">:</span> <span class="nx">CALLBACK</span>
-<span class="p">});</span>
-</pre></div>
+</ul>
+
+<div class="highlight highlight-javascript"><pre>$.ku4webApp.model(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
+    <span class="pl-c">//METHODS GO HERE</span>
+    <span class="pl-en">METHOD</span>: <span class="pl-st">function</span>() { },
+    <span class="pl-en">CALLBACK</span>: <span class="pl-st">function</span>() { }
+},
+{
+    <span class="pl-c">//MEDIATOR SUBSCRIPTIONS GO HERE</span>
+    <span class="pl-s1"><span class="pl-pds">"</span>SUBSCRIPTION<span class="pl-pds">"</span></span><span class="pl-k">:</span> CALLBACK
+});</pre></div>
 
 <h2>
-<a name="views" class="anchor" href="#views"><span class="octicon octicon-link"></span></a>Views</h2>
+<a id="views" class="anchor" href="#views" aria-hidden="true"><span class="octicon octicon-link"></span></a>Views</h2>
 
-<p>Has access to the following protected methods</p>
+<p>Has access to the following protected methods and properties:</p>
+
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Return</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$template(name:<em>String</em>)</td>
+<td>template</td>
+<td>Retrieves the template named "name".</td>
+</tr>
+<tr>
+<td>$form(name:<em>String</em>)</td>
+<td>form</td>
+<td>Retrieves the form named "name".</td>
+</tr>
+<tr>
+<td>$navigator()</td>
+<td>navigator</td>
+<td>Retrieves the global navigator.</td>
+</tr>
+</tbody>
+</table>
 
 <ul>
-<li>$template(NAME): <em>Retrieves the template named NAME</em>
-</li>
-<li>$form(NAME): <em>Retrieves the form named NAME</em>
-</li>
 <li>Runtime instantiation requires a valid templateFactory and formFactory. <em>(This is an absurd scenario. If you require it,
 it is likely that you need to revisit <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a>. If you
 find a necessary reason, please contact <a href="mailto:support@kodmunki.com">support@kodmunki.com</a> to share)</em>.</li>
-</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">view</span><span class="p">(</span><span class="s2">"NAME"</span><span class="p">,</span> <span class="p">{</span>
-    <span class="c1">//METHODS GO HERE</span>
-    <span class="nx">METHOD</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">},</span>
-    <span class="nx">CALLBACK</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
-<span class="p">},</span>
-<span class="p">{</span>
-    <span class="c1">//MEDIATOR SUBSCRIPTIONS GO HERE</span>
-    <span class="s2">"SUBSCRIPTION"</span><span class="o">:</span> <span class="nx">CALLBACK</span>
-<span class="p">});</span>
-</pre></div>
+</ul>
+
+<div class="highlight highlight-javascript"><pre>$.ku4webApp.view(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
+    <span class="pl-c">//METHODS GO HERE</span>
+    <span class="pl-en">METHOD</span>: <span class="pl-st">function</span>() { },
+    <span class="pl-en">CALLBACK</span>: <span class="pl-st">function</span>() { }
+},
+{
+    <span class="pl-c">//MEDIATOR SUBSCRIPTIONS GO HERE</span>
+    <span class="pl-s1"><span class="pl-pds">"</span>SUBSCRIPTION<span class="pl-pds">"</span></span><span class="pl-k">:</span> CALLBACK
+});</pre></div>
 
 <h2>
-<a name="controllers" class="anchor" href="#controllers"><span class="octicon octicon-link"></span></a>Controllers</h2>
+<a id="controllers" class="anchor" href="#controllers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Controllers</h2>
 
-<p>Has access to the following protected methods</p>
+<p>Has access to the following protected methods and properties:</p>
+
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Return</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$model(name:<em>String</em>)</td>
+<td>model</td>
+<td>Retrieves the model named "name".</td>
+</tr>
+<tr>
+<td>$form(name:<em>String</em>)</td>
+<td>form</td>
+<td>Retrieves the form named "name".</td>
+</tr>
+<tr>
+<td>$navigator()</td>
+<td>navigator</td>
+<td>Retrieves the global navigator.</td>
+</tr>
+</tbody>
+</table>
 
 <ul>
-<li>$model(NAME): Retrieves the model named NAME</li>
-<li>$form(NAME): Retrieves the form named NAME</li>
-<li>Runtime instantiation requires a valid modelFactory and formFactory. <em>(This, again, is an absurd scenario. If you
-require it, it is likely that you need to revisit
-<a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a>. If you find a necessary reason, please
-contact <a href="mailto:support@kodmunki.com">support@kodmunki.com</a> to share)</em>.</li>
-</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s2">"NAME"</span><span class="p">,</span> <span class="p">{</span>
-    <span class="c1">//METHODS GO HERE</span>
-<span class="p">});</span>
-</pre></div>
+<li>Runtime instantiation requires a valid modelFactory and formFactory.</li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre>$.ku4webApp.controller(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
+    <span class="pl-c">//METHODS GO HERE</span>
+});</pre></div>
 
 <h2>
-<a name="applications-files" class="anchor" href="#applications-files"><span class="octicon octicon-link"></span></a>Applications/ files</h2>
+<a id="applications-files" class="anchor" href="#applications-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applications/ files</h2>
 
 <p>These files are where you will initialize your controllers and views and expose your controller to the HTML page.</p>
 
-<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">controller</span><span class="p">;</span>
-<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="kd">var</span> <span class="nx">appName</span> <span class="o">=</span> <span class="s2">"[ENTER YOUR APP NAME HERE]"</span><span class="p">,</span>
-        <span class="nx">app</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">app</span><span class="p">();</span>
-    <span class="nx">controller</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">controllers</span><span class="p">[</span><span class="nx">appName</span><span class="p">](</span><span class="nx">app</span><span class="p">)</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">appName</span><span class="p">](</span><span class="nx">app</span><span class="p">);</span>
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> controller;
+$(<span class="pl-st">function</span>(){
+    <span class="pl-s">var</span> appName <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>[ENTER YOUR APP NAME HERE]<span class="pl-pds">"</span></span>,
+        app <span class="pl-k">=</span> $.ku4webApp.app();
+    controller <span class="pl-k">=</span> $.ku4webApp.<span class="pl-sc">controllers</span>[appName](app)
+    $.ku4webApp.views[appName](app);
 
-<span class="cm">/*======================================================*/</span>
+<span class="pl-c">/*======================================================*/</span>
 
- <span class="c1">//[Other desired views or initialization scripting HERE]</span>
+ <span class="pl-c">//[Other desired views or initialization scripting HERE]</span>
 
-<span class="cm">/*======================================================*/</span>
+<span class="pl-c">/*======================================================*/</span>
 
-<span class="p">});</span>
-</pre></div>
+});</pre></div>
 
 <p>When you have successfully integrated ku4js-webApp into your application you will be able to call your controller
 methods by calling "controller.yourMethod" where "yourMethod" is some method that you have created in your custom
 controller. For example, if you had implemented a controller with the method "execute" and wished to call it from
 a button you would add the following HTML into the desired location of your web application:</p>
 
-<div class="highlight highlight-html"><pre><span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">"controller.execute(); return false;"</span><span class="nt">&gt;</span>Execute<span class="nt">&lt;/button&gt;</span>
-</pre></div>
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">button</span> <span class="pl-e">onclick</span>=<span class="pl-s1"><span class="pl-pds">"</span>controller.execute(); return false;<span class="pl-pds">"</span></span>&gt;Execute&lt;/<span class="pl-ent">button</span>&gt;</pre></div>
 
 <h2>
-<a name="configurations" class="anchor" href="#configurations"><span class="octicon octicon-link"></span></a>Configurations</h2>
+<a id="configurations" class="anchor" href="#configurations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configurations</h2>
 
 <p>The dependency injection of ku4js-webApp is largely dependent upon the configuration files. These files are required
 for a ku4js-webApp project to work successfully. They are very simple files to configure. The ones listed here
@@ -217,47 +349,45 @@ are required and must be included in your ku4js-web app. You can add more of the
 <strong><em>very</em></strong> extensible! Documentation for each of the required configuration follows:</p>
 
 <h3>
-<a name="configcollections" class="anchor" href="#configcollections"><span class="octicon octicon-link"></span></a>config.collections</h3>
+<a id="configcollections" class="anchor" href="#configcollections" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.collections</h3>
 
 <p>Configures the local client-side persistence callback structure.</p>
 
-<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
-<span class="cm">    //COLLECTION</span>
-<span class="cm">    NAME: {</span>
-<span class="cm">        name: "COLLECTION NAME",</span>
-<span class="cm">        insert: "ON CREATED",</span>
-<span class="cm">        find: "ON FOUND",</span>
-<span class="cm">        update: "ON UPDATED",</span>
-<span class="cm">        remove: "ON REMOVED"</span>
-<span class="cm">    }</span>
-<span class="cm"> */</span>
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
+<span class="pl-c">    //COLLECTION</span>
+<span class="pl-c">    NAME: {</span>
+<span class="pl-c">        name: "COLLECTION NAME",</span>
+<span class="pl-c">        insert: "ON CREATED",</span>
+<span class="pl-c">        find: "ON FOUND",</span>
+<span class="pl-c">        update: "ON UPDATED",</span>
+<span class="pl-c">        remove: "ON REMOVED"</span>
+<span class="pl-c">    }</span>
+<span class="pl-c"> */</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">collections</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">//ADD YOUR COLLECTIONS HERE</span>
-<span class="p">};</span>
-</pre></div>
+$.ku4webApp.config.collections <span class="pl-k">=</span> {
+    <span class="pl-c">//ADD YOUR COLLECTIONS HERE</span>
+};</pre></div>
 
 <h3>
-<a name="configservices" class="anchor" href="#configservices"><span class="octicon octicon-link"></span></a>config.services</h3>
+<a id="configservices" class="anchor" href="#configservices" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.services</h3>
 
 <p>Configures the ajax services</p>
 
-<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
-<span class="cm">    NAME: {</span>
-<span class="cm">        verb: "VERB",</span>
-<span class="cm">        uri: "URI",</span>
-<span class="cm">        contentType: "Content-Type" //(OPTIONAL)</span>
-<span class="cm">        success: "ON SUCCESS",</span>
-<span class="cm">        error: "ON ERROR"</span>
-<span class="cm">    }</span>
-<span class="cm"> */</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">services</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">//ADD YOUR SERVICES HERE</span>
-<span class="p">};</span>
-</pre></div>
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
+<span class="pl-c">    NAME: {</span>
+<span class="pl-c">        verb: "VERB",</span>
+<span class="pl-c">        uri: "URI",</span>
+<span class="pl-c">        contentType: "Content-Type" //(OPTIONAL)</span>
+<span class="pl-c">        success: "ON SUCCESS",</span>
+<span class="pl-c">        error: "ON ERROR"</span>
+<span class="pl-c">    }</span>
+<span class="pl-c"> */</span>
+$.ku4webApp.config.services <span class="pl-k">=</span> {
+    <span class="pl-c">//ADD YOUR SERVICES HERE</span>
+};</pre></div>
 
 <h4>
-<a name="service-processid" class="anchor" href="#service-processid"><span class="octicon octicon-link"></span></a>Service processId</h4>
+<a id="service-processid" class="anchor" href="#service-processid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Service processId</h4>
 
 <p>Sometimes a developer retains state across service calls and in their architecture must be infomed which service call is
 responsible for making the callback. ku4webApp service calls contain a processId for developers to use in this case.
@@ -266,106 +396,119 @@ service call is making a notification of its callback. When a service makes a no
 notify each subscriber by passing any server data that was returned as a first argument and its processId as the second
 arguments. Note the example callback method below:</p>
 
-<div class="highlight highlight-javascript"><pre><span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">serverData</span><span class="p">,</span> <span class="nx">processId</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">serverData</span><span class="p">);</span> <span class="c1">//This will log returned data</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">processId</span><span class="p">);</span> <span class="c1">//This will log the notifying servers processId</span>
-<span class="p">};</span>
-</pre></div>
+<div class="highlight highlight-javascript"><pre><span class="pl-st">function</span> <span class="pl-en">callback</span>(<span class="pl-vpf">serverData</span>, <span class="pl-vpf">processId</span>) {
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(serverData); <span class="pl-c">//This will log returned data</span>
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(processId); <span class="pl-c">//This will log the notifying servers processId</span>
+};</pre></div>
 
 <h3>
-<a name="configforms" class="anchor" href="#configforms"><span class="octicon octicon-link"></span></a>config.forms</h3>
+<a id="configsockets" class="anchor" href="#configsockets" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.sockets</h3>
+
+<p>Configures the ajax services</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
+<span class="pl-c">    NAME: {</span>
+<span class="pl-c">        event: "NAME"</span>
+<span class="pl-c">        success: "ON SUCCESS",</span>
+<span class="pl-c">        error: "ON ERROR"</span>
+<span class="pl-c">    }</span>
+<span class="pl-c"> */</span>
+$.ku4webApp.config.sockets <span class="pl-k">=</span> {
+    <span class="pl-c">//ADD YOUR SERVICES HERE</span>
+};</pre></div>
+
+<h3>
+<a id="configforms" class="anchor" href="#configforms" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.forms</h3>
 
 <p>Configures the forms that your controllers will read from when calling model methods that require user input, and that
 your views will write to when there is data coming from the server that should be placed into the form on load, e.g.
 when a user is editing information that they have already provided.</p>
 
-<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
-<span class="cm">    NAME: [</span>
-<span class="cm">        //FIRST FIELD</span>
-<span class="cm">        {</span>
-<span class="cm">            selector: "DOM SELECTOR",</span>
-<span class="cm">            type: "TYPE", (OPTIONS: field, select, checkbox)</span>
-<span class="cm">            required: BOOL</span>
-<span class="cm">        },</span>
-<span class="cm">        //SECOND FIELD</span>
-<span class="cm">        {</span>
-<span class="cm">            selector: "DOM SELECTOR",</span>
-<span class="cm">            type: "TYPE", (OPTIONS: field, select, checkbox)</span>
-<span class="cm">            required: BOOL</span>
-<span class="cm">        }]</span>
-<span class="cm"> */</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">//ADD YOUR FORMS HERE</span>
-<span class="p">};</span>
-</pre></div>
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
+<span class="pl-c">    NAME: [</span>
+<span class="pl-c">        //FIRST FIELD</span>
+<span class="pl-c">        {</span>
+<span class="pl-c">            selector: "DOM SELECTOR",</span>
+<span class="pl-c">            type: "TYPE", (OPTIONS: field, select, checkbox)</span>
+<span class="pl-c">            required: BOOL</span>
+<span class="pl-c">        },</span>
+<span class="pl-c">        //SECOND FIELD</span>
+<span class="pl-c">        {</span>
+<span class="pl-c">            selector: "DOM SELECTOR",</span>
+<span class="pl-c">            type: "TYPE", (OPTIONS: field, select, checkbox)</span>
+<span class="pl-c">            required: BOOL</span>
+<span class="pl-c">        }]</span>
+<span class="pl-c"> */</span>
+$.ku4webApp.config.<span class="pl-sc">forms</span> <span class="pl-k">=</span> {
+    <span class="pl-c">//ADD YOUR FORMS HERE</span>
+};</pre></div>
 
 <h3>
-<a name="configvalidators" class="anchor" href="#configvalidators"><span class="octicon octicon-link"></span></a>config.validators</h3>
+<a id="configvalidators" class="anchor" href="#configvalidators" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.validators</h3>
 
 <p>Configures the validation rules that your models can use to validate operation classes before they are transmitted
 to the server.</p>
 
-<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
-<span class="cm">    //VALIDATOR</span>
-<span class="cm">    NAME: [</span>
-<span class="cm">        //VALIDATION RULE 1</span>
-<span class="cm">        {</span>
-<span class="cm">            name: "DTO KEY TO VALIDATE",</span>
-<span class="cm">            spec: SPEC ($.spec),</span>
-<span class="cm">            message: "MESSAGE IF INVALID"</span>
-<span class="cm">        },</span>
-<span class="cm">        //VALIDATION RULE 2</span>
-<span class="cm">        {</span>
-<span class="cm">            name: "DTO KEY TO VALIDATE",</span>
-<span class="cm">            spec: SPEC ($.spec),</span>
-<span class="cm">            message: "MESSAGE IF INVALID"</span>
-<span class="cm">        }]</span>
-<span class="cm"> */</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">validators</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">//ADD YOUR VALIDATORS HERE</span>
-<span class="p">};</span>
-</pre></div>
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
+<span class="pl-c">    //VALIDATOR</span>
+<span class="pl-c">    NAME: [</span>
+<span class="pl-c">        //VALIDATION RULE 1</span>
+<span class="pl-c">        {</span>
+<span class="pl-c">            name: "DTO KEY TO VALIDATE",</span>
+<span class="pl-c">            spec: SPEC ($.spec),</span>
+<span class="pl-c">            message: "MESSAGE IF INVALID"</span>
+<span class="pl-c">        },</span>
+<span class="pl-c">        //VALIDATION RULE 2</span>
+<span class="pl-c">        {</span>
+<span class="pl-c">            name: "DTO KEY TO VALIDATE",</span>
+<span class="pl-c">            spec: SPEC ($.spec),</span>
+<span class="pl-c">            message: "MESSAGE IF INVALID"</span>
+<span class="pl-c">        }]</span>
+<span class="pl-c"> */</span>
+$.ku4webApp.config.validators <span class="pl-k">=</span> {
+    <span class="pl-c">//ADD YOUR VALIDATORS HERE</span>
+};</pre></div>
 
 <h3>
-<a name="configtemplates" class="anchor" href="#configtemplates"><span class="octicon octicon-link"></span></a>config.templates</h3>
+<a id="configtemplates" class="anchor" href="#configtemplates" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.templates</h3>
 
 <p>Configures the templates in your web application. config.templates.forms and config.templates.views are required
 template configurations.</p>
 
 <h4>
-<a name="configtemplatesforms" class="anchor" href="#configtemplatesforms"><span class="octicon octicon-link"></span></a>config.templates.forms</h4>
+<a id="configtemplatesforms" class="anchor" href="#configtemplatesforms" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.templates.forms</h4>
 
-<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
-<span class="cm">    NAME: 'HTML FORM FORMAT'</span>
-<span class="cm"> */</span>
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
+<span class="pl-c">    NAME: 'HTML FORM FORMAT'</span>
+<span class="pl-c"> */</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">templates</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">//ADD YOUR FORM TEMPLATES HERE</span>
-<span class="p">};</span>
-</pre></div>
+$.ku4webApp.config.templates.<span class="pl-sc">forms</span> <span class="pl-k">=</span> {
+    <span class="pl-c">//ADD YOUR FORM TEMPLATES HERE</span>
+};</pre></div>
 
 <h4>
-<a name="configtemplatesviews" class="anchor" href="#configtemplatesviews"><span class="octicon octicon-link"></span></a>config.templates.views</h4>
+<a id="configtemplatesviews" class="anchor" href="#configtemplatesviews" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.templates.views</h4>
 
-<div class="highlight highlight-javascript"><pre><span class="cm">/*</span>
-<span class="cm">    NAME: 'HTML FORMAT'</span>
-<span class="cm"> */</span>
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
+<span class="pl-c">    NAME: 'HTML FORMAT'</span>
+<span class="pl-c"> */</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">ku4webApp</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">templates</span><span class="p">.</span><span class="nx">views</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">//ADD YOUR VIEW TEMPLATES HERE</span>
-<span class="p">};</span>
-</pre></div>
+$.ku4webApp.config.templates.views <span class="pl-k">=</span> {
+    <span class="pl-c">//ADD YOUR VIEW TEMPLATES HERE</span>
+};</pre></div>
 
 <h1>
-<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h1>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h1>
 
 <p>This project requires the following dependencies:</p>
 
 <ul>
 <li><a href="https://github.com/kodmunki/ku4js-kernel">ku4js-kernel</a></li>
 <li><a href="https://github.com/kodmunki/ku4js-data">ku4js-data</a></li>
-</ul><h1>
-<a name="gotchas" class="anchor" href="#gotchas"><span class="octicon octicon-link"></span></a>Gotchas!</h1>
+</ul>
+
+<h1>
+<a id="gotchas" class="anchor" href="#gotchas" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gotchas!</h1>
 
 <p>So, as with much JavaScript development, there may be a couple of gotchas! Below are listed a few of the items that
 noobs (meant respectfully) may encounter. Let's just clear those up here, and if you have further questions, please,
@@ -402,8 +545,10 @@ This means that the named notifier is erroneous and should, likely, be removed.<
 <li><p>Along with #4 above, you could also have an exception in your callback method. Read the stack trace and your method
 implementation carefully, you will likely find your issue in the implementation. For further questions, contact
 <a href="mailto:support@kodmunki.com">support@kodmunki.com</a>.</p></li>
-</ol><h1>
-<a name="other-cool-features" class="anchor" href="#other-cool-features"><span class="octicon octicon-link"></span></a>Other cool features</h1>
+</ol>
+
+<h1>
+<a id="other-cool-features" class="anchor" href="#other-cool-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other cool features</h1>
 
 <ol>
 <li>Did you know that along with the simple CRUD ops of find, insert, update and remove, you can also include $in,
@@ -413,9 +558,10 @@ hand, takes an object whose key is the property that you are interested in and a
 ascending ordering and -1 for descending. For example: if you had a collection of persons and wanted to find all of the
 people whose first name was John, Linda or Larry and order them by their age in ascending order you could query from
 your model as follows:</li>
-</ol><div class="highlight highlight-javascript"><pre>    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">$collection</span><span class="p">(</span><span class="s2">"persons"</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">$in</span><span class="o">:</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="p">[</span><span class="s2">"John"</span><span class="p">,</span> <span class="s2">"Linda"</span><span class="p">,</span> <span class="s2">"Larry"</span><span class="p">]},</span> <span class="nx">$orderby</span><span class="o">:</span> <span class="p">{</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">1</span> <span class="p">}});</span>
-</pre></div>
+</ol>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">return</span> <span class="pl-v">this</span>.$collection(<span class="pl-s1"><span class="pl-pds">"</span>persons<span class="pl-pds">"</span></span>)
+        .<span class="pl-s3">find</span>({$in<span class="pl-k">:</span> {name<span class="pl-k">:</span> [<span class="pl-s1"><span class="pl-pds">"</span>John<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>Linda<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>Larry<span class="pl-pds">"</span></span>]}, $orderby<span class="pl-k">:</span> { age<span class="pl-k">:</span> <span class="pl-c1">1</span> }});</pre></div>
 
 <ol>
 <li>Did you know that ku4js-webApps ships with a testingBundle for you to use for your unit tests? You can see it
