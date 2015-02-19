@@ -1,23 +1,8 @@
 $.ku4webApp.config.collections = {
-    example: {
-        name: "accounts"
-        //insert: "accountCreated",
-        //find: "accountRead",
-        //update: "accountUpdated",
-        //remove: "accountRemoved"
+    employees: {
+        name: "employees"
     },
-    example2: {
-        name: "users"
-        //insert: "accountCreated",
-        //find: "accountRead",
-        //update: "accountUpdated",
-        //remove: "accountRemoved"
-    },
-    example3: {
-        name: "otherUsers"
-        //insert: "accountCreated",
-        //find: "accountRead",
-        //update: "accountUpdated",
-        //remove: "accountRemoved"
+    departments: {
+        name: "departments"
     }
-}
+};

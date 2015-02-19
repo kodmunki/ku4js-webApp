@@ -1,15 +1,5 @@
 $.ku4webApp.config.forms = {
-    example: [
-        {
-            selector: "#username",
-            type: "field",
-            required:true
-        },
-        {
-            selector: "#password",
-            type: "field",
-            required:true
-        },
+    employee: [
         {
             selector: "#firstName",
             type: "field",
@@ -21,14 +11,31 @@ $.ku4webApp.config.forms = {
             required:true
         },
         {
-            selector: "#email",
+            selector: "#departmentId",
             type: "field",
             required:true
         },
         {
-            selector: "#reco",
-            type: "select",
-            required:false
+            selector: "#salary",
+            type: "field",
+            required:true
+        },
+        {
+            selector: "#email",
+            type: "field",
+            required:true
+        }
+    ],
+    department: [
+        {
+            selector: "#departmentId",
+            type: "field",
+            required:true
+        },
+        {
+            selector: "#name",
+            type: "field",
+            required:true
         }
     ]
 };

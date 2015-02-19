@@ -1,22 +1,22 @@
 $.ku4webApp.config.validators = {
-    example: [
+    employee: [
         {
-            name: "username",
+            name: "firstName",
             spec: $.fields.specs.alphaNumeric,
             message: "Username is invalid."
         },
         {
-            name: "password",
+            name: "lastName",
             spec: $.fields.specs.alphaNumeric,
             message: "Password is invalid."
         },
         {
-            name: "firstName",
+            name: "departmentId",
             spec: $.fields.specs.alpha,
             message: "First name is invalid."
         },
         {
-            name: "lastName",
+            name: "salary",
             spec: $.fields.specs.alpha,
             message: "Last name is invalid."
         },
@@ -25,5 +25,17 @@ $.ku4webApp.config.validators = {
             spec: $.fields.specs.email,
             message: "Email is invalid."
         }
+    ],
+    department: [
+        {
+            name: "departmentId",
+            spec: $.fields.specs.alphaNumeric,
+            message: "Username is invalid."
+        },
+        {
+            name: "name",
+            spec: $.fields.specs.alphaNumeric,
+            message: "Password is invalid."
+        },
     ]
-}
+};
