@@ -208,10 +208,7 @@ function socket(mediator, config) {
         socket.on("error", function(data) { mediator.notify(config.error, data); });
 }
 socket.prototype = {
-    call: function(data) {
-        console.log(socketInstance(), this._event, data)
-         socketInstance().emit(this._event, data);
-     }
+    call: function(data) { socketInstance().emit(this._event, data); }
 };
 $.ku4webApp.socket = function(mediator, config) {
     return new socket(mediator, config);
