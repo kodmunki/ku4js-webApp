@@ -18,7 +18,7 @@ bundle.prototype = {
 
     model: function(name) {
         var app = this._app.prodModel();
-        return $.ku4webApp.models[name](this._mediator, app.serviceFactory, app.storeFactory, app.validatorFactory);
+        return $.ku4webApp.models[name](this._mediator, app.serviceFactory, app.socketFactory, app.storeFactory, app.validatorFactory);
     },
     view: function(name) {
         return $.ku4webApp.views[name](this._app.prodModel());
@@ -37,6 +37,7 @@ function app() {
 
     this.mediator = $.mediator();
     this.serviceFactory = $.ku4webApp_testBundle.serviceFactory(this.mediator, app.config.services);
+    this.socketFactory = $.ku4webApp_testBundle.socketFactory(this.mediator, app.config.sockets);
     this.storeFactory = app.storeFactory(this.mediator, app.config.collections);
     this.validatorFactory = app.validatorFactory(app.config.validators);
     this.templateFactory = app.templateFactory(app.config.templates);
@@ -67,9 +68,9 @@ function classRefcheck(className, propertyName, property) {
 }
 
 $.ku4webApp_testBundle.onModelCall = function() { return; };
-$.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, storeFactory, validatorFactory) {
+$.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
 
-    var model = $.ku4webApp.models[name](mediator, serviceFactory, storeFactory, validatorFactory),
+    var model = $.ku4webApp.models[name](mediator, serviceFactory, socketFactory, storeFactory, validatorFactory),
         testModel = { };
 
     function func() {
@@ -133,6 +134,17 @@ serviceFactory.prototype = {
 };
 $.ku4webApp_testBundle.serviceFactory = function(mediator, config) {
     return new serviceFactory(mediator, config);
+};
+
+function socketFactory(mediator, config) {
+    this._mediator = mediator;
+    this._config = config;
+}
+socketFactory.prototype = {
+    create: function(key) { return $.ku4webApp_testBundle.service(this._mediator, this._config[key]); }
+};
+$.ku4webApp_testBundle.socketFactory = function(mediator, config) {
+    return new socketFactory(mediator, config);
 };
 
 function stubModelFactory(mediator, serviceFactory, storeFactory, validatorFactory) {

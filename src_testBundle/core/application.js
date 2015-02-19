@@ -3,6 +3,7 @@ function app() {
 
     this.mediator = $.mediator();
     this.serviceFactory = $.ku4webApp_testBundle.serviceFactory(this.mediator, app.config.services);
+    this.socketFactory = $.ku4webApp_testBundle.socketFactory(this.mediator, app.config.sockets);
     this.storeFactory = app.storeFactory(this.mediator, app.config.collections);
     this.validatorFactory = app.validatorFactory(app.config.validators);
     this.templateFactory = app.templateFactory(app.config.templates);

@@ -15,7 +15,7 @@ bundle.prototype = {
 
     model: function(name) {
         var app = this._app.prodModel();
-        return $.ku4webApp.models[name](this._mediator, app.serviceFactory, app.storeFactory, app.validatorFactory);
+        return $.ku4webApp.models[name](this._mediator, app.serviceFactory, app.socketFactory, app.storeFactory, app.validatorFactory);
     },
     view: function(name) {
         return $.ku4webApp.views[name](this._app.prodModel());

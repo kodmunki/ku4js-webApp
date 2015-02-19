@@ -1,7 +1,7 @@
 $.ku4webApp_testBundle.onModelCall = function() { return; };
-$.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, storeFactory, validatorFactory) {
+$.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
 
-    var model = $.ku4webApp.models[name](mediator, serviceFactory, storeFactory, validatorFactory),
+    var model = $.ku4webApp.models[name](mediator, serviceFactory, socketFactory, storeFactory, validatorFactory),
         testModel = { };
 
     function func() {

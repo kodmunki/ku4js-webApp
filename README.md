@@ -10,6 +10,8 @@ brought to you by [ku4js-kernel](https://github.com/kodmunki/ku4js-kernel) and
 [ku4js-data](https://github.com/kodmunki/ku4js-data). All of these technologies are rooted in SOLID OO
 principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.
 
+<img src="http://www.kodmunki.com/media/logo-small.png" alt="kodmunki" />
+
 ---
 
 #kodmunki™ build process
