@@ -34,7 +34,7 @@ $.ku4webApp.model("example", {
     createAccount: function(dto) {
         var validation = this.$validator("example").validate(dto);
         if(validation.isValid) this.$service("account.create").call(dto.toQueryString());
-        else this.$notify(validation, "accountInvalid");
+        else this.$notify("accountInvalid", validation);
         return this;
     },
     listAccounts: function() {
@@ -48,11 +48,11 @@ $.ku4webApp.model("example", {
     _accountCreated: function(response) {
         var dto = $.dto.parseJson(response);
         this.$collection("example").insert(dto);
-        this.$notify(dto, "accountCreated");
+        this.$notify("accountCreated", dto);
     },
     _accountsListed: function(response) {
         var accounts = this.$collection("example").find();
-        this.$notify(accounts, "accountsListed");
+        this.$notify("accountsListed", accounts);
     },
     _error: function() {
         throw new Error("Service Exception")
@@ -197,12 +197,10 @@ $.ku4webApp.config.forms = {
 };
 
 $.ku4webApp.config.navigator = {
-
     "example": {
         model: "example",
         method: "cancelForm"
     }
-
 };
 
 $.ku4webApp.config.services = {
@@ -219,6 +217,19 @@ $.ku4webApp.config.services = {
         contentType: "text/json",
         success: "svc+accountsListed",
         error: "svc-accountsListed"
+    }
+};
+
+$.ku4webApp.config.sockets = {
+    "account.create": {
+        event: "acount.create",
+        success: "socket+accountCreated",
+        error: "socket-accountCreated"
+    },
+    "account.list": {
+        event: "account.list",
+        success: "socket+accountCreated",
+        error: "socket-accountCreated"
     }
 };
 
