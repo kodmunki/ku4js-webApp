@@ -6,5 +6,5 @@
     }
  */
 $.ku4webApp.config.sockets = {
-    //ADD YOUR SERVICES HERE
+    //ADD YOUR SOCKETS HERE
 };
