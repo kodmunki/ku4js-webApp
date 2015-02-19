@@ -107,6 +107,7 @@ function abstractModel(mediator, serviceFactory, socketFactory, storeFactory, va
     this._state = new state();
 }
 abstractModel.prototype = {
+    $mediator: function() { return this._mediator; },
     $collection: function(name) { return this._storeFactory.create(name); },
     $service: function(name) { return this._serviceFactory.create(name); },
     $socket: function(name) { return this._socketFactory.create(name); },
@@ -416,11 +417,11 @@ abstractTemplate.prototype = {
     $config: function(name) { return ($.exists(name)) ? this._config[name] : this._config; },
     $forms: function(name) { return ($.exists(name)) ? this._config.forms[name] : this._config.forms; },
     $views: function(name) { return ($.exists(name)) ? this._config.views[name] : this._config.views; },
-    $render: function(template, data) { return $.str.render(template, data); },
-    $renderList: function(template, dataList) {
+    $render: function(template, data, alt) { return $.str.render(template, data, alt); },
+    $renderList: function(template, dataList, alt) {
         var rendering = "";
         $.list(dataList).each(function(entity) {
-            rendering += this.$render(template, entity);
+            rendering += this.$render(template, entity, alt);
         }, this);
         return rendering;
     },

@@ -7,6 +7,7 @@ function abstractModel(mediator, serviceFactory, socketFactory, storeFactory, va
     this._state = new state();
 }
 abstractModel.prototype = {
+    $mediator: function() { return this._mediator; },
     $collection: function(name) { return this._storeFactory.create(name); },
     $service: function(name) { return this._serviceFactory.create(name); },
     $socket: function(name) { return this._socketFactory.create(name); },
