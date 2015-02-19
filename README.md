@@ -81,6 +81,7 @@ Has access to the following protected methods and properties:
 | --- | --- | --- |
 | $collection(name:_String_) | collection | Retrieves the collection named "name". |
 | $service(name:_String_) | service | Retrieves the service named "name". |
+| $socket(name:_String_) | service | Retrieves the socket named "name". _(requires socket.io -- not included)_|
 | $validator(name:_String_) | validator | Retrieves the validator named "name". |
 | $state() | state | Retrieves the local state machine. |
 | $appState() | state | Retrieves the global state machine. |
@@ -238,7 +239,22 @@ function callback(serverData, processId) {
 };
 ```
 
+###config.sockets
 
+Configures the ajax services
+
+```javascript
+/*
+    NAME: {
+        event: "NAME"
+        success: "ON SUCCESS",
+        error: "ON ERROR"
+    }
+ */
+$.ku4webApp.config.sockets = {
+    //ADD YOUR SERVICES HERE
+};
+```
 
 ###config.forms
 
