@@ -1,41 +1,19 @@
 $.ku4webApp.config.validators = {
-    employee: [
-        {
-            name: "firstName",
-            spec: $.fields.specs.alphaNumeric,
-            message: "Username is invalid."
-        },
-        {
-            name: "lastName",
-            spec: $.fields.specs.alphaNumeric,
-            message: "Password is invalid."
-        },
-        {
-            name: "departmentId",
-            spec: $.fields.specs.alpha,
-            message: "First name is invalid."
-        },
-        {
-            name: "salary",
-            spec: $.fields.specs.alpha,
-            message: "Last name is invalid."
-        },
-        {
-            name: "email",
-            spec: $.fields.specs.email,
-            message: "Email is invalid."
-        }
-    ],
-    department: [
-        {
-            name: "departmentId",
-            spec: $.fields.specs.alphaNumeric,
-            message: "Username is invalid."
-        },
+    card: [
         {
             name: "name",
-            spec: $.fields.specs.alphaNumeric,
-            message: "Password is invalid."
+            spec: $.spec(function(value) { return /^\w{1,140}$/.test(value); }),
+            message: "Username is invalid."
         },
+        {
+            name: "description",
+            spec: $.spec(function(value) { return /.{1,140}/.test(value) }),
+            message: "Invalid description."
+        },
+        {
+            name: "value",
+            spec: $.spec(function(value) { return $.money.canParse(value); }),
+            message: "Invalid value."
+        }
     ]
 };

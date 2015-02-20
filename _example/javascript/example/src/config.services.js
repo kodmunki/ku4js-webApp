@@ -1,30 +1,16 @@
-$.ku4webApp.config.sockets = {
-    "employee.list": {
+$.ku4webApp.config.services = {
+    "card.list": {
         verb: "GET",
-        uri: "./response.create.json",
+        uri: "./_serverStub/cardList.json",
         contentType: "text/json",
-        success: "svc+employeesListed",
-        error: "svc-employeesListed"
+        success: "svc+cardsListed",
+        error: "svc-cardsListed"
     },
-    "employee.add": {
+    "card.add": {
         verb: "POST",
-        uri: "./response.create.json",
+        uri: "./_serverStub/cardAdd.json",
         contentType: "text/json",
-        success: "svc+employeeAdded",
-        error: "svc-employeeAdded"
-    },
-    "department.list": {
-        verb: "GET",
-        uri: "./response.list.json",
-        contentType: "text/json",
-        success: "svc+departmentsListed",
-        error: "svc-departmentsListed"
-    },
-    "department.add": {
-        verb: "POST",
-        uri: "./response.list.json",
-        contentType: "text/json",
-        success: "svc+departmentAdded",
-        error: "svc-departmentAdded"
+        success: "svc+cardAdded",
+        error: "svc-cardAdded"
     }
 };
