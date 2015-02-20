@@ -27,9 +27,10 @@ $.ku4webApp.model("card", {
         return this;
     },
     editCard: function(id) {
-        var card = this.$collection("card").find({"id": id});
+        console.log(id)
+        var cards = this.$collection("card").find({"id": id});
 
-        if(!($.isArray() && cards.length == 1)) this.$notify("onError", new Error("Card collection corrupted."))
+        if(!($.isArray(cards) && cards.length == 1)) this.$notify("onError", new Error("Card collection corrupted."));
         else this.$notify("onEditCard", cards[0]);
         return this;
     },

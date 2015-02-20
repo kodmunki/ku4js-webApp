@@ -71,18 +71,24 @@ $.ku4webApp.config.sockets = {
 };
 
 $.ku4webApp.config.templates.forms = {
+    card:   '<form class="card-form js-card-form" action="">' + '' +
+                '<legend>Card Info</legend>' +
+                '<fieldset>' +
 
+                '</fieldset>' +
+
+                '{{controls}}</form>'
 };
 
 $.ku4webApp.config.templates.views = {
     cardList: '<div class="card-list js-card-list"></div>' +
               '<button class="card-add-control js-card-add-control" onclick="cardController.create();">Add Card</button>',
 
-    card:   '<div class="card">' +
-                '<img src="{{photo}}" />' +
-                '<span>{{name}}</span>' +
-                '<span>{{value}}</span>' +
-                '<span>{{description}}</span>' +
+    card:   '<div class="card js-card">' +
+                '<img src="{{photo}}" class="card-photo"/>' +
+                '<span class="card-name">{{name}}</span>' +
+                '<span class="card-value">{{value}}</span>' +
+                '<span class="card-description">{{description}}</span>' +
                 '<button class="card-edit-control" onclick="cardController.edit(\'{{id}}\');">Edit</button></div>'
 };
 
@@ -154,9 +160,10 @@ $.ku4webApp.model("card", {
         return this;
     },
     editCard: function(id) {
-        var card = this.$collection("card").find({"id": id});
+        console.log(id)
+        var cards = this.$collection("card").find({"id": id});
 
-        if(!($.isArray() && cards.length == 1)) this.$notify("onError", new Error("Card collection corrupted."))
+        if(!($.isArray(cards) && cards.length == 1)) this.$notify("onError", new Error("Card collection corrupted."));
         else this.$notify("onEditCard", cards[0]);
         return this;
     },
@@ -190,21 +197,34 @@ $.ku4webApp.model("card", {
 });
 
 $.ku4webApp.template("card", {
-    renderForm: function() {
+    renderCardForm: function() {
         return this.$render(this.$forms("card"));
     },
     renderCardList: function(data) {
-        return this.$renderList(this.$views("card"), data)
+        return this.$renderList(this.$views("card"), data, "", function(data) {
+            data.value = $.money.parse(data.value).toString();
+            return data;
+        })
     }
 });
 
 $.ku4webApp.view("card", {
     displayCardList: function(data) {
+        $(".js-card-form").remove();
+
         var cardList = this.$template("card").renderCardList(data);
         $("#site").append(cardList);
     },
     displayCardAdded: function(data) {
         console.log(data);
+    },
+    displayEditCard: function(card) {
+        $(".js-card").remove();
+
+        var cardForm = this.$template("card").renderCardForm();
+        $("#site").append(cardForm);
+
+        //this.$form("card").write(card);
     },
     displayCardListError: function(data) {
         console.log(data);
@@ -216,6 +236,8 @@ $.ku4webApp.view("card", {
 {
     "onCardsListed":        "displayCardList",
     "onCardAdded":          "displayCardAdded",
+
+    "onEditCard":           "displayEditCard",
 
     "onCardsListedError":   "displayCardListError",
     "onError":              "displayError"
