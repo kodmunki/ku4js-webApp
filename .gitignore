@@ -1,26 +1,4 @@
 
-.idea/ku4js-webApp.iml
+.idea
 
-.idea/encodings.xml
-
-.idea/encodings.xml
-
-.idea/misc.xml
-
-.idea/misc.xml
-
-.idea/modules.xml
-
-.idea/modules.xml
-
-*.xml
-
-.idea/scopes/scope_settings.xml
-
-.idea/scopes/scope_settings.xml
-
-.idea/vcs.xml
-
-.idea/vcs.xml
-
-.idea/.name
+.sass-cache

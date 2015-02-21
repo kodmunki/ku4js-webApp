@@ -1,0 +1,33 @@
+/* Model unit test template
+ */
+
+$(function() {
+
+    module("model.NAME");
+
+    var bundle = $.ku4webAppUT.bundle().throwErrors(),
+        mediator = bundle.mediator(),
+        model = bundle.model("NAME");
+
+    test("new", function() {
+        expect(1);
+        ok(model);
+    });
+
+    test("UNIT TEST NAME", function() {
+        expect(1);
+        function assertion(data) {
+            equal(data, null);
+            mediator.unsubscribe("NOTIFICATION", 1);
+        }
+        bundle.callback(function(data) {
+            //NOTE: This method acts as a stub server. The data argument
+            //      will contain the data that the model method passes to
+            //      the server. Return the data that you expect the server
+            //      to return. This method is optional. If unneeded it can
+            //      be deleted.
+        });
+        mediator.subscribe("NOTIFICATION", assertion, null, 1);
+        model.METHOD();
+    });
+});

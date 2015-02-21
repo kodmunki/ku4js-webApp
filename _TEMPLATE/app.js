@@ -1,14 +1,20 @@
+//NOTE: Expose your controllers to your DOM here
 var controller;
+
 $(function(){
-    var appName = "[ENTER YOUR APP NAME HERE]",
-        app = $.ku4webApp.app(appName).throwErrors();
-    controller = $.ku4webApp.controllers[appName](app);
-    $.ku4webApp.views[appName](app);
 
-/*======================================================*/
+    //NOTE: Giving your app an appropriate name helps make exception messaging
+    //      more explicit and helpful.
+    var app = $.ku4webApp.app("APP_NAME").throwErrors();
 
- //[Other desired views or initialization scripting HERE]
+    //NOTE: Instantiate your controller(s) here. You can use dot syntax.
+    controller = $.ku4webApp.controllers["CONTROLLER_NAME"](app);
 
-/*======================================================*/
+    //NOTE: Instantiate your view(s) here. You can use dot syntax.
+    $.ku4webApp.views["VIEW_NAME"](app);
+
+/*===================================================
+ * NOTE: Other desired initialization scripting here
+ *==================================================*/
 
 });

@@ -1,0 +1,43 @@
+.card {
+  margin: 30px 1%;
+
+  .card-photo {
+    width: 100px;
+    height: 100px;
+    float: left;
+  }
+
+  .card-name,
+  .card-value,
+  .card-description {
+    display: inline-block;
+    width: 50%;
+    margin: 8px 0 0 3%;
+  }
+
+  .card-name {
+    font-size: 16px;
+    font-weight: 200;
+  }
+  .card-value {
+    font-size: 24px;
+    font-weight: 100;
+    letter-spacing: 2px;
+  }
+  .card-description {
+    font-size: 11px;
+    font-style: italic;
+  }
+
+  .card-edit-control {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 100;
+    background: none;
+    border: solid 1px;
+    border-radius: 4px;
+    color: #0025e5;
+  }
+}

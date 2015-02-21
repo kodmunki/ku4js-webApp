@@ -1,0 +1,240 @@
+/* line 5, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+/*
+@keyframes cssAnimation {
+  from { }
+  to { }
+}
+@-webkit-keyframes cssAnimation {
+  from { }
+  to { }
+}
+@-moz-keyframes cssAnimation {
+  from { }
+  to { }
+}
+@-o-keyframes cssAnimation {
+  from { }
+  to { }
+}
+*/
+/* line 2, ../sass/lib/ku4sass-grid/base/_boxsizing.scss */
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 2, ../sass/lib/ku4sass-grid/base/_grid.scss */
+[class*='ku4col-'] {
+  float: left;
+}
+
+/* line 7, ../sass/lib/ku4sass-grid/base/_grid.scss */
+.ku4grid:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* line 2, ../sass/lib/ku4sass-grid/base/_gutters.scss */
+[class*='ku4col-'] {
+  padding-right: 10px;
+}
+
+/* line 5, ../sass/lib/ku4sass-grid/base/_gutters.scss */
+[class*='ku4col-']:last-of-type {
+  padding-right: 0;
+}
+
+/* line 11, ../sass/lib/ku4sass-grid/base/_gutters.scss */
+.ku4grid-outter-gutter {
+  padding: 20px 0 20px 20px;
+}
+
+/* line 15, ../sass/lib/ku4sass-grid/base/_gutters.scss */
+.ku4grid-outter-gutter > [class*='ku4col-']:last-of-type {
+  padding-right: 20px;
+}
+
+/* line 1, ../sass/lib/ku4sass-grid/device/desktop/_grid.scss */
+.ku4col-article {
+  width: 33%;
+}
+
+/* line 8, ../sass/lib/ku4sass-grid/device/desktop/_gutters.scss */
+.ku4grid-outter-gutter {
+  padding: 20px 0 20px 20px;
+}
+
+/* line 12, ../sass/lib/ku4sass-grid/device/desktop/_gutters.scss */
+.ku4grid-outter-gutter > [class*='ku4col-']:last-of-type {
+  padding-right: 20px;
+}
+
+@media (min-width: 993px) and (max-width: 1081px) {
+  /* line 1, ../sass/lib/ku4sass-grid/device/pad/_grid.scss */
+  .ku4col-article {
+    width: 100%;
+  }
+
+  /* line 1, ../sass/lib/ku4sass-grid/device/pad/_gutters.scss */
+  [class*='ku4col-'] {
+    padding-right: 10px;
+  }
+
+  /* line 4, ../sass/lib/ku4sass-grid/device/pad/_gutters.scss */
+  [class*='ku4col-']:last-of-type {
+    padding-right: 0;
+  }
+
+  /* line 8, ../sass/lib/ku4sass-grid/device/pad/_gutters.scss */
+  .ku4grid-outter-gutter {
+    padding: 20px 0 20px 20px;
+  }
+
+  /* line 12, ../sass/lib/ku4sass-grid/device/pad/_gutters.scss */
+  .ku4grid-outter-gutter > [class*='ku4col-']:last-of-type {
+    padding-right: 20px;
+  }
+}
+@media (min-width: 300px) and (max-width: 700px) {
+  /* line 1, ../sass/lib/ku4sass-grid/device/mobile/_grid.scss */
+  .ku4col-article {
+    width: 100%;
+  }
+
+  /* line 1, ../sass/lib/ku4sass-grid/device/mobile/_gutters.scss */
+  [class*='ku4col-'] {
+    padding-right: 0;
+  }
+
+  /* line 4, ../sass/lib/ku4sass-grid/device/mobile/_gutters.scss */
+  [class*='ku4col-']:last-of-type {
+    padding-right: 0;
+  }
+
+  /* line 8, ../sass/lib/ku4sass-grid/device/mobile/_gutters.scss */
+  .ku4grid-outter-gutter {
+    padding: 0;
+  }
+
+  /* line 12, ../sass/lib/ku4sass-grid/device/mobile/_gutters.scss */
+  .ku4grid-outter-gutter > [class*='ku4col-']:last-of-type {
+    padding-right: 0;
+  }
+}
+/* line 1, ../sass/src/base/_typography.scss */
+html, body {
+  font-family: Helvetica Neue Thin, Helvetica Neue, Helvetica, Arial;
+}
+
+/* line 1, ../sass/src/mobile/card/_list.scss */
+.card {
+  margin: 30px 1%;
+}
+/* line 4, ../sass/src/mobile/card/_list.scss */
+.card .card-photo {
+  width: 100px;
+  height: 100px;
+  float: left;
+}
+/* line 10, ../sass/src/mobile/card/_list.scss */
+.card .card-name,
+.card .card-value,
+.card .card-description {
+  display: inline-block;
+  width: 50%;
+  margin: 8px 0 0 3%;
+}
+/* line 18, ../sass/src/mobile/card/_list.scss */
+.card .card-name {
+  font-size: 16px;
+  font-weight: 200;
+}
+/* line 22, ../sass/src/mobile/card/_list.scss */
+.card .card-value {
+  font-size: 24px;
+  font-weight: 100;
+  letter-spacing: 2px;
+}
+/* line 27, ../sass/src/mobile/card/_list.scss */
+.card .card-description {
+  font-size: 11px;
+  font-style: italic;
+}
+/* line 32, ../sass/src/mobile/card/_list.scss */
+.card .card-edit-control {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 100;
+  background: none;
+  border: solid 1px;
+  border-radius: 4px;
+  color: #0025e5;
+}

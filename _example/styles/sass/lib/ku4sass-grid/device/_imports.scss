@@ -1,0 +1,9 @@
+@import "desktop/imports";
+
+ @media (min-width: 993px) and (max-width: 1081px) {
+  @import "pad/imports";
+ }
+
+ @media (min-width: 300px) and (max-width: 700px) {
+  @import "mobile/imports";
+ }

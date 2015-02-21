@@ -18,8 +18,10 @@ abstractTemplate.prototype = {
         }, this);
         return rendering;
     },
-    $renderListWithAction: function(dataList, action) {
-        var rendering = "";
+    $renderListWithAction: function(dataList, action, formatFunc) {
+        var rendering = "",
+            _formatFunc = formatFunc || function(value) { return value; };
+
         $.list(dataList).each(function(entity) {
             rendering += action.call(this, _formatFunc(entity));
         }, this);

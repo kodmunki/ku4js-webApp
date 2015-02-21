@@ -1,0 +1,14 @@
+[class*='ku4col-'] {
+  padding-right: 10px;
+}
+[class*='ku4col-']:last-of-type {
+  padding-right: 0;
+}
+
+.ku4grid-outter-gutter {
+  padding: 20px 0 20px 20px;
+}
+
+.ku4grid-outter-gutter > [class*='ku4col-']:last-of-type {
+  padding-right: 20px;
+}

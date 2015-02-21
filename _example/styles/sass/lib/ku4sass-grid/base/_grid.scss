@@ -1,0 +1,11 @@
+//Float all columns left to align them on the horizontal
+[class*='ku4col-'] {
+  float: left;
+}
+
+//Clearfix for grid container
+.ku4grid:after {
+  content: "";
+  display: table;
+  clear: both;
+}
