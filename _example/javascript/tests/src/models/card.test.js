@@ -4,7 +4,21 @@ $(function() {
 
     var bundle = $.ku4webAppUT.bundle().throwErrors(),
         mediator = bundle.mediator(),
-        model = bundle.model("card");
+        model = bundle.model("card"),
+        cardList = [{
+            "id": "id1",
+            "name": "card1",
+            "description": "description1",
+            "value": 1.00,
+            "photo": "photo1"
+        },
+        {
+            "id": "id2",
+            "name": "card2",
+            "description": "description2",
+            "value": 2.00,
+            "photo": "photo2"
+        }];
 
     test("new", function() {
         expect(1);
@@ -12,24 +26,9 @@ $(function() {
     });
 
     test("listCards", function() {
-        var cardList = [{
-                "id": "id1",
-                "name": "card1",
-                "description": "description1",
-                "value": 1.00,
-                "photo": "photo1"
-            },
-            {
-                "id": "id2",
-                "name": "card2",
-                "description": "description2",
-                "value": 2.00,
-                "photo": "photo2"
-            }];
-
         expect(1);
         function assertion(data) {
-            deepEqual(cardList, data);
+            deepEqual(data, cardList);
             mediator.unsubscribe("onCardsListed", 1);
         }
         bundle.callback(function() { return cardList; });
@@ -48,40 +47,52 @@ $(function() {
     });
 
     test("addCard", function() {
-        var card = {
-                "id": "id1",
-                "name": "card   1",
+        var card = $.dto({
+                "name": "card 1",
                 "description": "description1",
                 "value": 1.00,
                 "photo": "photo1"
-            };
+            });
 
         expect(1);
         function assertion(data) {
-            deepEqual(card, data);
+            deepEqual(data, card.toObject());
             mediator.unsubscribe("onCardAdded", 1);
         }
         mediator.subscribe("onCardAdded", assertion, null, 1);
-        model.addCard();
+        model.addCard(card);
     });
 
     test("editCard", function() {
         expect(1);
         function assertion(data) {
-            equal(data, null);
-            mediator.unsubscribe("NOTIFICATION", 1);
+            deepEqual(data, cardList[0]);
+            mediator
+                .unsubscribe("onCardsListed", 1)
+                .unsubscribe("onEditCard", 1);
         }
-        mediator.subscribe("NOTIFICATION", assertion, null, 1);
-        model.editCard();
+        bundle.callback(function() { return cardList; });
+        mediator
+            .subscribe("onCardsListed", function() { return; }, null, 1)
+            .subscribe("onEditCard", assertion, null, 1);
+        model.listCards().editCard("id1");
     });
 
     test("updateCard", function() {
         expect(1);
         function assertion(data) {
-            equal(data, null);
-            mediator.unsubscribe("NOTIFICATION", 1);
+            deepEqual(data, {
+                id: "id1",
+                value: 20.15
+            });
+            mediator
+                .unsubscribe("onCardsListed", 1)
+                .unsubscribe("onCardUpdated", 1);
         }
-        mediator.subscribe("NOTIFICATION", assertion, null, 1);
-        model.updateCard();
+        bundle.callback(function() { return cardList; });
+        mediator
+            .subscribe("onCardsListed", function() { return; }, null, 1)
+            .subscribe("onCardUpdated", assertion, null, 1);
+        model.updateCard($.dto({"id":"id1", "value": 20.15}));
     });
 });

@@ -151,16 +151,19 @@ $.ku4webApp.model("card", {
         //      In a real world app, you would likely call a service here and add to your
         //      collection on a successful response either getting the data in a response
         //      from the server or persisting it in state, as depicted above, until you
-        //      recieved a response;
+        //      received a response;
 
-        dto.add("id", $.uid())
-           .update("photo", $.image.dataUrlFromFile(dto.find("photo")));
+        try {
+            dto.update("photo", $.image.dataUrlFromFile(dto.find("photo")));
+        }
+        catch(e) { /*Fail Silently*/ }
 
-        this.$collection("card").insert(dto.toObject());
+        var card = dto.add("id", $.uid()).toObject();
+        this.$collection("card").insert(card);
+        this.$notify("onCardAdded", card);
         return this;
     },
     editCard: function(id) {
-        console.log(id)
         var cards = this.$collection("card").find({"id": id});
 
         if(!($.isArray(cards) && cards.length == 1)) this.$notify("onError", new Error("Card collection corrupted."));

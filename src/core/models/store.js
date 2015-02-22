@@ -6,7 +6,6 @@ function store(mediator, config, key, collection) {
 }
 store.prototype = {
     init: function(list) {
-        this._collection = null;
         this.__collection().init(list).save();
         return this;
     },
@@ -77,9 +76,17 @@ store.prototype = {
     __config: function() {
         return classRefcheck("Collection", "config", this._config[this._key]);
     },
+    __store: function() {
+        var storeType = this._config.storeType;
+        switch(storeType) {
+            case "memory": return $.ku4memoryStore();
+            case "indexedDB": return $.ku4indexedDbStore();
+            default: return $.ku4localStorageStore();
+        }
+    },
     __collection: function() {
         var collection = this._collection;
-        return ($.exists(collection)) ? collection : $.ku4store().read(this.__config().name);
+        return ($.exists(collection)) ? collection : this.__store().read(this.__config().name);
     }
 };
 $.ku4webApp.store = function(mediator, config, key, collection) {

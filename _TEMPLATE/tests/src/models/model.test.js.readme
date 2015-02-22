@@ -17,7 +17,7 @@ $(function() {
     test("UNIT TEST NAME", function() {
         expect(1);
         function assertion(data) {
-            equal(data, null);
+            equal(null, data);
             mediator.unsubscribe("NOTIFICATION", 1);
         }
         bundle.callback(function(data) {
