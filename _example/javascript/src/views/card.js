@@ -3,11 +3,18 @@ $.ku4webApp.view("card", {
         this._clearSite();
         var cardList = this.$template("card").renderCardList(data);
         $("#site").append(cardList);
+        this.$navigator().write("card.list");
     },
     displayCardAdded: function(data) {
         this._clearSite();
         var card = this.$template("card").renderCard(data);
         $("#site").append(card);
+    },
+    displayCreateCard: function(card) {
+        this._clearSite();
+        var cardForm = this.$template("card").renderAddCardForm();
+        $("#site").append(cardForm);
+        this.$navigator().write("card.add");
     },
     displayAddCard: function(card) {
         this._clearSite();
@@ -34,6 +41,7 @@ $.ku4webApp.view("card", {
 {
     "onCardsListed":        "displayCardList",
     "onCardAdded":          "displayCardAdded",
+    "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",
     "onCardsListedError":   "displayCardListError",

@@ -1,5 +1,5 @@
 $.ku4webApp.config.templates.views = {
-    cardList: '<div class="card-list js-card-list"></div>' +
+    cardList: '<div class="card-list js-card-list">{{cardList}}</div>' +
               '<button class="card-add-control js-card-add-control" onclick="cardController.create();">Add Card</button>',
 
     card:   '<div class="card js-card">' +

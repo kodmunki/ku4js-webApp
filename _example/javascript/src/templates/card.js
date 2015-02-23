@@ -14,9 +14,11 @@ $.ku4webApp.template("card", {
         })
     },
     renderCardList: function(data) {
-        return this.$renderList(this.$views("card"), data, "", function(data) {
+        var cardList = this.$renderList(this.$views("card"), data, "", function(data) {
             data.value = $.money.parse(data.value).toString();
             return data;
-        })
+        });
+
+        return this.$render(this.$views("cardList"), { "cardList": cardList });
     }
 });

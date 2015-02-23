@@ -1,5 +1,5 @@
 $.ku4webApp.config.collections = {
-    "ku4StoreType": "localStorage",
+    "ku4StoreType": "indexedDB",
 
     card: {
         name: "card"

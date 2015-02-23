@@ -1,6 +1,6 @@
 (function(l){
 $.ku4webApp.config.collections = {
-    "ku4StoreType": "localStorage",
+    "ku4StoreType": "indexedDB",
 
     card: {
         name: "card"
@@ -92,7 +92,7 @@ $.ku4webApp.config.templates.forms = {
 };
 
 $.ku4webApp.config.templates.views = {
-    cardList: '<div class="card-list js-card-list"></div>' +
+    cardList: '<div class="card-list js-card-list">{{cardList}}</div>' +
               '<button class="card-add-control js-card-add-control" onclick="cardController.create();">Add Card</button>',
 
     card:   '<div class="card js-card">' +
@@ -164,14 +164,19 @@ $.ku4webApp.model("card", {
         //      from the server or persisting it in state, as depicted above, until you
         //      received a response;
 
-        try {
-            dto.update("photo", $.image.dataUrlFromFile(dto.find("photo")));
+        var me  = this;
+        function save(dto) {
+            var card = dto.add("id", $.uid()).toObject();
+            me.$collection("card").insert(card);
+            me.$notify("onCardAdded", card);
         }
-        catch(e) { /*Fail Silently*/ }
 
-        var card = dto.add("id", $.uid()).toObject();
-        this.$collection("card").insert(card);
-        this.$notify("onCardAdded", card);
+        if(dto.containsKey("photo"))
+            $.image.dataUrlFromFile(dto.find("photo"), function(dataUrl){
+                dto.update("photo", dataUrl);
+                save(dto);
+            });
+        else save(dto);
         return this;
     },
     editCard: function(id) {
@@ -198,6 +203,7 @@ $.ku4webApp.model("card", {
         //var card = this.$state().read("addCard")
 
         this.$collection("card").insert(card);
+        this.$notify("onCardAdded", card);
     },
 
     onCardsListedError: function(serverResponse) {
@@ -225,10 +231,12 @@ $.ku4webApp.template("card", {
         })
     },
     renderCardList: function(data) {
-        return this.$renderList(this.$views("card"), data, "", function(data) {
+        var cardList = this.$renderList(this.$views("card"), data, "", function(data) {
             data.value = $.money.parse(data.value).toString();
             return data;
-        })
+        });
+
+        return this.$render(this.$views("cardList"), { "cardList": cardList });
     }
 });
 
@@ -237,11 +245,18 @@ $.ku4webApp.view("card", {
         this._clearSite();
         var cardList = this.$template("card").renderCardList(data);
         $("#site").append(cardList);
+        this.$navigator().write("card.list");
     },
     displayCardAdded: function(data) {
         this._clearSite();
         var card = this.$template("card").renderCard(data);
         $("#site").append(card);
+    },
+    displayCreateCard: function(card) {
+        this._clearSite();
+        var cardForm = this.$template("card").renderAddCardForm();
+        $("#site").append(cardForm);
+        this.$navigator().write("card.add");
     },
     displayAddCard: function(card) {
         this._clearSite();
@@ -268,6 +283,7 @@ $.ku4webApp.view("card", {
 {
     "onCardsListed":        "displayCardList",
     "onCardAdded":          "displayCardAdded",
+    "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",
     "onCardsListedError":   "displayCardListError",

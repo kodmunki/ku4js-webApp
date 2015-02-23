@@ -20,14 +20,19 @@ $.ku4webApp.model("card", {
         //      from the server or persisting it in state, as depicted above, until you
         //      received a response;
 
-        try {
-            dto.update("photo", $.image.dataUrlFromFile(dto.find("photo")));
+        var me  = this;
+        function save(dto) {
+            var card = dto.add("id", $.uid()).toObject();
+            me.$collection("card").insert(card);
+            me.$notify("onCardAdded", card);
         }
-        catch(e) { /*Fail Silently*/ }
 
-        var card = dto.add("id", $.uid()).toObject();
-        this.$collection("card").insert(card);
-        this.$notify("onCardAdded", card);
+        if(dto.containsKey("photo"))
+            $.image.dataUrlFromFile(dto.find("photo"), function(dataUrl){
+                dto.update("photo", dataUrl);
+                save(dto);
+            });
+        else save(dto);
         return this;
     },
     editCard: function(id) {
@@ -54,6 +59,7 @@ $.ku4webApp.model("card", {
         //var card = this.$state().read("addCard")
 
         this.$collection("card").insert(card);
+        this.$notify("onCardAdded", card);
     },
 
     onCardsListedError: function(serverResponse) {
