@@ -7,11 +7,10 @@ navigator.prototype = {
         return this.read() == value;
     },
     hash: function(value) {
-        return ($.exists(value)) ? this.write(true, value) : this.read();
+        return ($.exists(value)) ? this.write(true, value) : this.read().split("_")[0];
     },
     read: function() {
-        var hash = location.hash.substr(1);
-        return hash.split("_")[0];
+        return location.hash.substr(1);
     },
     write: function(/*mute, value, ...*/) {
         var args = Array.prototype.slice.call(arguments),
@@ -76,17 +75,18 @@ navigator.prototype = {
         return $.json.deserialize($.str.decodeBase64(decodeURIComponent(value)));
     },
     _setEventListener: function(callback) {
+        var write = this.write;
+
         if($.exists(window.addEventListener)) {
             window.addEventListener("hashchange", function(e) {
-                callback();
-                console.log(arguments.callee)
                 window.removeEventListener("hashchange", arguments.callee);
+                setTimeout(function() { callback(); }, 500);
             });
         }
         else if($.exists(window.attachEvent)) {
             window.attachEvent("onhashchange", function(e) {
-                callback();
                 window.detachEvent("onhashchange", arguments.callee);
+                setTimeout(function() { callback(); }, 500);
             });
         }
     }

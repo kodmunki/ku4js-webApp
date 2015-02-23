@@ -32,26 +32,8 @@ $(function() {
 
     test("write", function () {
         expect(1);
-        navigator.write("test.hash", true);
+        navigator.write(true, "test.hash");
         equal(navigator.read(), "test.hash");
-    });
-
-    asyncTest("forward/back", function () {
-        expect(4);
-        navigator.write("test.hash1");
-        navigator.write("test.hash2");
-        navigator.write("test.hash1");
-        navigator.back(function() {
-            console.log("BACK")
-            ok(navigator.hashEquals("test.hash2"));
-            equal(navigator.read(), "test.hash2");
-            navigator.forward(function() {
-            console.log("FORWARD")
-                ok(navigator.hashEquals("test.hash1"));
-                equal(navigator.read(), "test.hash1");
-                start();
-            });
-        });
     });
 
     test("execute", function () {
@@ -63,4 +45,21 @@ $(function() {
         expect(0);
         navigator.execute("test.hash3", "test.hash1");
     });
+
+    asyncTest("forward/back", function () {
+        expect(4);
+        navigator.write("test.hash1");
+        navigator.write("test.hash2");
+        navigator.write("test.hash1");
+        navigator.back(function() {
+            ok(navigator.hashEquals("test.hash2"));
+            equal(navigator.read(), "test.hash2");
+            navigator.forward(function() {
+                ok(navigator.hashEquals("test.hash1"));
+                equal(navigator.read(), "test.hash1");
+                start();
+            });
+        });
+    });
+
 });
