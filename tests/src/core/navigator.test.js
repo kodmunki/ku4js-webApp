@@ -31,9 +31,10 @@ $(function() {
     });
 
     test("write", function () {
-        expect(1);
-        navigator.write(true, "test.hash", 1, 2, 3, 4, 5, 6);
-        equal(navigator.read(), "test.hash_WzEsMiwzLDQsNSw2XQ%3D%3D");
+        expect(2);
+        navigator.write("test.hash", 1, 2, 3, 4, 5, 6);
+        ok(navigator.hashContainsArguments());
+        equal(navigator.read(), "test.hash_ku4_WzEsMiwzLDQsNSw2XQ==");
     });
 
     test("execute", function () {

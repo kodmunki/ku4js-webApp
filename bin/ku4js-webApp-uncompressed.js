@@ -317,7 +317,7 @@ store.prototype = {
         return classRefcheck("Collection", "config", this._config[this._key]);
     },
     __store: function() {
-        var storeType = this._config.storeType;
+        var storeType = this._config.ku4StoreType;
         switch(storeType) {
             case "memory": return $.ku4memoryStore();
             case "indexedDB": return $.ku4indexedDbStore();
@@ -336,25 +336,42 @@ $.ku4webApp.store = function(mediator, config, key, collection) {
 function navigator(modelFactory, config) {
     this._modelFactory = modelFactory;
     this._config = config;
+    this._mute = false;
+
+    var me = this;
+    function onhashchange(e) {
+        if(!me._mute) me.execute(me.read());
+        me._mute = false;
+    }
+
+    if($.exists(window.addEventListener)) window.addEventListener("hashchange", onhashchange);
+    else if($.exists(window.attachEvent)) window.attachEvent("onhashchange", onhashchange);
 }
 navigator.prototype = {
     hashEquals: function(value) {
         return this.read() == value;
     },
+    hashContainsArguments: function() {
+        return /_ku4_/.test(this.read());
+    },
     hash: function(value) {
-        return ($.exists(value)) ? this.write(true, value) : this.read().split("_")[0];
+        return ($.exists(value)) ? this.write(value) : this.read().split("_ku4_")[0];
     },
     read: function() {
         return location.hash.substr(1);
     },
-    write: function(/*mute, value, ...*/) {
+    write: function(/*value, args...*/) {
         var args = Array.prototype.slice.call(arguments),
-            mute = ($.isBool(args[0])) ? args.shift() : false,
             hash = args.shift(),
             argString = (args.length > 0) ? this._encodeArgs(args) : "";
 
-        location.hash = ($.isNullOrEmpty(argString)) ? hash : $.str.build(hash, "_", argString);
-        if(!mute) this.execute(this.read());
+        this._mute = true;
+        location.hash = ($.isNullOrEmpty(argString)) ? hash : $.str.build(hash, "_ku4_", argString);
+        return this;
+    },
+    execute: function(/*value, args...*/) {
+        this.write.apply(this, arguments);
+        this._execute(this.read());
         return this;
     },
     forward: function(callback) {
@@ -370,13 +387,20 @@ navigator.prototype = {
     clear: function() {
         return this.hash("");
     },
-    execute: function(value) {
+    executeOrDefault: function(value, dflt) {
         var config = this._config;
         if(!$.exists(config)) return;
 
-        var split = value.split("_"),
+        var confg = config[value];
+        return ($.exists(confg)) ? this._execute(value) : this._execute(dflt);
+    },
+    _execute: function(value) {
+        var config = this._config;
+        if(!$.exists(config)) return;
+
+        var split = value.split("_ku4_"),
             key = split[0],
-            args = this._decodeArgs(split[1]),
+            args = (split.length > 1) ? this._decodeArgs(split[1]) : [],
             confg = config[key];
 
         if (!$.exists(confg)) return;
@@ -394,34 +418,25 @@ navigator.prototype = {
         }
         return this;
     },
-    executeOrDefault: function(value, dflt) {
-        var config = this._config;
-        if(!$.exists(config)) return;
-
-        var confg = config[value];
-        return ($.exists(confg)) ? this.execute(value) : this.execute(dflt);
-    },
     _encodeArgs: function(value) {
         if($.isNullOrEmpty(value)) return "";
-        return encodeURIComponent($.str.encodeBase64($.json.serialize(value)));
+        return $.str.encodeBase64($.json.serialize(value));
     },
     _decodeArgs: function(value) {
         if($.isNullOrEmpty(value)) return "";
-        return $.json.deserialize($.str.decodeBase64(decodeURIComponent(value)));
+        return $.json.deserialize($.str.decodeBase64(value));
     },
     _setEventListener: function(callback) {
-        var write = this.write;
-
         if($.exists(window.addEventListener)) {
             window.addEventListener("hashchange", function(e) {
                 window.removeEventListener("hashchange", arguments.callee);
-                setTimeout(function() { callback(); }, 500);
+                setTimeout(function() { callback(); }, 800);
             });
         }
         else if($.exists(window.attachEvent)) {
             window.attachEvent("onhashchange", function(e) {
                 window.detachEvent("onhashchange", arguments.callee);
-                setTimeout(function() { callback(); }, 500);
+                setTimeout(function() { callback(); }, 800);
             });
         }
     }
@@ -630,6 +645,11 @@ function app(name) {
     this.formFactory = app.formFactory(app.config.forms);
     this.navigator = app.navigator(this.modelFactory, app.config.navigator);
     this.mediator = mediator;
+
+    if($.exists(app.config.navigator)) {
+        var ku4OnAppLoad = app.config.navigator.ku4OnAppLoad;
+        if ($.isFunction(ku4OnAppLoad)) ku4OnAppLoad(this.navigator);
+    }
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },

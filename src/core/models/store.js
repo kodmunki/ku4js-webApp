@@ -77,7 +77,7 @@ store.prototype = {
         return classRefcheck("Collection", "config", this._config[this._key]);
     },
     __store: function() {
-        var storeType = this._config.storeType;
+        var storeType = this._config.ku4StoreType;
         switch(storeType) {
             case "memory": return $.ku4memoryStore();
             case "indexedDB": return $.ku4indexedDbStore();

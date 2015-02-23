@@ -1,5 +1,7 @@
 (function(l){
 $.ku4webApp.config.collections = {
+    "ku4StoreType": "localStorage",
+
     card: {
         name: "card"
     }
@@ -32,6 +34,14 @@ $.ku4webApp.config.forms = {
 };
 
 $.ku4webApp.config.navigator = {
+    "ku4OnAppLoad": function(navigator) {
+            if (navigator.hashContainsArguments() &&
+                navigator.hashEquals("card.edit")) {
+                navigator.execute(navigator.read())
+            }
+            else navigator.execute("card.list");
+    },
+
     "card.list": {
         model: "card",
         method: "listCards"
@@ -243,6 +253,7 @@ $.ku4webApp.view("card", {
         var cardForm = this.$template("card").renderEditCardForm();
         $("#site").append(cardForm);
         this.$form("card").write(card);
+        this.$navigator().write("card.edit", card.id);
     },
     displayCardListError: function(data) {
         console.log("ERROR", data);

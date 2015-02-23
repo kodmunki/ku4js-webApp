@@ -19,6 +19,7 @@ $.ku4webApp.view("card", {
         var cardForm = this.$template("card").renderEditCardForm();
         $("#site").append(cardForm);
         this.$form("card").write(card);
+        this.$navigator().write("card.edit", card.id);
     },
     displayCardListError: function(data) {
         console.log("ERROR", data);

@@ -15,7 +15,7 @@ $.ku4webApp.config.collections = {
     //      data. The default is localStorage. Type memory will only persist
     //      for the duration of the application run. Whereas, localStorage and
     //      indexedDB will persist until the storage mechanism is cleared.
-    "storeType": "localStorage" // memory | localStorage | indexedDB
+    "ku4StoreType": "localStorage" // memory | localStorage | indexedDB
 
     //ADD YOUR COLLECTIONS HERE
 };

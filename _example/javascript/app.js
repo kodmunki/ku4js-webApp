@@ -4,6 +4,4 @@ $(function(){
 
     cardController = $.ku4webApp.controllers.card(app);
     $.ku4webApp.views.card(app);
-
-    cardController.list();
 });
