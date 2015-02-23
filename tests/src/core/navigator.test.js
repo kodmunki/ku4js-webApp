@@ -32,8 +32,8 @@ $(function() {
 
     test("write", function () {
         expect(1);
-        navigator.write(true, "test.hash");
-        equal(navigator.read(), "test.hash");
+        navigator.write(true, "test.hash", 1, 2, 3, 4, 5, 6);
+        equal(navigator.read(), "test.hash_WzEsMiwzLDQsNSw2XQ%3D%3D");
     });
 
     test("execute", function () {
