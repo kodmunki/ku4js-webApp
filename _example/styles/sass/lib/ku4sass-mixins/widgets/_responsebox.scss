@@ -1,0 +1,12 @@
+@mixin _responsebox($width, $duration:0.5) {
+  @include _opacity(0);
+  @include _transition(all, $duration);
+  @include _center-fluid($width);
+  position: absolute;
+  width: #{$width}px;
+
+  &.css-responsebox-show {
+    @include _opacity(100);
+    @include _transition(all, $duration);
+  }
+}

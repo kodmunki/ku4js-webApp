@@ -8,22 +8,23 @@ $.ku4webApp.config.collections = {
 $.ku4webApp.config.forms = {
     card: [
         {
-            selector: "#name",
+            selector: '#cardNameField',
             type: "field",
             required:true
         },
         {
-            selector: "#photo",
+            selector: '#cardPhotoField',
             type: "imageFileField",
             maxDims: [100,100]
         },
         {
-            selector: "#description",
+            selector: '#cardValueField',
             type: "field",
-            required:true
+            required:true,
+            format: function(value) { return $.money.parse(value).value(); }
         },
         {
-            selector: "#value",
+            selector: '#cardDescriptionField',
             type: "field",
             required:true
         }
@@ -31,21 +32,17 @@ $.ku4webApp.config.forms = {
 };
 
 $.ku4webApp.config.navigator = {
-    "employee.list": {
-        model: "employee",
-        method: "list"
+    "card.list": {
+        model: "card",
+        method: "listCards"
     },
-    "employee.add": {
-        model: "employee",
-        method: "add"
+    "card.add": {
+        model: "card",
+        method: "createCard"
     },
-    "department.list": {
-        model: "department",
-        method: "list"
-    },
-    "department.add": {
-        model: "department",
-        method: "add"
+    "card.edit": {
+        model: "card",
+        method: "editCard"
     }
 };
 
@@ -71,13 +68,17 @@ $.ku4webApp.config.sockets = {
 };
 
 $.ku4webApp.config.templates.forms = {
-    card:   '<form class="card-form js-card-form" action="">' + '' +
-                '<legend>Card Info</legend>' +
+    card:   '<form id="cardForm" class="card-form" action="">' +
                 '<fieldset>' +
+                    '<legend>Card Info</legend>' +
+                    '<input id="cardPhotoField" name="photo" class="card-photo-field" type="file" accept="image/*" capture="camera" />' +
+                    '<input id="cardNameField" name="name" class="card-name-field" type="text" placeholder="Card Name"/>' +
+                    '<input id="cardValueField" name="value" class="card-value-field" type="number" placeholder="999.99"/>' +
+                    '<textarea id="cardDescriptionField" name="description" class="card-description-field" placeholder="Description"></textarea></fieldset>' +
+                '<div class="card-form-controls">{{controls}}</div></form>',
 
-                '</fieldset>' +
-
-                '{{controls}}</form>'
+    cardAddControl:   '<button class="card-add-control" onclick="cardController.add(); return false;">Add</button>',
+    cardEditControl:  '<button class="card-update-control" onclick="cardController.update(); return false;">Update</button>'
 };
 
 $.ku4webApp.config.templates.views = {
@@ -85,10 +86,10 @@ $.ku4webApp.config.templates.views = {
               '<button class="card-add-control js-card-add-control" onclick="cardController.create();">Add Card</button>',
 
     card:   '<div class="card js-card">' +
-                '<img src="{{photo}}" class="card-photo"/>' +
-                '<span class="card-name">{{name}}</span>' +
-                '<span class="card-value">{{value}}</span>' +
-                '<span class="card-description">{{description}}</span>' +
+                '<img src="{{photo}}" class="card-photo js-card-photo"/>' +
+                '<span class="card-name js-card-name">{{name}}</span>' +
+                '<span class="card-value js-card-value">{{value}}</span>' +
+                '<span class="card-description js-card-description">{{description}}</span>' +
                 '<button class="card-edit-control" onclick="cardController.edit(\'{{id}}\');">Edit</button></div>'
 };
 
@@ -165,7 +166,6 @@ $.ku4webApp.model("card", {
     },
     editCard: function(id) {
         var cards = this.$collection("card").find({"id": id});
-
         if(!($.isArray(cards) && cards.length == 1)) this.$notify("onError", new Error("Card collection corrupted."));
         else this.$notify("onEditCard", cards[0]);
         return this;
@@ -200,8 +200,19 @@ $.ku4webApp.model("card", {
 });
 
 $.ku4webApp.template("card", {
-    renderCardForm: function() {
-        return this.$render(this.$forms("card"));
+    renderAddCardForm: function() {
+        var controls = this.$forms("cardAddControl");
+        return this.$render(this.$forms("card"), { controls: controls });
+    },
+    renderEditCardForm: function() {
+        var controls = this.$forms("cardEditControl");
+        return this.$render(this.$forms("card"), { controls: controls });
+    },
+    renderCard: function(data) {
+        return this.$render(this.$views("card"), data, "", function(data) {
+            data.value = $.money.parse(data.value).toString();
+            return data;
+        })
     },
     renderCardList: function(data) {
         return this.$renderList(this.$views("card"), data, "", function(data) {
@@ -213,35 +224,41 @@ $.ku4webApp.template("card", {
 
 $.ku4webApp.view("card", {
     displayCardList: function(data) {
-        $(".js-card-form").remove();
-
+        this._clearSite();
         var cardList = this.$template("card").renderCardList(data);
         $("#site").append(cardList);
     },
     displayCardAdded: function(data) {
-        console.log(data);
+        this._clearSite();
+        var card = this.$template("card").renderCard(data);
+        $("#site").append(card);
+    },
+    displayAddCard: function(card) {
+        this._clearSite();
+        var cardForm = this.$template("card").renderAddCardForm();
+        $("#site").append(cardForm);
     },
     displayEditCard: function(card) {
-        $(".js-card").remove();
-
-        var cardForm = this.$template("card").renderCardForm();
+        this._clearSite();
+        var cardForm = this.$template("card").renderEditCardForm();
         $("#site").append(cardForm);
-
-        //this.$form("card").write(card);
+        this.$form("card").write(card);
     },
     displayCardListError: function(data) {
-        console.log(data);
+        console.log("ERROR", data);
     },
     displayError: function(data) {
-        console.log(data);
+        console.log("ERROR", data);
+    },
+    _clearSite: function() {
+        $("#site").html("");
     }
 },
 {
     "onCardsListed":        "displayCardList",
     "onCardAdded":          "displayCardAdded",
-
+    "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",
-
     "onCardsListedError":   "displayCardListError",
     "onError":              "displayError"
 });

@@ -1,22 +1,23 @@
 $.ku4webApp.config.forms = {
     card: [
         {
-            selector: "#name",
+            selector: '#cardNameField',
             type: "field",
             required:true
         },
         {
-            selector: "#photo",
+            selector: '#cardPhotoField',
             type: "imageFileField",
             maxDims: [100,100]
         },
         {
-            selector: "#description",
+            selector: '#cardValueField',
             type: "field",
-            required:true
+            required:true,
+            format: function(value) { return $.money.parse(value).value(); }
         },
         {
-            selector: "#value",
+            selector: '#cardDescriptionField',
             type: "field",
             required:true
         }

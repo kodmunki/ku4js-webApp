@@ -1,0 +1,29 @@
+$animationLinear: linear;
+$animationEaseIn: cubic-bezier(0.50, 0.0, 1.0, 1.0);
+$animationEaseOut: cubic-bezier(0.0, 0.0, 0.25, 1.0);
+
+@mixin _animation($name, $duration, $timefunc:linear, $delay:0, $iterationCount:1, $fillMode:none) {
+  animation:$name #{$duration}s $timefunc #{$delay}s $iterationCount $fillMode;
+  -webkit-animation:$name #{$duration}s $timefunc #{$delay}s $iterationCount $fillMode;
+  -moz-animation:$name #{$duration}s $timefunc #{$delay}s $iterationCount $fillMode;
+  -o-animation:$name #{$duration}s $timefunc #{$delay}s $iterationCount $fillMode;
+}
+
+/*
+@keyframes cssAnimation {
+  from { }
+  to { }
+}
+@-webkit-keyframes cssAnimation {
+  from { }
+  to { }
+}
+@-moz-keyframes cssAnimation {
+  from { }
+  to { }
+}
+@-o-keyframes cssAnimation {
+  from { }
+  to { }
+}
+*/

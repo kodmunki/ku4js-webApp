@@ -32,7 +32,6 @@ $.ku4webApp.model("card", {
     },
     editCard: function(id) {
         var cards = this.$collection("card").find({"id": id});
-
         if(!($.isArray(cards) && cards.length == 1)) this.$notify("onError", new Error("Card collection corrupted."));
         else this.$notify("onEditCard", cards[0]);
         return this;

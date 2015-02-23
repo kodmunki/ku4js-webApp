@@ -238,3 +238,27 @@ html, body {
   border-radius: 4px;
   color: #0025e5;
 }
+
+/* line 2, ../sass/src/mobile/card/_form.scss */
+.card-form .card-photo-field,
+.card-form .card-name-field,
+.card-form .card-value-field,
+.card-form .card-description-field {
+  border: solid 1px #ccc;
+  width: 100%;
+  padding: 10px 2%;
+  margin-top: 10px;
+}
+/* line 12, ../sass/src/mobile/card/_form.scss */
+.card-form .card-add-control,
+.card-form .card-update-control {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 100;
+  background: none;
+  border: solid 1px;
+  border-radius: 4px;
+  color: #0025e5;
+}

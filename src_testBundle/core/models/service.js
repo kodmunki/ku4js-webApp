@@ -8,6 +8,7 @@ service.prototype = {
             callback = $.ku4webApp_testBundle.callback || function(data) { return data;},
             callbackData = callback(data),
             isError = /^__error__$/i.test(callbackData);
+
         if(!$.exists(config))
             throw $.ku4exception("$.service", "Test Bundle services require a valid config containing a " +
                                               "'success':[data] and an 'error':[data] configuration.");
@@ -16,7 +17,6 @@ service.prototype = {
         else if($.exists(config.success)) this._mediator.notify(config.success, callbackData);
 
         $.ku4webApp_testBundle.callback = function(data) { return data; };
-
         return this;
     }
 };

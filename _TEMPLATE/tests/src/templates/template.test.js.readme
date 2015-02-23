@@ -14,8 +14,9 @@ $(function() {
     });
 
     test("UNIT TEST NAME", function() {
-        var result = 'RENDERD RESULT EXPECTATION';
+        var expected = 'RENDERED_RESULT_EXPECTATION_HERE';
+
         expect(1);
-        equal(template.METHOD(), result);
+        equal(template.METHOD(), expected);
     });
 });

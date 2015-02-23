@@ -1,0 +1,22 @@
+@mixin _center-fluid($width) {
+  margin: 0px 0px 0px -#{$width/2}px;
+  left: 50%;
+}
+
+//NOTE: The following two mixins need to be used
+//      together to achieve a centered element
+//      there parent contains child and child is
+//      the desired centered element
+@mixin _center_unknown_parent {
+    text-align: center;
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+    }
+}
+@mixin _center_unknown_child {
+  display: inline-block;
+  vertical-align: middle;
+}

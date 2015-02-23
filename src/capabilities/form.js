@@ -7,7 +7,8 @@ form.prototype = {
         var field = $[fieldConfig.type](fieldConfig.selector);
         if($.exists(fieldConfig.spec)) field.spec(fieldConfig.spec);
         if($.exists(fieldConfig.maxDims)) field.maxDims(fieldConfig.maxDims);
-        if(fieldConfig.required && $.exists(field.required)) field.required();
+        if((fieldConfig.required === true) && $.isFunction(field.required)) field.required();
+        if($.exists(fieldConfig.format) && $.isFunction(field.format)) field.format(fieldConfig.format);
 
         if($.isNullOrEmpty(field.dom().name))
             throw $.ku4exception("form", "Form requires all field DOM elements have a valid 'name' attribute");

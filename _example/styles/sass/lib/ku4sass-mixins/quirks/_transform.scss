@@ -1,0 +1,36 @@
+//translate(x,y)	Defines a 2D translation
+@mixin _translate($x, $y) {
+  transform:translate(#{$x}px, #{$y}px);
+  -ms-transform:translate(#{$x}px, #{$y}px);
+  -webkit-transform:translate(#{$x}px, #{$y}px);
+}
+
+//scale(x,y)	Defines a 2D scale transformation
+@mixin _scale($x, $y) {
+  transform:scale($x, $y);
+  -ms-transform:scale($x, $y);
+  -webkit-transform:scale($x, $y);
+}
+
+//rotate(angle)	Defines a 2D rotation, the angle is specified in the parameter
+@mixin _rotate($angle) {
+  transform:rotate(#{$angle}deg);
+  -ms-transform:rotate(#{$angle}deg);
+  -webkit-transform:rotate(#{$angle}deg);
+
+  transform-origin: center;
+}
+
+//skew(x-angle,y-angle)	Defines a 2D skew transformation along the X- and the Y-axis
+@mixin _skew($x, $y) {
+  transform:skew(#{$x}deg, #{$y}deg);
+  -ms-transform:skew(#{$x}deg, #{$y}deg);
+  -webkit-transform:skew(#{$x}deg, #{$y}deg);
+}
+
+//skew(x-angle,y-angle)	Defines a 2D transformation origin along the X- and the Y-axis
+@mixin _transform-origin($x:50%, $y:50%) {
+  transform-origin:#{$x}, #{$y};
+  -ms-transform-origin:#{$x}, #{$y};
+  -webkit-transform-origin:#{$x}, #{$y};
+}

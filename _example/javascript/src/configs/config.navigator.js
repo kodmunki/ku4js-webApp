@@ -1,18 +1,14 @@
 $.ku4webApp.config.navigator = {
-    "employee.list": {
-        model: "employee",
-        method: "list"
+    "card.list": {
+        model: "card",
+        method: "listCards"
     },
-    "employee.add": {
-        model: "employee",
-        method: "add"
+    "card.add": {
+        model: "card",
+        method: "createCard"
     },
-    "department.list": {
-        model: "department",
-        method: "list"
-    },
-    "department.add": {
-        model: "department",
-        method: "add"
+    "card.edit": {
+        model: "card",
+        method: "editCard"
     }
 };

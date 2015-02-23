@@ -18,7 +18,8 @@ form.prototype = {
         var field = $[fieldConfig.type](fieldConfig.selector);
         if($.exists(fieldConfig.spec)) field.spec(fieldConfig.spec);
         if($.exists(fieldConfig.maxDims)) field.maxDims(fieldConfig.maxDims);
-        if(fieldConfig.required && $.exists(field.required)) field.required();
+        if((fieldConfig.required === true) && $.isFunction(field.required)) field.required();
+        if($.exists(fieldConfig.format) && $.isFunction(field.format)) field.format(fieldConfig.format);
 
         if($.isNullOrEmpty(field.dom().name))
             throw $.ku4exception("form", "Form requires all field DOM elements have a valid 'name' attribute");
@@ -333,21 +334,8 @@ $.ku4webApp.store = function(mediator, config, key, collection) {
 };
 
 function navigator(modelFactory, config) {
-
     this._modelFactory = modelFactory;
     this._config = config;
-    this._notify = true;
-
-    var me = this;
-    function onhashchange() {
-        if(me._notify) me.execute(me.read());
-        me._notify = true;
-    }
-
-    if($.exists(window.addEventListener))
-        window.addEventListener("hashchange", onhashchange);
-    else if($.exists(window.attachEvent))
-        window.attachEvent("onhashchange", onhashchange);
 }
 navigator.prototype = {
     hashEquals: function(value) {
@@ -357,39 +345,44 @@ navigator.prototype = {
     //NOTE: Writing the hash using this method will NOT cause a "hash" config
     //      method call. That is, there is NO notification
     hash: function(value) {
-        return ($.exists(value)) ? this.write(value, true) : this.read();
+        return ($.exists(value)) ? this.write(true, value) : this.read();
     },
     read: function() {
-        return location.hash.substr(1);
+        var hash = location.hash.substr(1);
+        return hash.split("_")[0];
     },
+    write: function(/*mute, value*/) {
+        var args = Array.prototype.slice.call(arguments),
+            mute = ($.isBool(args[0])) ? args.shift() : false,
+            hash = args.shift(),
+            argString = (args.length > 0) ? this._encodeArgs(args) : "";
 
-    //NOTE: Writing the hash using this method WILL cause a "hash" config
-    //      method call. That is, there IS notification. Unless, true is
-    //      passed for mute, then this will act as hash, above.
-    write: function(value, mute) {
-        var currentHash = this.read();
-
-        //NOTE: This check is here because onhashchange will NOT fire if the value that is written
-        //      is the same as the currentValue. Therefore we need to NOT set the isInternalChange
-        //      value because there is no "change" and the onhashchange event will NOT fire, leaving
-        //      this value in the incorrect state for a subsequent call.
-        this._notify = (mute) ? false : true;
-        location.hash = value;
+        location.hash = ($.isNullOrEmpty(argString)) ? hash : $.str.build(hash, "_", argString);
+        if(!mute) this.execute(this.read());
         return this;
     },
-    forward: function() {
+    forward: function(callback) {
+        if($.exists(callback)) this._setEventListener(callback);
         window.history.forward();
         return this;
     },
-    back: function() {
+    back: function(callback) {
+        if($.exists(callback)) this._setEventListener(callback);
         window.history.back();
         return this;
+    },
+    clear: function() {
+        return this.hash("");
     },
     execute: function(value) {
         var config = this._config;
         if(!$.exists(config)) return;
 
-        var confg = config[value];
+        var split = value.split("_"),
+            key = split[0],
+            args = this._decodeArgs(split[1]),
+            confg = config[key];
+
         if (!$.exists(confg)) return;
 
         var modelName = confg.model,
@@ -399,7 +392,7 @@ navigator.prototype = {
         if ($.exists(modelName) && $.exists(methodName)) {
             try {
                 var model = modelFactory.create(modelName);
-                model[methodName]();
+                model[methodName].apply(model, args);
             }
             catch (e) { /* Fail silently */ }
         }
@@ -411,6 +404,29 @@ navigator.prototype = {
 
         var confg = config[value];
         return ($.exists(confg)) ? this.execute(value) : this.execute(dflt);
+    },
+    _encodeArgs: function(value) {
+        if($.isNullOrEmpty(value)) return "";
+        return encodeURIComponent($.str.encodeBase64($.json.serialize(value)));
+    },
+    _decodeArgs: function(value) {
+        if($.isNullOrEmpty(value)) return "";
+        return $.json.deserialize($.str.decodeBase64(decodeURIComponent(value)));
+    },
+    _setEventListener: function(callback) {
+        if($.exists(window.addEventListener)) {
+            window.addEventListener("hashchange", function(e) {
+                callback();
+                console.log(arguments.callee)
+                window.removeEventListener("hashchange", arguments.callee);
+            });
+        }
+        else if($.exists(window.attachEvent)) {
+            window.attachEvent("onhashchange", function(e) {
+                callback();
+                window.detachEvent("onhashchange", arguments.callee);
+            });
+        }
     }
 };
 

@@ -1,0 +1,24 @@
+.card-form {
+  .card-photo-field,
+  .card-name-field,
+  .card-value-field,
+  .card-description-field {
+    border: solid 1px #ccc;
+    width: 100%;
+    padding: 10px 2%;
+    margin-top: 10px;
+  }
+
+  .card-add-control,
+  .card-update-control {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 100;
+    background: none;
+    border: solid 1px;
+    border-radius: 4px;
+    color: #0025e5;
+  }
+}

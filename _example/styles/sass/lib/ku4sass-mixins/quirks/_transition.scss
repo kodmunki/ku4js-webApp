@@ -1,0 +1,31 @@
+//Transitions -- Take effect when a DOM class changes value
+$transitionLinear: linear;
+$transitionEaseIn: cubic-bezier(0.50, 0.0, 1.0, 1.0);
+$transitionEaseOut: cubic-bezier(0.0, 0.0, 0.25, 1.0);
+
+@mixin _transition($property, $duration, $timefunc:linear, $delay:0) {
+  transition-property:$property;
+  transition-duration:#{$duration}s;
+  transition-timing-function:$timefunc;
+  transition-delay:#{$delay}s;
+
+  -webkit-transition-property:$property;
+  -webkit-transition-duration:#{$duration}s;
+  -webkit-transition-timing-function:$timefunc;
+  -webkit-transition-delay:#{$delay}s;
+
+  -moz-transition-property:$property;
+  -moz-transition-duration:#{$duration}s;
+  -moz-transition-timing-function:$timefunc;
+  -moz-transition-delay:#{$delay}s;
+
+  -ms-transition-property:$property;
+  -ms-transition-duration:#{$duration}s;
+  -ms-transition-timing-function:$timefunc;
+  -ms-transition-delay:#{$delay}s;
+
+  -o-transition-property:$property;
+  -o-transition-duration:#{$duration}s;
+  -o-transition-timing-function:$timefunc;
+  -o-transition-delay:#{$delay}s;
+}

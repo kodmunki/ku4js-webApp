@@ -1,6 +1,3 @@
-/* Template unit test template
- */
-
 $(function() {
 
     module("templates.NAME");

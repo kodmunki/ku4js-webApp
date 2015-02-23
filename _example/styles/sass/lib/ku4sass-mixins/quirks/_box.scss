@@ -1,0 +1,11 @@
+@mixin _box-shadow($top, $left, $blur, $spread, $color, $inset:"") {
+  -webkit-box-shadow:#{$top}px #{$left}px #{$blur}px #{$spread}px $color #{$inset};
+  -moz-box-shadow:#{$top}px #{$left}px #{$blur}px #{$spread}px $color #{$inset};
+  box-shadow:#{$top}px #{$left}px #{$blur}px #{$spread}px $color #{$inset};
+}
+
+@mixin _box-sizing($value) {
+  -webkit-box-sizing: $value;
+  -moz-box-sizing: $value;
+  box-sizing: $value;
+}
