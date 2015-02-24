@@ -25,6 +25,7 @@ store.prototype = {
         var config = this.__config(),
             scp = scope || this;
 
+        console.log(this._collection)
         this.__collection(function(err, collection) {
             if($.exists(err)) callback.call(scp, err, null);
             else {
@@ -161,8 +162,10 @@ store.prototype = {
         }
     },
     __collection: function(callback, scope) {
-        var collection = this._collection;
-        return ($.exists(collection)) ? collection : this.__store().read(this.__config().name, callback, scope);
+        var collection = this._collection, scp = scope || this;
+
+        if($.exists(collection)) callback.call(scp, null, collection)
+        else this.__store().read(this.__config().name, callback, scope);
     }
 };
 $.ku4webApp.store = function(mediator, config, key, collection) {
