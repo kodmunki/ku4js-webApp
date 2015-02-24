@@ -3,6 +3,7 @@ $.ku4webApp.config.templates.forms = {
                 '<fieldset>' +
                     '<legend>Card Info</legend>' +
                     '<input id="cardId" name="id" type="hidden" />' +
+                    '<div class="card-photo-container"><img src="{{photo}}" class="card-photo js-card-photo"/></div>' +
                     '<input id="cardPhotoField" name="photo" class="card-photo-field" type="file" accept="image/*" capture="camera" />' +
                     '<input id="cardNameField" name="name" class="card-name-field" type="text" placeholder="Card Name"/>' +
                     '<input id="cardValueField" name="value" class="card-value-field" type="number" placeholder="999.99"/>' +

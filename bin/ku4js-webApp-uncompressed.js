@@ -64,7 +64,8 @@ validator.prototype = {
             isValid = false;
             messages.add(name, message);
         });
-        return { isValid: isValid, messages: messages.toObject() };
+        return { isValid: function() { return isValid; },
+                 messages: function() { return messages.toObject(); } };
     }
 };
 $.ku4webApp.validator = function(config) {

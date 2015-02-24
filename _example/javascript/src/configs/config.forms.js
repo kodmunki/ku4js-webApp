@@ -19,7 +19,10 @@ $.ku4webApp.config.forms = {
             selector: '#cardValueField',
             type: "field",
             required:true,
-            format: function(value) { return $.money.parse(value).value(); }
+            format: function(value) {
+                var value = $.money.tryParse(value);
+                return $.money.isMoney(value) ? value.value() : "";
+            }
         },
         {
             selector: '#cardDescriptionField',

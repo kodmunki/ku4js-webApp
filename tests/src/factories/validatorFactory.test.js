@@ -13,7 +13,7 @@ $(function() {
             validator = validatorFactory.create("test"),
             validation = validator.validate(dto);
         expect(1);
-        ok(!validation.isValid);
+        ok(!validation.isValid());
     });
 
 });

@@ -1,4 +1,12 @@
 (function(l){
+$.exampleErrorMessage = function(messageObject) {
+    var message = "";
+    $.hash(messageObject).each(function(obj) {
+        message += $.str.format("* Field: {0} -- {1}\n", obj.key, obj.value);
+    });
+    return message;
+};
+
 $.ku4webApp.config.collections = {
     "ku4StoreType": "localStorage",
 
@@ -28,7 +36,10 @@ $.ku4webApp.config.forms = {
             selector: '#cardValueField',
             type: "field",
             required:true,
-            format: function(value) { return $.money.parse(value).value(); }
+            format: function(value) {
+                var value = $.money.tryParse(value);
+                return $.money.isMoney(value) ? value.value() : "";
+            }
         },
         {
             selector: '#cardDescriptionField',
@@ -87,6 +98,7 @@ $.ku4webApp.config.templates.forms = {
                 '<fieldset>' +
                     '<legend>Card Info</legend>' +
                     '<input id="cardId" name="id" type="hidden" />' +
+                    '<div class="card-photo-container"><img src="{{photo}}" class="card-photo js-card-photo"/></div>' +
                     '<input id="cardPhotoField" name="photo" class="card-photo-field" type="file" accept="image/*" capture="camera" />' +
                     '<input id="cardNameField" name="name" class="card-name-field" type="text" placeholder="Card Name"/>' +
                     '<input id="cardValueField" name="value" class="card-value-field" type="number" placeholder="999.99"/>' +
@@ -113,12 +125,12 @@ $.ku4webApp.config.validators = {
     card: [
         {
             name: "name",
-            spec: $.spec(function(value) { return /^\w{1,140}$/.test(value); }),
-            message: "Username is invalid."
+            spec: $.spec(function(value) { return /^.{1,140}$/.test(value); }),
+            message: "Name is invalid."
         },
         {
             name: "description",
-            spec: $.spec(function(value) { return /.{1,140}/.test(value) }),
+            spec: $.spec(function(value) { return /^.{1,140}$/.test(value) }),
             message: "Invalid description."
         },
         {
@@ -167,35 +179,40 @@ $.ku4webApp.model("card", {
         return this;
     },
     addCard: function(dto) {
+        var validation = this.$validator("card").validate(dto);
+        if(validation.isValid()) {
 
-        //this.$state().write("addCard", dto);
-        //this.$service("card.add").call(dto.toFormData)
+            //this.$state().write("addCard", dto);
+            //this.$service("card.add").call(dto.toFormData)
 
-        //NOTE: Bypassing the service call above as there is no real server in this example
-        //      In a real world app, you would likely call a service here and add to your
-        //      collection on a successful response either getting the data in a response
-        //      from the server or persisting it in state, as depicted above, until you
-        //      received a response;
+            //NOTE: Bypassing the service call above as there is no real server in this example
+            //      In a real world app, you would likely call a service here and add to your
+            //      collection on a successful response either getting the data in a response
+            //      from the server or persisting it in state, as depicted above, until you
+            //      received a response;
 
-        var me  = this;
-        function save(dto) {
-            var card = dto.update("id", $.uid()).toObject();
-            me.$collection("card").insert(card, function(err) {
-                if($.exists(err)) this.$notify("addCardError", err);
-                else this.$collection("card").find({}, function(err, results) {
-                    if($.exists(err) || !($.isArray(results) && results.length > 0))
-                        this.$notify("onCardAddedError", new Error("Card collection add failed."));
-                    else this.$notify("onCardAdded", results);
-                }, this);
-            }, me);
+            var me = this;
+
+            function save(dto) {
+                var card = dto.update("id", $.uid()).toObject();
+                me.$collection("card").insert(card, function (err) {
+                    if ($.exists(err)) this.$notify("addCardError", err);
+                    else this.$collection("card").find({}, function (err, results) {
+                        if ($.exists(err) || !($.isArray(results) && results.length > 0))
+                            this.$notify("onCardAddedError", new Error("Card collection add failed."));
+                        else this.$notify("onCardAdded", results);
+                    }, this);
+                }, me);
+            }
+
+            if (dto.containsKey("photo"))
+                $.image.dataUrlFromFile(dto.find("photo"), function (dataUrl) {
+                    dto.update("photo", dataUrl);
+                    save(dto);
+                }, this, { maxDims: [200, 200] });
+            else save(dto);
         }
-
-        if(dto.containsKey("photo"))
-            $.image.dataUrlFromFile(dto.find("photo"), function(dataUrl){
-                dto.update("photo", dataUrl);
-                save(dto);
-            }, this, { maxDims: [300, 300] });
-        else save(dto);
+        else this.$notify("onCardInvalid", validation.messages());
         return this;
     },
     editCard: function(id) {
@@ -210,27 +227,29 @@ $.ku4webApp.model("card", {
         return this;
     },
     updateCard: function(dto) {
-        var card = dto.toObject(),
-            photo = dto.find("photo");
+        var validation = this.$validator("card").validate(dto);
+        if(validation.isValid()) {
+            var card = dto.toObject(),
+                photo = dto.find("photo");
 
-        function update() {
-            this.$collection("card").update({"id": card.id}, card, function(err) {
-                if($.exists(err)) this.$notify("onCardUpdatedError", err);
-                else this.$collection("card").find({}, function(err, results) {
-                    if($.exists(err) || !($.isArray(results) && results.length > 0))
-                        this.$notify("onCardUpdatedError", new Error("Card collection update failed."));
-                    else this.$notify("onCardUpdated", results);
+            function update() {
+                this.$collection("card").update({"id": card.id}, card, function (err) {
+                    if ($.exists(err)) this.$notify("onCardUpdatedError", err);
+                    else this.$collection("card").find({}, function (err, results) {
+                        if ($.exists(err) || !($.isArray(results) && results.length > 0))
+                            this.$notify("onCardUpdatedError", new Error("Card collection update failed."));
+                        else this.$notify("onCardUpdated", results);
+                    }, this);
                 }, this);
-            }, this);
+            }
+
+            if ($.exists(photo)) $.image.dataUrlFromFile(photo, function (dataUrl) {
+                dto.update("photo", dataUrl);
+                update.call(this);
+            }, this, { maxDims: [200, 200] });
+            else update.call(this);
         }
-
-
-        if($.exists(photo)) $.image.dataUrlFromFile(photo, function(dataUrl){
-            dto.update("photo", dataUrl);
-            update.call(this);
-        }, this, { maxDims: [300, 300] });
-        else update.call(this);
-
+        else this.$notify("onCardInvalid", validation.messages());
         return this;
     },
     onCardsListed: function(serverResponse) {
@@ -271,11 +290,16 @@ $.ku4webApp.model("card", {
 $.ku4webApp.template("card", {
     renderAddCardForm: function() {
         var controls = this.$forms("cardAddControl");
-        return this.$render(this.$forms("card"), { controls: controls });
+        return this.$render(this.$forms("card"), {
+            controls: controls
+        }, "");
     },
-    renderEditCardForm: function() {
+    renderEditCardForm: function(card) {
         var controls = this.$forms("cardEditControl");
-        return this.$render(this.$forms("card"), { controls: controls });
+        return this.$render(this.$forms("card"), {
+            photo: card.photo,
+            controls: controls
+        }, "");
     },
     renderCard: function(data) {
         return this.$render(this.$views("card"), data, "", function(data) {
@@ -305,6 +329,12 @@ $.ku4webApp.view("card", {
         var cardForm = this.$template("card").renderAddCardForm();
         $("#site").append(cardForm);
         this.$navigator().write("card.add");
+
+         $("#cardPhotoField").on("change", function() {
+            $.image.dataUrlFromFile(this.files[0], function(dataUrl){
+                $(".js-card-photo").attr("src", dataUrl);
+            }, this, { maxDims: [200, 200] });
+        });
     },
     displayAddCard: function(card) {
         this._clearSite();
@@ -314,10 +344,19 @@ $.ku4webApp.view("card", {
     },
     displayEditCard: function(card) {
         this._clearSite();
-        var cardForm = this.$template("card").renderEditCardForm();
+        var cardForm = this.$template("card").renderEditCardForm(card);
         $("#site").append(cardForm);
         this.$form("card").write(card);
         this.$navigator().write("card.edit", card.id);
+
+        $("#cardPhotoField").on("change", function() {
+            $.image.dataUrlFromFile(this.files[0], function(dataUrl){
+                $(".js-card-photo").attr("src", dataUrl);
+            }, this, { maxDims: [200, 200] });
+        });
+    },
+    displayCardInvalid: function(messages) {
+        alert($.exampleErrorMessage(messages));
     },
     displayCardListError: function(data) {
         console.log("ERROR", data);
@@ -338,6 +377,9 @@ $.ku4webApp.view("card", {
     "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",
+
+    "onCardInvalid":        "displayCardInvalid",
+
     "onCardUpdated":        "displayCardList",
     "onCardsListedError":   "displayCardListError",
     "onCardUpdatedError":   "displayCardUpdatedError",

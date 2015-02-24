@@ -1,51 +1,66 @@
-.card {
-  margin: 30px 1%;
+.card-list {
+  .card {
+    margin: 30px 1%;
 
-  .card-photo-container {
-    display: inline-block;
-    float: left;
-    max-width: 120px;
-    width: 30%;
-    @include _center_unknown_parent;
+    .card-photo-container {
+      display: inline-block;
+      float: left;
+      max-width: 120px;
+      width: 30%;
+      @include _center_unknown_parent;
 
-    .card-photo {
-      max-width: 100%;
-      max-height: 100%;
-      @include _center_unknown_child;
+      .card-photo {
+        max-width: 100%;
+        max-height: 100%;
+        @include _center_unknown_child;
+      }
+    }
+
+    .card-name,
+    .card-value,
+    .card-description {
+      display: inline-block;
+      width: 50%;
+      margin: 8px 0 0 3%;
+    }
+
+    .card-name {
+      font-size: 16px;
+      font-weight: 200;
+    }
+    .card-value {
+      font-size: 24px;
+      font-weight: 100;
+      letter-spacing: 2px;
+    }
+    .card-description {
+      font-size: 11px;
+      font-style: italic;
+    }
+
+    .card-edit-control {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: 100;
+      background: none;
+      border: solid 1px;
+      border-radius: 4px;
+      color: #0025e5;
     }
   }
 
-  .card-name,
-  .card-value,
-  .card-description {
-    display: inline-block;
-    width: 50%;
-    margin: 8px 0 0 3%;
-  }
-
-  .card-name {
-    font-size: 16px;
-    font-weight: 200;
-  }
-  .card-value {
-    font-size: 24px;
-    font-weight: 100;
-    letter-spacing: 2px;
-  }
-  .card-description {
-    font-size: 11px;
-    font-style: italic;
-  }
-
-  .card-edit-control {
-    width: 100%;
-    margin-top: 10px;
+  .card-add-control {
+    position: fixed;
+    top: 0;
+    right: 0;
     padding: 10px;
-    font-size: 16px;
-    font-weight: 100;
-    background: none;
-    border: solid 1px;
-    border-radius: 4px;
+    height: 80px;
+    width: 80px;
+    background: #eeffff;
+    border: solid 2px #0025e5;
     color: #0025e5;
+    font-size: 20px;
   }
 }

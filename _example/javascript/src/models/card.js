@@ -13,35 +13,40 @@ $.ku4webApp.model("card", {
         return this;
     },
     addCard: function(dto) {
+        var validation = this.$validator("card").validate(dto);
+        if(validation.isValid()) {
 
-        //this.$state().write("addCard", dto);
-        //this.$service("card.add").call(dto.toFormData)
+            //this.$state().write("addCard", dto);
+            //this.$service("card.add").call(dto.toFormData)
 
-        //NOTE: Bypassing the service call above as there is no real server in this example
-        //      In a real world app, you would likely call a service here and add to your
-        //      collection on a successful response either getting the data in a response
-        //      from the server or persisting it in state, as depicted above, until you
-        //      received a response;
+            //NOTE: Bypassing the service call above as there is no real server in this example
+            //      In a real world app, you would likely call a service here and add to your
+            //      collection on a successful response either getting the data in a response
+            //      from the server or persisting it in state, as depicted above, until you
+            //      received a response;
 
-        var me  = this;
-        function save(dto) {
-            var card = dto.update("id", $.uid()).toObject();
-            me.$collection("card").insert(card, function(err) {
-                if($.exists(err)) this.$notify("addCardError", err);
-                else this.$collection("card").find({}, function(err, results) {
-                    if($.exists(err) || !($.isArray(results) && results.length > 0))
-                        this.$notify("onCardAddedError", new Error("Card collection add failed."));
-                    else this.$notify("onCardAdded", results);
-                }, this);
-            }, me);
+            var me = this;
+
+            function save(dto) {
+                var card = dto.update("id", $.uid()).toObject();
+                me.$collection("card").insert(card, function (err) {
+                    if ($.exists(err)) this.$notify("addCardError", err);
+                    else this.$collection("card").find({}, function (err, results) {
+                        if ($.exists(err) || !($.isArray(results) && results.length > 0))
+                            this.$notify("onCardAddedError", new Error("Card collection add failed."));
+                        else this.$notify("onCardAdded", results);
+                    }, this);
+                }, me);
+            }
+
+            if (dto.containsKey("photo"))
+                $.image.dataUrlFromFile(dto.find("photo"), function (dataUrl) {
+                    dto.update("photo", dataUrl);
+                    save(dto);
+                }, this, { maxDims: [200, 200] });
+            else save(dto);
         }
-
-        if(dto.containsKey("photo"))
-            $.image.dataUrlFromFile(dto.find("photo"), function(dataUrl){
-                dto.update("photo", dataUrl);
-                save(dto);
-            }, this, { maxDims: [300, 300] });
-        else save(dto);
+        else this.$notify("onCardInvalid", validation.messages());
         return this;
     },
     editCard: function(id) {
@@ -56,27 +61,29 @@ $.ku4webApp.model("card", {
         return this;
     },
     updateCard: function(dto) {
-        var card = dto.toObject(),
-            photo = dto.find("photo");
+        var validation = this.$validator("card").validate(dto);
+        if(validation.isValid()) {
+            var card = dto.toObject(),
+                photo = dto.find("photo");
 
-        function update() {
-            this.$collection("card").update({"id": card.id}, card, function(err) {
-                if($.exists(err)) this.$notify("onCardUpdatedError", err);
-                else this.$collection("card").find({}, function(err, results) {
-                    if($.exists(err) || !($.isArray(results) && results.length > 0))
-                        this.$notify("onCardUpdatedError", new Error("Card collection update failed."));
-                    else this.$notify("onCardUpdated", results);
+            function update() {
+                this.$collection("card").update({"id": card.id}, card, function (err) {
+                    if ($.exists(err)) this.$notify("onCardUpdatedError", err);
+                    else this.$collection("card").find({}, function (err, results) {
+                        if ($.exists(err) || !($.isArray(results) && results.length > 0))
+                            this.$notify("onCardUpdatedError", new Error("Card collection update failed."));
+                        else this.$notify("onCardUpdated", results);
+                    }, this);
                 }, this);
-            }, this);
+            }
+
+            if ($.exists(photo)) $.image.dataUrlFromFile(photo, function (dataUrl) {
+                dto.update("photo", dataUrl);
+                update.call(this);
+            }, this, { maxDims: [200, 200] });
+            else update.call(this);
         }
-
-
-        if($.exists(photo)) $.image.dataUrlFromFile(photo, function(dataUrl){
-            dto.update("photo", dataUrl);
-            update.call(this);
-        }, this, { maxDims: [300, 300] });
-        else update.call(this);
-
+        else this.$notify("onCardInvalid", validation.messages());
         return this;
     },
     onCardsListed: function(serverResponse) {

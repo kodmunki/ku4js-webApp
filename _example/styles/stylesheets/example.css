@@ -210,12 +210,12 @@ html, body {
   display: block;
 }
 
-/* line 1, ../sass/src/mobile/card/_list.scss */
-.card {
+/* line 2, ../sass/src/mobile/card/_list.scss */
+.card-list .card {
   margin: 30px 1%;
 }
-/* line 4, ../sass/src/mobile/card/_list.scss */
-.card .card-photo-container {
+/* line 5, ../sass/src/mobile/card/_list.scss */
+.card-list .card .card-photo-container {
   display: inline-block;
   float: left;
   max-width: 120px;
@@ -223,45 +223,45 @@ html, body {
   text-align: center;
 }
 /* line 12, ../sass/lib/ku4sass-mixins/quirks/_center.scss */
-.card .card-photo-container:before {
+.card-list .card .card-photo-container:before {
   content: '';
   display: inline-block;
   height: 100%;
   vertical-align: middle;
 }
-/* line 11, ../sass/src/mobile/card/_list.scss */
-.card .card-photo-container .card-photo {
+/* line 12, ../sass/src/mobile/card/_list.scss */
+.card-list .card .card-photo-container .card-photo {
   max-width: 100%;
   max-height: 100%;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 18, ../sass/src/mobile/card/_list.scss */
-.card .card-name,
-.card .card-value,
-.card .card-description {
+/* line 19, ../sass/src/mobile/card/_list.scss */
+.card-list .card .card-name,
+.card-list .card .card-value,
+.card-list .card .card-description {
   display: inline-block;
   width: 50%;
   margin: 8px 0 0 3%;
 }
-/* line 26, ../sass/src/mobile/card/_list.scss */
-.card .card-name {
+/* line 27, ../sass/src/mobile/card/_list.scss */
+.card-list .card .card-name {
   font-size: 16px;
   font-weight: 200;
 }
-/* line 30, ../sass/src/mobile/card/_list.scss */
-.card .card-value {
+/* line 31, ../sass/src/mobile/card/_list.scss */
+.card-list .card .card-value {
   font-size: 24px;
   font-weight: 100;
   letter-spacing: 2px;
 }
-/* line 35, ../sass/src/mobile/card/_list.scss */
-.card .card-description {
+/* line 36, ../sass/src/mobile/card/_list.scss */
+.card-list .card .card-description {
   font-size: 11px;
   font-style: italic;
 }
-/* line 40, ../sass/src/mobile/card/_list.scss */
-.card .card-edit-control {
+/* line 41, ../sass/src/mobile/card/_list.scss */
+.card-list .card .card-edit-control {
   width: 100%;
   margin-top: 10px;
   padding: 10px;
@@ -271,6 +271,19 @@ html, body {
   border: solid 1px;
   border-radius: 4px;
   color: #0025e5;
+}
+/* line 54, ../sass/src/mobile/card/_list.scss */
+.card-list .card-add-control {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  height: 80px;
+  width: 80px;
+  background: #eeffff;
+  border: solid 2px #0025e5;
+  color: #0025e5;
+  font-size: 20px;
 }
 
 /* line 2, ../sass/src/mobile/card/_form.scss */
