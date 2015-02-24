@@ -28,7 +28,11 @@ $.ku4webApp.model("card", {
             var card = dto.update("id", $.uid()).toObject();
             me.$collection("card").insert(card, function(err) {
                 if($.exists(err)) this.$notify("addCardError", err);
-                this.$notify("onCardAdded", card);
+                else this.$collection("card").find({}, function(err, results) {
+                    if($.exists(err) || !($.isArray(results) && results.length > 0))
+                        this.$notify("onCardAddedError", new Error("Card collection add failed."));
+                    else this.$notify("onCardAdded", results);
+                }, this);
             }, me);
         }
 

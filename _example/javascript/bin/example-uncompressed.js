@@ -102,7 +102,7 @@ $.ku4webApp.config.templates.views = {
               '<button class="card-add-control js-card-add-control" onclick="cardController.create();">Add Card</button></div>',
 
     card:   '<div class="card js-card js-{{id}}">' +
-                '<img src="{{photo}}" class="card-photo js-card-photo"/>' +
+                '<div class="card-photo-container"><img src="{{photo}}" class="card-photo js-card-photo"/></div>' +
                 '<span class="card-name js-card-name">{{name}}</span>' +
                 '<span class="card-value js-card-value">{{value}}</span>' +
                 '<span class="card-description js-card-description">{{description}}</span>' +
@@ -182,7 +182,11 @@ $.ku4webApp.model("card", {
             var card = dto.update("id", $.uid()).toObject();
             me.$collection("card").insert(card, function(err) {
                 if($.exists(err)) this.$notify("addCardError", err);
-                this.$notify("onCardAdded", card);
+                else this.$collection("card").find({}, function(err, results) {
+                    if($.exists(err) || !($.isArray(results) && results.length > 0))
+                        this.$notify("onCardAddedError", new Error("Card collection add failed."));
+                    else this.$notify("onCardAdded", results);
+                }, this);
             }, me);
         }
 
@@ -296,11 +300,6 @@ $.ku4webApp.view("card", {
         $("#site").append(cardList);
         this.$navigator().write("card.list");
     },
-    displayCardAdded: function(data) {
-        this._clearSite();
-        var card = this.$template("card").renderCard(data);
-        $("#site").append(card);
-    },
     displayCreateCard: function(card) {
         this._clearSite();
         var cardForm = this.$template("card").renderAddCardForm();
@@ -335,7 +334,7 @@ $.ku4webApp.view("card", {
 },
 {
     "onCardsListed":        "displayCardList",
-    "onCardAdded":          "displayCardAdded",
+    "onCardAdded":          "displayCardList",
     "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",

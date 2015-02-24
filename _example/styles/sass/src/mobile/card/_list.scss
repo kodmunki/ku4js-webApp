@@ -1,10 +1,18 @@
 .card {
   margin: 30px 1%;
 
-  .card-photo {
-    width: 100px;
-    height: 100px;
+  .card-photo-container {
+    display: inline-block;
     float: left;
+    max-width: 120px;
+    width: 30%;
+    @include _center_unknown_parent;
+
+    .card-photo {
+      max-width: 100%;
+      max-height: 100%;
+      @include _center_unknown_child;
+    }
   }
 
   .card-name,

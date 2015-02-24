@@ -5,11 +5,6 @@ $.ku4webApp.view("card", {
         $("#site").append(cardList);
         this.$navigator().write("card.list");
     },
-    displayCardAdded: function(data) {
-        this._clearSite();
-        var card = this.$template("card").renderCard(data);
-        $("#site").append(card);
-    },
     displayCreateCard: function(card) {
         this._clearSite();
         var cardForm = this.$template("card").renderAddCardForm();
@@ -44,7 +39,7 @@ $.ku4webApp.view("card", {
 },
 {
     "onCardsListed":        "displayCardList",
-    "onCardAdded":          "displayCardAdded",
+    "onCardAdded":          "displayCardList",
     "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",

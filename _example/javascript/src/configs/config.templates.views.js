@@ -3,7 +3,7 @@ $.ku4webApp.config.templates.views = {
               '<button class="card-add-control js-card-add-control" onclick="cardController.create();">Add Card</button></div>',
 
     card:   '<div class="card js-card js-{{id}}">' +
-                '<img src="{{photo}}" class="card-photo js-card-photo"/>' +
+                '<div class="card-photo-container"><img src="{{photo}}" class="card-photo js-card-photo"/></div>' +
                 '<span class="card-name js-card-name">{{name}}</span>' +
                 '<span class="card-value js-card-value">{{value}}</span>' +
                 '<span class="card-description js-card-description">{{description}}</span>' +
