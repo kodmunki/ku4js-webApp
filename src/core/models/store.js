@@ -161,7 +161,7 @@ store.prototype = {
         var storeType = this._config.ku4StoreType;
         switch(storeType) {
             case "memory": return $.ku4memoryStore();
-            case "indexedDB": return $.ku4webApp.store();
+            case "indexedDB": return $.ku4indexedDbStore();
             default: return $.ku4localStorageStore();
         }
     },

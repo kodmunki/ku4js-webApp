@@ -20,6 +20,7 @@ $.ku4webApp.view("card", {
         this._clearSite();
         var cardForm = this.$template("card").renderAddCardForm();
         $("#site").append(cardForm);
+        this.$navigator().write("card.list");
     },
     displayEditCard: function(card) {
         this._clearSite();
@@ -29,6 +30,9 @@ $.ku4webApp.view("card", {
         this.$navigator().write("card.edit", card.id);
     },
     displayCardListError: function(data) {
+        console.log("ERROR", data);
+    },
+    displayCardUpdatedError: function(data) {
         console.log("ERROR", data);
     },
     displayError: function(data) {
@@ -44,6 +48,8 @@ $.ku4webApp.view("card", {
     "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",
+    "onCardUpdated":        "displayCardList",
     "onCardsListedError":   "displayCardListError",
+    "onCardUpdatedError":   "displayCardUpdatedError",
     "onError":              "displayError"
 });

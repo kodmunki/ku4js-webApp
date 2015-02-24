@@ -9,24 +9,22 @@ $(function() {
 
     asyncTest("find", function() {
         var data1 = {
-                name: "test",
-                value: "data"
+                name: "test1",
+                value: "data1"
             },
             data2 = {
-                name: "test",
-                value: "data"
+                name: "test2",
+                value: "data2"
             };
 
-        expect(6);
+        expect(4);
         performanceOk(function() {
             $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
                 .init([data1, data2], function(err, store) {
-                    store.find({name: "test"}, function(err, results) {
-                        equal(results.length, 2);
-                        equal(results[0].name, data1.name);
-                        equal(results[0].value, data1.value);
-                        equal(results[1].name, data2.name);
-                        equal(results[1].value, data2.value);
+                    store.find({name: "test2"}, function(err, results) {
+                        equal(results.length, 1);
+                        equal(results[0].name, data2.name);
+                        equal(results[0].value, data2.value);
 
                         store.remove(function() {
                             start();

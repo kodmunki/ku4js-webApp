@@ -14,5 +14,9 @@ $.ku4webApp.controller("card", {
     edit: function(id) {
         this.$model("card").editCard(id);
         return this;
+    },
+    update: function() {
+        this.$model("card").updateCard(this.$form("card").read());
+        return this;
     }
 });

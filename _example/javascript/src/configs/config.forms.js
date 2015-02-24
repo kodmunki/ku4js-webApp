@@ -1,6 +1,11 @@
 $.ku4webApp.config.forms = {
     card: [
         {
+            selector: '#cardId',
+            type: "field",
+            required:true
+        },
+        {
             selector: '#cardNameField',
             type: "field",
             required:true

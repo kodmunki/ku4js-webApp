@@ -401,7 +401,7 @@ store.prototype = {
         var storeType = this._config.ku4StoreType;
         switch(storeType) {
             case "memory": return $.ku4memoryStore();
-            case "indexedDB": return $.ku4webApp.store();
+            case "indexedDB": return $.ku4indexedDbStore();
             default: return $.ku4localStorageStore();
         }
     },
@@ -446,10 +446,12 @@ navigator.prototype = {
     write: function(/*value, args...*/) {
         var args = Array.prototype.slice.call(arguments),
             hash = args.shift(),
-            argString = (args.length > 0) ? this._encodeArgs(args) : "";
+            argString = (args.length > 0) ? this._encodeArgs(args) : "",
+            writeHash = ($.isNullOrEmpty(argString)) ? hash : $.str.build(hash, "_ku4_", argString);
 
+        if(this.read() == writeHash) return this;
         this._mute = true;
-        location.hash = ($.isNullOrEmpty(argString)) ? hash : $.str.build(hash, "_ku4_", argString);
+        location.hash = writeHash;
         return this;
     },
     execute: function(/*value, args...*/) {
@@ -497,7 +499,7 @@ navigator.prototype = {
                 var model = modelFactory.create(modelName);
                 model[methodName].apply(model, args);
             }
-            catch (e) { /* Fail silently */ }
+            catch (e) { console.log(e);/* Fail silently */ }
         }
         return this;
     },

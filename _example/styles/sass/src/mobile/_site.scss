@@ -1,0 +1,9 @@
+#site.list {
+  .card-list { display: block; }
+  .card-form { display: none; }
+}
+
+#site.form {
+  .card-list { display: none; }
+  .card-form { display: block; }
+}

@@ -1,6 +1,6 @@
 (function(l){
 $.ku4webApp.config.collections = {
-    "ku4StoreType": "indexedDB",
+    "ku4StoreType": "localStorage",
 
     card: {
         name: "card"
@@ -9,6 +9,11 @@ $.ku4webApp.config.collections = {
 
 $.ku4webApp.config.forms = {
     card: [
+        {
+            selector: '#cardId',
+            type: "field",
+            required:true
+        },
         {
             selector: '#cardNameField',
             type: "field",
@@ -81,6 +86,7 @@ $.ku4webApp.config.templates.forms = {
     card:   '<form id="cardForm" class="card-form" action="">' +
                 '<fieldset>' +
                     '<legend>Card Info</legend>' +
+                    '<input id="cardId" name="id" type="hidden" />' +
                     '<input id="cardPhotoField" name="photo" class="card-photo-field" type="file" accept="image/*" capture="camera" />' +
                     '<input id="cardNameField" name="name" class="card-name-field" type="text" placeholder="Card Name"/>' +
                     '<input id="cardValueField" name="value" class="card-value-field" type="number" placeholder="999.99"/>' +
@@ -92,10 +98,10 @@ $.ku4webApp.config.templates.forms = {
 };
 
 $.ku4webApp.config.templates.views = {
-    cardList: '<div class="card-list js-card-list">{{cardList}}</div>' +
-              '<button class="card-add-control js-card-add-control" onclick="cardController.create();">Add Card</button>',
+    cardList: '<div class="card-list js-card-list">{{cardList}}' +
+              '<button class="card-add-control js-card-add-control" onclick="cardController.create();">Add Card</button></div>',
 
-    card:   '<div class="card js-card">' +
+    card:   '<div class="card js-card js-{{id}}">' +
                 '<img src="{{photo}}" class="card-photo js-card-photo"/>' +
                 '<span class="card-name js-card-name">{{name}}</span>' +
                 '<span class="card-value js-card-value">{{value}}</span>' +
@@ -139,13 +145,20 @@ $.ku4webApp.controller("card", {
     edit: function(id) {
         this.$model("card").editCard(id);
         return this;
+    },
+    update: function() {
+        this.$model("card").updateCard(this.$form("card").read());
+        return this;
     }
 });
 
 $.ku4webApp.model("card", {
     listCards: function() {
         if(this.$state().is("cardsListed"))
-            this.$notify("onCardsListed", this.$collection("card").find());
+            this.$collection("card").find({}, function(err, results) {
+                if($.exists(err)) this.$notify("onCardsListedError", err);
+                else this.$notify("onCardsListed", results);
+            }, this);
         else this.$service("card.list").call();
         return this;
     },
@@ -166,46 +179,82 @@ $.ku4webApp.model("card", {
 
         var me  = this;
         function save(dto) {
-            var card = dto.add("id", $.uid()).toObject();
-            me.$collection("card").insert(card);
-            me.$notify("onCardAdded", card);
+            var card = dto.update("id", $.uid()).toObject();
+            me.$collection("card").insert(card, function(err) {
+                if($.exists(err)) this.$notify("addCardError", err);
+                this.$notify("onCardAdded", card);
+            }, me);
         }
 
         if(dto.containsKey("photo"))
             $.image.dataUrlFromFile(dto.find("photo"), function(dataUrl){
                 dto.update("photo", dataUrl);
                 save(dto);
-            });
+            }, this, { maxDims: [300, 300] });
         else save(dto);
         return this;
     },
     editCard: function(id) {
-        var cards = this.$collection("card").find({"id": id});
-        if(!($.isArray(cards) && cards.length == 1)) this.$notify("onError", new Error("Card collection corrupted."));
-        else this.$notify("onEditCard", cards[0]);
+        this.$collection("card").find({"id": id}, function(err, results) {
+            if($.exists(err)) this.$notify("editCardError", err);
+            else {
+                if(!($.isArray(results) && results.length == 1))
+                    this.$notify("onError", new Error("Card collection corrupted."));
+                else this.$notify("onEditCard", results[0]);
+            }
+        }, this);
         return this;
     },
     updateCard: function(dto) {
-        var card = dto.toObject();
-        this.$collection("card").update({"id": card.id}, card);
-        this.$notify("onCardUpdated", card);
+        var card = dto.toObject(),
+            photo = dto.find("photo");
+
+        function update() {
+            this.$collection("card").update({"id": card.id}, card, function(err) {
+                if($.exists(err)) this.$notify("onCardUpdatedError", err);
+                else this.$collection("card").find({}, function(err, results) {
+                    if($.exists(err) || !($.isArray(results) && results.length > 0))
+                        this.$notify("onCardUpdatedError", new Error("Card collection update failed."));
+                    else this.$notify("onCardUpdated", results);
+                }, this);
+            }, this);
+        }
+
+
+        if($.exists(photo)) $.image.dataUrlFromFile(photo, function(dataUrl){
+            dto.update("photo", dataUrl);
+            update.call(this);
+        }, this, { maxDims: [300, 300] });
+        else update.call(this);
+
         return this;
     },
     onCardsListed: function(serverResponse) {
         var cardList = $.dto.parseJson(serverResponse).toObject();
-        this.$collection("card").init(cardList);
+        this.$collection("card").find({}, function(err, results) {
+            if(results.length > 0) {
+                this.$state().set("cardsListed");
+                this.$notify("onCardsListed", results);
+            }
+            else this.$collection("card").init(cardList, function(err) {
+                if($.exists(err)) this.$notify("onCardsListedError", err);
+                else {
+                    this.$state().set("cardsListed");
+                    this.$notify("onCardsListed", cardList);
+                }
+            }, this);
+        }, this);
 
-        this.$state().set("cardsListed");
-        this.$notify("onCardsListed", cardList);
     },
     onCardAdded: function(serverResponse) {
         var card = $.dto.parseJson(serverResponse).toObject();
         //var card = this.$state().read("addCard")
 
-        this.$collection("card").insert(card);
-        this.$notify("onCardAdded", card);
+        this.$collection("card").insert(card, function(err) {
+            if($.exists(err)) this.$notify("onCardAddedError", err);
+            else this.$notify("onCardAdded", card);
+        });
     },
-
     onCardsListedError: function(serverResponse) {
         this.$notify("onCardListedError, onError", new Error("Card listing exception."));
     }
@@ -262,6 +311,7 @@ $.ku4webApp.view("card", {
         this._clearSite();
         var cardForm = this.$template("card").renderAddCardForm();
         $("#site").append(cardForm);
+        this.$navigator().write("card.list");
     },
     displayEditCard: function(card) {
         this._clearSite();
@@ -271,6 +321,9 @@ $.ku4webApp.view("card", {
         this.$navigator().write("card.edit", card.id);
     },
     displayCardListError: function(data) {
+        console.log("ERROR", data);
+    },
+    displayCardUpdatedError: function(data) {
         console.log("ERROR", data);
     },
     displayError: function(data) {
@@ -286,7 +339,9 @@ $.ku4webApp.view("card", {
     "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",
+    "onCardUpdated":        "displayCardList",
     "onCardsListedError":   "displayCardListError",
+    "onCardUpdatedError":   "displayCardUpdatedError",
     "onError":              "displayError"
 });
 

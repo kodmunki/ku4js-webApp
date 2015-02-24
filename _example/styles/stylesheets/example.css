@@ -192,6 +192,24 @@ html, body {
   font-family: Helvetica Neue Thin, Helvetica Neue, Helvetica, Arial;
 }
 
+/* line 2, ../sass/src/mobile/_site.scss */
+#site.list .card-list {
+  display: block;
+}
+/* line 3, ../sass/src/mobile/_site.scss */
+#site.list .card-form {
+  display: none;
+}
+
+/* line 7, ../sass/src/mobile/_site.scss */
+#site.form .card-list {
+  display: none;
+}
+/* line 8, ../sass/src/mobile/_site.scss */
+#site.form .card-form {
+  display: block;
+}
+
 /* line 1, ../sass/src/mobile/card/_list.scss */
 .card {
   margin: 30px 1%;
