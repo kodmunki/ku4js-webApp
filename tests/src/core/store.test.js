@@ -17,21 +17,23 @@ $(function() {
                 value: "data"
             };
 
-        expect(5);
-        $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
-            .init([data1, data2], function(err, store) {
-                store.find({name: "test"}, function(err, results) {
-                    equal(results.length, 2);
-                    equal(results[0].name, data1.name);
-                    equal(results[0].value, data1.value);
-                    equal(results[1].name, data2.name);
-                    equal(results[1].value, data2.value);
+        expect(6);
+        performanceOk(function() {
+            $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                .init([data1, data2], function(err, store) {
+                    store.find({name: "test"}, function(err, results) {
+                        equal(results.length, 2);
+                        equal(results[0].name, data1.name);
+                        equal(results[0].value, data1.value);
+                        equal(results[1].name, data2.name);
+                        equal(results[1].value, data2.value);
 
-                    store.remove(function() {
-                        start();
+                        store.remove(function() {
+                            start();
+                        });
                     });
                 });
-            });
+        }, 200);
     });
 
     asyncTest("insert", function() {
@@ -40,16 +42,18 @@ $(function() {
                 value: "data"
             };
 
-        expect(3);
-        $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
-            .insert(data, function(err, store) {
-                store.find({name: "test"}, function(err, results) {
-                    equal(results.length, 1);
-                    equal(results[0].name, data.name);
-                    equal(results[0].value, data.value);
-                    store.remove(function() { start(); });
+        expect(4);
+        performanceOk(function() {
+            $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                .insert(data, function(err, store) {
+                    store.find({name: "test"}, function(err, results) {
+                        equal(results.length, 1);
+                        equal(results[0].name, data.name);
+                        equal(results[0].value, data.value);
+                        store.remove(function() { start(); });
+                    });
                 });
-            });
+        }, 200);
     });
 
     asyncTest("find in", function() {
@@ -66,17 +70,19 @@ $(function() {
                 value: "moreData"
             }];
 
-        expect(3);
-        $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
-            .insertList(data, function(err, store) {
-                store.find({$in: {name: ["test", "testToo"]}, $orderby: {value: -1}},
-                            function(err, results) {
-                                equal(results.length, 2);
-                                equal(results[0].value, data[2].value);
-                                equal(results[1].value, data[0].value);
-                                store.remove(function() { start(); });
-                            });
-            });
+        expect(4);
+        performanceOk(function() {
+            $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                .insertList(data, function(err, store) {
+                    store.find({$in: {name: ["test", "testToo"]}, $orderby: {value: -1}},
+                                function(err, results) {
+                                    equal(results.length, 2);
+                                    equal(results[0].value, data[2].value);
+                                    equal(results[1].value, data[0].value);
+                                    store.remove(function() { start(); });
+                                });
+                });
+        }, 100);
     });
 
     asyncTest("update", function() {
@@ -85,25 +91,27 @@ $(function() {
                 value: "data"
             };
 
-        expect(4);
-        $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
-            .insert(data, function(err, store) {
-                store.find({name: "test"}, function(err, results) {
-                    var result = results[0];
-                    equal(result.name, data.name);
-                    equal(result.value, data.value);
-                    result.name = "newTester";
+        expect(5);
+        performanceOk(function() {
+            $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                .insert(data, function(err, store) {
+                    store.find({name: "test"}, function(err, results) {
+                        var result = results[0];
+                        equal(result.name, data.name);
+                        equal(result.value, data.value);
+                        result.name = "newTester";
 
-                    store.update({"value": result.value}, result, function(err, store) {
-                        store.find({"value": data.value}, function(err, results) {
-                            var result = results[0];
-                            equal(result.name, "newTester");
-                            equal(result.value, data.value);
-                            store.remove(function() { start(); });
+                        store.update({"value": result.value}, result, function(err, store) {
+                            store.find({"value": data.value}, function(err, results) {
+                                var result = results[0];
+                                equal(result.name, "newTester");
+                                equal(result.value, data.value);
+                                store.remove(function() { start(); });
+                            });
                         });
                     });
                 });
-            });
+        }, 200);
     });
 
     asyncTest("remove", function() {
@@ -119,21 +127,23 @@ $(function() {
                 name: "testToo",
                 value: "moreData"
             }];
-        expect(2);
-        $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
-            .insertList(data, function(err, store) {
-                store.find({}, function(err, results) {
-                    equal(results.length, 3);
-                    store.remove(data[0], function(err, store) {
-                        store.find({}, function(err, results) {
-                            equal(results.length, 2);
-                            store.remove(function () {
-                                start();
+        expect(3);
+        performanceOk(function() {
+            $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                .insertList(data, function(err, store) {
+                    store.find({}, function(err, results) {
+                        equal(results.length, 3);
+                        store.remove(data[0], function(err, store) {
+                            store.find({}, function(err, results) {
+                                equal(results.length, 2);
+                                store.remove(function () {
+                                    start();
+                                });
                             });
                         });
                     });
                 });
-            });
+        }, 200);
     });
 
     asyncTest("join", function() {
@@ -176,25 +186,27 @@ $(function() {
                 test2: { name: "collection2" }
             };
 
-        expect(5);
-        $.ku4webApp.store($.mediator(), config, "test1")
-            .join("test2", "id", "cid", function(err, store) {
-                store.find({}, function(err, results) {
-                    equal(results.length, 3);
+        expect(6);
+        performanceOk(function() {
+            $.ku4webApp.store($.mediator(), config, "test1")
+                .join("test2", "id", "cid", function(err, store) {
+                    store.find({}, function(err, results) {
+                        equal(results.length, 3);
 
-                    var result0 = results[0];
+                        var result0 = results[0];
 
-                    equal(result0["collection1.id"], 100);
-                    equal(result0["collection2.id"], 110);
-                    equal(result0["collection1.name"], "myName1");
-                    equal(result0["collection2.name"], "otherName1");
+                        equal(result0["collection1.id"], 100);
+                        equal(result0["collection2.id"], 110);
+                        equal(result0["collection1.name"], "myName1");
+                        equal(result0["collection2.name"], "otherName1");
 
-                    store.remove(function() { start(); });
+                        store.remove(function() { start(); });
+                    });
                 });
-            });
+        }, 200);
     });
 
-    test("exec", function() {
+    asyncTest("exec", function() {
         var data1 = {
                 name: "test",
                 value: "data"
@@ -203,17 +215,24 @@ $(function() {
                 name: "test",
                 value: "data"
             };
-        var store = $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
-                        .insertList([data1, data2]).exec(function(item) { return {"id": item.name, "value": 1}});
 
-        var results = store.find();
-
-        expect(5);
-        equal(results.length, 2);
-        equal(results[0].id, data1.name);
-        equal(results[0].value, 1);
-        equal(results[1].id, data2.name);
-        equal(results[1].value, 1);
-        store.remove();
+        expect(6);
+        performanceOk(function() {
+            $.ku4webApp.store($.mediator(), $.ku4webApp.config.collections, "test")
+                .insertList([data1, data2], function(err, store) {
+                    store.exec(function(item) {
+                        return {"id": item.name, "value": 1};
+                    }, function(err, store) {
+                        store.find({}, function(err, results) {
+                            equal(results.length, 2);
+                            equal(results[0].id, data1.name);
+                            equal(results[0].value, 1);
+                            equal(results[1].id, data2.name);
+                            equal(results[1].value, 1);
+                            store.remove(function() { start(); });
+                        });
+                    });
+                });
+        }, 200);
     });
 });

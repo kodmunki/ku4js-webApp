@@ -25,7 +25,6 @@ store.prototype = {
         var config = this.__config(),
             scp = scope || this;
 
-        console.log(this._collection)
         this.__collection(function(err, collection) {
             if($.exists(err)) callback.call(scp, err, null);
             else {
@@ -144,10 +143,15 @@ store.prototype = {
     },
     exec: function(func, callback, scope) {
         var scp = scope || this;
+
         if(!$.isFunction(callback)) throw $.ku4exception("$.ku4webApp.store", "Invalid callback parameter at exec");
-
-        this._collection = this.__collection().exec(func);
-
+        this.__collection(function(err, collection) {
+            if($.exists(err)) _callback.call(scp, err, null);
+            else {
+                var execStore = new store(this._mediator, this._config, this._key, collection.exec(func));
+                callback.call(scp, err, execStore);
+            }
+        }, this);
         return this;
     },
     __config: function() {
@@ -164,8 +168,8 @@ store.prototype = {
     __collection: function(callback, scope) {
         var collection = this._collection, scp = scope || this;
 
-        if($.exists(collection)) callback.call(scp, null, collection)
-        else this.__store().read(this.__config().name, callback, scope);
+        if($.exists(collection)) callback.call(scp, null, collection);
+        else this.__store().read(this.__config().name, callback, scp);
     }
 };
 $.ku4webApp.store = function(mediator, config, key, collection) {

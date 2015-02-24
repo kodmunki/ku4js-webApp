@@ -6,4 +6,4 @@ $.ku4webApp.config.collections = {
         update: "testUpdated",
         remove: "testRemoved"
     }
-}
+};
