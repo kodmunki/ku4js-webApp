@@ -50,14 +50,10 @@ $.ku4webApp.config.forms = {
 };
 
 $.ku4webApp.config.navigator = {
-    "ku4OnAppLoad": function(navigator) {
-            if (navigator.hashContainsArguments() &&
-                navigator.hashEquals("card.edit")) {
-                navigator.execute(navigator.read())
-            }
-            else navigator.execute("card.list");
+    "ku4routes": {
+        "card.edit*": "card.edit*",
+        "__default": "card.list"
     },
-
     "card.list": {
         model: "card",
         method: "listCards"
@@ -211,10 +207,10 @@ $.ku4webApp.model("card", {
 
     editCard: function(id) {
         this.$collection("card").find({"id": id}, function(err, results) {
-            if($.exists(err)) this.$notify("editCardError", err);
+            if($.exists(err)) this.$notify("onEditCardError", err);
             else {
                 if(!($.isArray(results) && results.length == 1))
-                    this.$notify("onError", new Error("Card collection corrupted."));
+                    this.$notify("onEditCardError", new Error("Card collection corrupted."));
                 else this.$notify("onEditCard", results[0]);
             }
         }, this);
@@ -359,13 +355,16 @@ $.ku4webApp.view("card", {
         alert($.exampleErrorMessage(messages));
     },
     displayCardListError: function(data) {
-        console.log("ERROR", data);
+        console.log("displayCardListError", data);
+    },
+    displayEditCardError: function() {
+        this.$navigator().route();
     },
     displayCardUpdatedError: function(data) {
-        console.log("ERROR", data);
+        console.log("displayCardUpdatedError", data);
     },
     displayError: function(data) {
-        console.log("ERROR", data);
+        console.log("displayError", data);
     },
     _clearSite: function() {
         $("#site").html("");
@@ -377,11 +376,12 @@ $.ku4webApp.view("card", {
     "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",
+    "onCardUpdated":        "displayCardList",
 
     "onCardInvalid":        "displayCardInvalid",
 
-    "onCardUpdated":        "displayCardList",
     "onCardsListedError":   "displayCardListError",
+    "onEditCardError":      "displayEditCardError",
     "onCardUpdatedError":   "displayCardUpdatedError",
     "onError":              "displayError"
 });

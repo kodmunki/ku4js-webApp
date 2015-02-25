@@ -1,6 +1,7 @@
 function navigator(modelFactory, config) {
     this._modelFactory = modelFactory;
     this._config = config;
+    this._routes = $.hash(config.ku4routes);
     this._mute = false;
 
     var me = this;
@@ -41,6 +42,27 @@ navigator.prototype = {
         this._execute(this.read());
         return this;
     },
+    route: function() {
+
+        var route;
+        if(this._routes.isEmpty()) route = "";
+        else
+        {
+            var split = this.read().split("_ku4_"),
+                hash = split[0],
+                args = split[1] || "",
+                key = (!$.isNullOrEmpty) ? hash + "*" : hash,
+                proposedRoute = this._routes.findValue(key);
+
+            console.log(key, proposedRoute)
+
+            route = ($.isNullOrEmpty(proposedRoute))
+                ? this._routes.findValue("__default")
+                : proposedRoute.replace("*", "_ku4_", args);
+        }
+
+        this.execute(route || "");
+    },
     forward: function(callback) {
         if($.exists(callback)) this._setEventListener(callback);
         window.history.forward();
@@ -74,14 +96,22 @@ navigator.prototype = {
 
         var modelName = confg.model,
             methodName = confg.method,
-            modelFactory =  this._modelFactory;
+            model = this._modelFactory.create(modelName);
 
         if ($.exists(modelName) && $.exists(methodName)) {
             try {
-                var model = modelFactory.create(modelName);
                 model[methodName].apply(model, args);
             }
-            catch (e) { console.log(e);/* Fail silently */ }
+            catch (e) {
+                var _value = this._routes.findValue("__default") || "";
+                split = _value.split("_ku4_");
+                key = split[0];
+                args = (split.length > 1) ? this._decodeArgs(split[1]) : [];
+                confg = config[key];
+
+                if (!$.exists(confg)) return;
+                model[methodName].apply(model, args);
+            }
         }
         return this;
     },

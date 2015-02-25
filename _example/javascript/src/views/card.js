@@ -40,13 +40,16 @@ $.ku4webApp.view("card", {
         alert($.exampleErrorMessage(messages));
     },
     displayCardListError: function(data) {
-        console.log("ERROR", data);
+        console.log("displayCardListError", data);
+    },
+    displayEditCardError: function() {
+        this.$navigator().route();
     },
     displayCardUpdatedError: function(data) {
-        console.log("ERROR", data);
+        console.log("displayCardUpdatedError", data);
     },
     displayError: function(data) {
-        console.log("ERROR", data);
+        console.log("displayError", data);
     },
     _clearSite: function() {
         $("#site").html("");
@@ -58,11 +61,12 @@ $.ku4webApp.view("card", {
     "onCreateCard":         "displayCreateCard",
     "onAddCard":            "displayAddCard",
     "onEditCard":           "displayEditCard",
+    "onCardUpdated":        "displayCardList",
 
     "onCardInvalid":        "displayCardInvalid",
 
-    "onCardUpdated":        "displayCardList",
     "onCardsListedError":   "displayCardListError",
+    "onEditCardError":      "displayEditCardError",
     "onCardUpdatedError":   "displayCardUpdatedError",
     "onError":              "displayError"
 });

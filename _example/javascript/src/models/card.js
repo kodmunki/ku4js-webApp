@@ -45,10 +45,10 @@ $.ku4webApp.model("card", {
 
     editCard: function(id) {
         this.$collection("card").find({"id": id}, function(err, results) {
-            if($.exists(err)) this.$notify("editCardError", err);
+            if($.exists(err)) this.$notify("onEditCardError", err);
             else {
                 if(!($.isArray(results) && results.length == 1))
-                    this.$notify("onError", new Error("Card collection corrupted."));
+                    this.$notify("onEditCardError", new Error("Card collection corrupted."));
                 else this.$notify("onEditCard", results[0]);
             }
         }, this);

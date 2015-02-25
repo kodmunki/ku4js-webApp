@@ -12,11 +12,6 @@ function app(name) {
     this.formFactory = app.formFactory(app.config.forms);
     this.navigator = app.navigator(this.modelFactory, app.config.navigator);
     this.mediator = mediator;
-
-    if($.exists(app.config.navigator)) {
-        var ku4OnAppLoad = app.config.navigator.ku4OnAppLoad;
-        if ($.isFunction(ku4OnAppLoad)) ku4OnAppLoad(this.navigator);
-    }
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
