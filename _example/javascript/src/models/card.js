@@ -60,7 +60,7 @@ $.ku4webApp.model("card", {
         if(validation.isValid()) {
             var card = dto.toObject(),
                 photo = dto.find("photo"),
-                collection = his.$collection("card");
+                collection = this.$collection("card");
 
             function update() {
                 collection.update({"id": card.id}, card, function (err) {

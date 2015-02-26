@@ -5,5 +5,5 @@ $(function(){
     cardController = $.ku4webApp.controllers.card(app);
     $.ku4webApp.views.card(app);
 
-    app.navigator.route();
+    app.navigator.tryRouteOrHash("card.list");
 });

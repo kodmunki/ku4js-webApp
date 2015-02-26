@@ -1,7 +1,7 @@
 $.ku4webApp.config.navigator = {
     "ku4routes": {
-        "card.edit*": "card.edit*",
-        "__default": "card.list"
+        "card.edit*":   "card.edit",
+        "ku4default":   "card.list"
     },
     "card.list": {
         model: "card",

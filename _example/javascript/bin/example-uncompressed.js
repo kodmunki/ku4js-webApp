@@ -51,8 +51,8 @@ $.ku4webApp.config.forms = {
 
 $.ku4webApp.config.navigator = {
     "ku4routes": {
-        "card.edit*": "card.edit*",
-        "__default": "card.list"
+        "card.edit*":   "card.edit",
+        "ku4default":   "card.list"
     },
     "card.list": {
         model: "card",
@@ -222,7 +222,7 @@ $.ku4webApp.model("card", {
         if(validation.isValid()) {
             var card = dto.toObject(),
                 photo = dto.find("photo"),
-                collection = his.$collection("card");
+                collection = this.$collection("card");
 
             function update() {
                 collection.update({"id": card.id}, card, function (err) {

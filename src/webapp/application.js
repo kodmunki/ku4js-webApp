@@ -14,8 +14,21 @@ function app(name) {
     this.mediator = mediator;
 }
 app.prototype = {
-    logErrors: function() { this.mediator.logErrors(); return this; },
-    throwErrors: function() { this.mediator.throwErrors(); return this; }
+    logErrors: function() {
+        this.mediator.logErrors();
+        this.navigator.logErrors();
+        return this;
+    },
+    throwErrors: function() {
+        this.mediator.throwErrors();
+        this.navigator.throwErrors();
+        return this;
+    },
+    catchErrors: function() {
+        this.mediator.catchErrors();
+        this.navigator.catchErrors();
+        return this;
+    }
 };
 $.ku4webApp.app = function(name) { return new app(name); };
 

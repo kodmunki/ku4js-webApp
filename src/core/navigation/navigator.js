@@ -1,7 +1,9 @@
 function navigator(modelFactory, config) {
     this._modelFactory = modelFactory;
     this._config = config;
-    this._routes = $.hash(config.ku4routes);
+    this._routes = ($.exists(config)) ? $.hash(config.ku4routes) : $.hash();
+    this._catchAll = this._routes.find("ku4default");
+    this._throwErrors = 0;
     this._mute = false;
 
     var me = this;
@@ -14,6 +16,10 @@ function navigator(modelFactory, config) {
     else if($.exists(window.attachEvent)) window.attachEvent("onhashchange", onhashchange);
 }
 navigator.prototype = {
+    throwErrors: function() { this._throwErrors = 2; return this; },
+    logErrors: function() { this._throwErrors = 1; return this; },
+    catchErrors: function() { this._throwErrors = 0; return this; },
+
     hashEquals: function(value) {
         return this.read() == value;
     },
@@ -42,26 +48,25 @@ navigator.prototype = {
         this._execute(this.read());
         return this;
     },
+    executeOrDefault: function(value, dflt) {
+        var config = this._config;
+        if(!$.exists(config) || !$.isString(value)) return;
+
+        var key = value.split("_ku4_")[0];
+        return ($.exists(config[key])) ? this._execute(value) : this._execute(dflt);
+    },
     route: function() {
+        var hasArguments = this.hashContainsArguments(),
+            currentHash = (hasArguments) ? this.hash() + "*" : this.hash(),
+            proposedRoute = this._routes.findValue(currentHash),
+            proposedArgs = (hasArguments) ? "_ku4_" + this._readArgs() : "",
+            primaryRoute = ($.exists(proposedRoute)) ? proposedRoute + proposedArgs : "";
 
-        var route;
-        if(this._routes.isEmpty()) route = "";
-        else
-        {
-            var split = this.read().split("_ku4_"),
-                hash = split[0],
-                args = split[1] || "",
-                key = (!$.isNullOrEmpty) ? hash + "*" : hash,
-                proposedRoute = this._routes.findValue(key);
-
-            console.log(key, proposedRoute)
-
-            route = ($.isNullOrEmpty(proposedRoute))
-                ? this._routes.findValue("__default")
-                : proposedRoute.replace("*", "_ku4_", args);
-        }
-
-        this.execute(route || "");
+        this.executeOrDefault(primaryRoute, this._routes.findValue("ku4default"));
+    },
+    tryRouteOrHash: function(hash) {
+        try { this.route(); }
+        catch(e) { this.execute(hash); }
     },
     forward: function(callback) {
         if($.exists(callback)) this._setEventListener(callback);
@@ -76,24 +81,16 @@ navigator.prototype = {
     clear: function() {
         return this.hash("");
     },
-    executeOrDefault: function(value, dflt) {
-        var config = this._config;
-        if(!$.exists(config)) return;
-
-        var confg = config[value];
-        return ($.exists(confg)) ? this._execute(value) : this._execute(dflt);
-    },
     _execute: function(value) {
         var config = this._config;
-        if(!$.exists(config)) return;
+        if(!$.exists(config)) return this;
 
         var split = value.split("_ku4_"),
             key = split[0],
             args = (split.length > 1) ? this._decodeArgs(split[1]) : [],
             confg = config[key];
 
-        if (!$.exists(confg)) return;
-
+        if (!$.exists(confg)) return this;
         var modelName = confg.model,
             methodName = confg.method,
             model = this._modelFactory.create(modelName);
@@ -103,17 +100,20 @@ navigator.prototype = {
                 model[methodName].apply(model, args);
             }
             catch (e) {
-                var _value = this._routes.findValue("__default") || "";
-                split = _value.split("_ku4_");
-                key = split[0];
-                args = (split.length > 1) ? this._decodeArgs(split[1]) : [];
-                confg = config[key];
-
-                if (!$.exists(confg)) return;
-                model[methodName].apply(model, args);
+                try {
+                    var catchAll = config[this._catchAll],
+                        catchAllModel = this._modelFactory.create(catchAll.model);
+                    catchAllModel[catchAll.method]();
+                }
+                catch(e) {
+                    this._alertException(e, modelName, methodName);
+                }
             }
         }
         return this;
+    },
+    _readArgs: function() {
+        return this.read().split("_ku4_")[1];
     },
     _encodeArgs: function(value) {
         if($.isNullOrEmpty(value)) return "";
@@ -136,6 +136,13 @@ navigator.prototype = {
                 setTimeout(function() { callback(); }, 800);
             });
         }
+    },
+    _alertException: function(e, modelName, methodName) {
+        var t = this._throwErrors,
+            exception = $.ku4exception("$.ku4webApp.navigator",
+                $.str.format("{0}. Model: {1}, Method: {2}", e.message, modelName, methodName));
+        if(t == 2) throw exception;
+        if(t == 1) $.ku4Log(exception.message);
     }
 };
 
