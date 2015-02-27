@@ -1,13 +1,15 @@
-function service(mediator, config) {
+function service(mediator, name, config, onServiceCall) {
     this._mediator = mediator;
+    this._name = name;
     this._config = config;
+    this._onServiceCall = onServiceCall;
 }
 service.prototype = {
     call: function(data) {
         var config = this._config,
-            callback = $.ku4webApp_testBundle.callback || function(data) { return data;},
-            callbackData = callback(data),
-            isError = /^__error__$/i.test(callbackData);
+            callback = this._onServiceCall.find(this._name),
+            callbackData = ($.isFunction(callback)) ? callback(data) : {},
+            isError = callbackData instanceof Error;
 
         if(!$.exists(config))
             throw $.ku4exception("$.service", "Test Bundle services require a valid config containing a " +
@@ -16,10 +18,9 @@ service.prototype = {
         if($.exists(config.error) && isError) this._mediator.notify(config.error, callbackData);
         else if($.exists(config.success)) this._mediator.notify(config.success, callbackData);
 
-        $.ku4webApp_testBundle.callback = function(data) { return data; };
         return this;
     }
 };
-$.ku4webApp_testBundle.service = function(mediator, config) {
-    return new service(mediator, config);
+$.ku4webApp_testBundle.service = function(mediator, name, config, onServiceCall) {
+    return new service(mediator, name, config, onServiceCall);
 };

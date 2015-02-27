@@ -162,7 +162,8 @@ store.prototype = {
         }
     },
     __collection: function(callback, scope) {
-        var collection = this._collection, scp = scope || this;
+        var collection = this._collection,
+            scp = scope || this;
 
         if($.exists(collection)) callback.call(scp, null, collection);
         else this.__store().read(this.__config().name, callback, scp);

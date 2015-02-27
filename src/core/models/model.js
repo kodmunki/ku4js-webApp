@@ -1,12 +1,12 @@
 $.ku4webApp.model = function(name, proto, subscriptions) {
-    function model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
-        model.base.call(this, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+    function model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
+        model.base.call(this, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState);
     }
     model.prototype = proto;
     $.Class.extend(model, abstractModel);
 
-    $.ku4webApp.models[name] = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
-        var _model = new model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+    $.ku4webApp.models[name] = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
+        var _model = new model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState);
         if($.exists(subscriptions)) {
             $.hash(subscriptions).each(function(obj) {
                 var key = obj.key,

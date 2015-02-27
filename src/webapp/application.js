@@ -7,7 +7,8 @@ function app(name) {
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
 
-    this.modelFactory = app.modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+    this._state = $.ku4webApp.state("__ku4appStarted__");
+    this.modelFactory = app.modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, this._state);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
     this.navigator = app.navigator(this.modelFactory, app.config.navigator);

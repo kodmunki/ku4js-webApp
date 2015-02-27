@@ -1,15 +1,17 @@
-$.ku4webApp_testBundle.onModelCall = function() { return; };
-$.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+$.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, onModelCall) {
 
     var model = $.ku4webApp.models[name](mediator, serviceFactory, socketFactory, storeFactory, validatorFactory),
         testModel = { };
 
-    function func() {
-        $.ku4webApp_testBundle.onModelCall.apply(this, arguments);
-        $.ku4webApp_testBundle.onModelCall = function() { return; };
+    for(var n in model) {
+        function testMethod(name) {
+            return function() {
+                var args = [name].concat($.arr.parseArguments(arguments));
+                onModelCall.notify.apply(onModelCall, args);
+            }
+        }
+        testModel[n] = testMethod(n);
     }
-
-    for(var n in model) testModel[n] = func;
 
     return testModel;
 };

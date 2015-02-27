@@ -8,7 +8,7 @@ $.ku4webApp.controller("card", {
         return this;
     },
     add: function() {
-        this.$model("card").addCard(this.$form("card").read());
+        this.$model("card").addCard(this.$form("card").read().remove("id"));
         return this;
     },
     edit: function(id) {

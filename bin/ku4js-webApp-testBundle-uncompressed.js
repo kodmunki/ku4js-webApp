@@ -8,6 +8,12 @@ function bundle() {
     this._mediator = app.mediator;
     this._navigator = app.navigator;
     this._app = app;
+
+    this._onModelCall = $.mediator();
+    this._onServiceCall = $.hash();
+
+    app.onModelCall(this._onModelCall)
+       .onServiceCall(this._onServiceCall);
 }
 bundle.prototype = {
     mediator: function() { return this._mediator; },
@@ -27,18 +33,28 @@ bundle.prototype = {
         this._navigator.catchErrors();
         return this;
     },
-
-    callback: function(callback){ $.ku4webApp_testBundle.callback = callback; return this; },
-    onModelCall: function(methodName, onModelCall) {
-    //MAKE THIS AN OBSERVER to subscribe to
-    $.ku4webApp_testBundle.onModelCall = onModelCall; return this; },
-
+    onModelCall: function(methodName, func, scope) {
+        this._onModelCall.subscribe(methodName, function() {
+            func.apply(scope, arguments);
+        });
+        return this;
+    },
+    onServiceCall: function(serviceName, callback){
+        this._onServiceCall.add(serviceName, function() {
+            return callback.apply(callback, arguments);
+        });
+        return this;
+    },
+    clear: function() {
+        this._onModelCall.clear();
+        this._onServiceCall.clear();
+    },
     form: function(name) {
         return this._app.formFactory.create(name);
     },
     model: function(name) {
         var app = this._app.prodModel();
-        return $.ku4webApp.models[name](this._mediator, app.serviceFactory, app.socketFactory, app.storeFactory, app.validatorFactory);
+        return $.ku4webApp.models[name](this._mediator, app.serviceFactory.onServiceCall(this._onServiceCall), app.socketFactory, app.storeFactory, app.validatorFactory, this._app.state);
     },
     view: function(name) {
         return $.ku4webApp.views[name](this._app.prodModel());
@@ -48,14 +64,18 @@ bundle.prototype = {
     },
     template: function(name) {
         return this._app.prodModel().templateFactory.create(name);
+    },
+    collection: function(name) {
+        var app = this._app.prodModel();
+        return app.storeFactory.create(name);
     }
 };
 $.ku4webAppUT.bundle = function() { return new bundle(); };
 
 function app() {
     var app = $.ku4webApp;
-
-    this.mediator = $.mediator();
+    this.state = $.ku4webApp.state("__ku4appTestStarted__");
+    this.mediator = $.mediator("ku4webApp_testBundle");
     this.serviceFactory = $.ku4webApp_testBundle.serviceFactory(this.mediator, app.config.services);
     this.socketFactory = $.ku4webApp_testBundle.socketFactory(this.mediator, app.config.sockets);
     this.storeFactory = app.storeFactory(this.mediator, app.config.collections);
@@ -69,13 +89,15 @@ app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
     throwErrors: function() { this.mediator.throwErrors(); return this; },
     stubModel: function() {
-        this.modelFactory = $.ku4webApp_testBundle.stubModelFactory(this.mediator, this.serviceFactory, this.socketFactory, this.storeFactory, this.validatorFactory);
+        this.modelFactory = $.ku4webApp_testBundle.stubModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this._onModelCall);
         return this;
     },
     prodModel: function() {
-        this.modelFactory = $.ku4webApp_testBundle.testModelFactory(this.mediator, this.serviceFactory, this.socketFactory, this.storeFactory, this.validatorFactory);
+        this.modelFactory = $.ku4webApp_testBundle.testModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this.state);
         return this;
-    }
+    },
+    onModelCall: function(onModelCall) { this._onModelCall = onModelCall; return this; },
+    onServiceCall: function(onServiceCall) { this._onServiceCall = onServiceCall; return this; }
 };
 $.ku4webApp_testBundle.app = function() { return new app(); };
 
@@ -87,32 +109,36 @@ function classRefcheck(className, propertyName, property) {
     else return property;
 }
 
-$.ku4webApp_testBundle.onModelCall = function() { return; };
-$.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+$.ku4webApp_testBundle.model = function(name, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, onModelCall) {
 
     var model = $.ku4webApp.models[name](mediator, serviceFactory, socketFactory, storeFactory, validatorFactory),
         testModel = { };
 
-    function func() {
-        $.ku4webApp_testBundle.onModelCall.apply(this, arguments);
-        $.ku4webApp_testBundle.onModelCall = function() { return; };
+    for(var n in model) {
+        function testMethod(name) {
+            return function() {
+                var args = [name].concat($.arr.parseArguments(arguments));
+                onModelCall.notify.apply(onModelCall, args);
+            }
+        }
+        testModel[n] = testMethod(n);
     }
-
-    for(var n in model) testModel[n] = func;
 
     return testModel;
 };
 
-function service(mediator, config) {
+function service(mediator, name, config, onServiceCall) {
     this._mediator = mediator;
+    this._name = name;
     this._config = config;
+    this._onServiceCall = onServiceCall;
 }
 service.prototype = {
     call: function(data) {
         var config = this._config,
-            callback = $.ku4webApp_testBundle.callback || function(data) { return data;},
-            callbackData = callback(data),
-            isError = /^__error__$/i.test(callbackData);
+            callback = this._onServiceCall.find(this._name),
+            callbackData = ($.isFunction(callback)) ? callback(data) : {},
+            isError = callbackData instanceof Error;
 
         if(!$.exists(config))
             throw $.ku4exception("$.service", "Test Bundle services require a valid config containing a " +
@@ -121,28 +147,28 @@ service.prototype = {
         if($.exists(config.error) && isError) this._mediator.notify(config.error, callbackData);
         else if($.exists(config.success)) this._mediator.notify(config.success, callbackData);
 
-        $.ku4webApp_testBundle.callback = function(data) { return data; };
         return this;
     }
 };
-$.ku4webApp_testBundle.service = function(mediator, config) {
-    return new service(mediator, config);
+$.ku4webApp_testBundle.service = function(mediator, name, config, onServiceCall) {
+    return new service(mediator, name, config, onServiceCall);
 };
 
-function testModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+function testModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
     this._mediator = mediator;
     this._serviceFactory = serviceFactory;
     this._socketFactory = socketFactory;
     this._storeFactory = storeFactory;
     this._validatorFactory = validatorFactory;
+    this._appState = appState;
 }
 testModelFactory.prototype = {
     create: function(name) {
-        return $.ku4webApp.models[name](this._mediator, this._serviceFactory, this._socketFactory, this._storeFactory, this._validatorFactory);
+        return $.ku4webApp.models[name](this._mediator, this._serviceFactory, this._socketFactory, this._storeFactory, this._validatorFactory, this._appState);
     }
 };
-$.ku4webApp_testBundle.testModelFactory = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
-    return new testModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+$.ku4webApp_testBundle.testModelFactory = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
+    return new testModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState);
 };
 
 function serviceFactory(mediator, config) {
@@ -150,7 +176,10 @@ function serviceFactory(mediator, config) {
     this._config = config;
 }
 serviceFactory.prototype = {
-    create: function(key) { return $.ku4webApp_testBundle.service(this._mediator, this._config[key]); }
+    create: function(key) {
+        return $.ku4webApp_testBundle.service(this._mediator, key, this._config[key], this._onServiceCall);
+    },
+    onServiceCall: function(onServiceCall) { this._onServiceCall = onServiceCall; return this; }
 };
 $.ku4webApp_testBundle.serviceFactory = function(mediator, config) {
     return new serviceFactory(mediator, config);
@@ -167,20 +196,21 @@ $.ku4webApp_testBundle.socketFactory = function(mediator, config) {
     return new socketFactory(mediator, config);
 };
 
-function stubModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+function stubModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, onModelCall) {
     this._mediator = mediator;
     this._serviceFactory = serviceFactory;
     this._socketFactory = socketFactory;
     this._storeFactory = storeFactory;
     this._validatorFactory = validatorFactory;
+    this._onModelCall = onModelCall;
 }
 stubModelFactory.prototype = {
     create: function(name) {
-        return $.ku4webApp_testBundle.model(name, this._mediator, this._serviceFactory, this._socketFactory, this._storeFactory, this._validatorFactory);
+        return $.ku4webApp_testBundle.model(name, this._mediator, this._serviceFactory, this._socketFactory, this._storeFactory, this._validatorFactory, this._onModelCall);
     }
 };
-$.ku4webApp_testBundle.stubModelFactory = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
-    return new stubModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+$.ku4webApp_testBundle.stubModelFactory = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, onModelCall) {
+    return new stubModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, onModelCall);
 };
 
 })();

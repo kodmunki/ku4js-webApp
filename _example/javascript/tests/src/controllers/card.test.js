@@ -12,7 +12,7 @@ $(function() {
 
     test("list", function() {
         expect(1);
-        bundle.onModelCall(function () {
+        bundle.onModelCall("listCards", function () {
             equal(arguments.length, 0);
         });
         controller.list();
@@ -20,7 +20,7 @@ $(function() {
 
     test("create", function() {
         expect(1);
-        bundle.onModelCall(function () {
+        bundle.onModelCall("createCard", function () {
             equal(arguments.length, 0);
         });
         controller.create();
@@ -36,17 +36,15 @@ $(function() {
         };
         expect(1);
         bundle.form("card").write(card);
-        bundle.onModelCall(function (dto) {
+        bundle.onModelCall("addCard", function (dto) {
             deepEqual(dto.toObject(), card);
         });
         controller.add();
     });
 
     test("edit", function() {
-        $("#qunit-fixture").append(bundle.template("card").renderEditCardForm());
-
         expect(1);
-        bundle.onModelCall(function (id) {
+        bundle.onModelCall("editCard", function (id) {
             equal(id, "id1");
         });
         controller.edit("id1");

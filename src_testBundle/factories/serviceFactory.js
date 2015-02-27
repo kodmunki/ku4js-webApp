@@ -3,7 +3,10 @@ function serviceFactory(mediator, config) {
     this._config = config;
 }
 serviceFactory.prototype = {
-    create: function(key) { return $.ku4webApp_testBundle.service(this._mediator, this._config[key]); }
+    create: function(key) {
+        return $.ku4webApp_testBundle.service(this._mediator, key, this._config[key], this._onServiceCall);
+    },
+    onServiceCall: function(onServiceCall) { this._onServiceCall = onServiceCall; return this; }
 };
 $.ku4webApp_testBundle.serviceFactory = function(mediator, config) {
     return new serviceFactory(mediator, config);

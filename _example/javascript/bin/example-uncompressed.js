@@ -147,7 +147,7 @@ $.ku4webApp.controller("card", {
         return this;
     },
     add: function() {
-        this.$model("card").addCard(this.$form("card").read());
+        this.$model("card").addCard(this.$form("card").read().remove("id"));
         return this;
     },
     edit: function(id) {
@@ -162,6 +162,7 @@ $.ku4webApp.controller("card", {
 
 $.ku4webApp.model("card", {
     listCards: function() {
+        console.log(this.$appState())
         if(this.$state().is("cardsListed"))
             this.$collection("card").find({}, function(err, results) {
                 if($.exists(err)) this.$notify("onCardsListedError", err);

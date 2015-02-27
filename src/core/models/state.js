@@ -16,5 +16,6 @@ state.prototype = {
         return this;
     }
 };
-
-var __appState = new state("__ku4appStarted__");
+$.ku4webApp.state = function(value) {
+    return new state(value);
+};

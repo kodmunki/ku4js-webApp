@@ -1,5 +1,6 @@
 $.ku4webApp.model("card", {
     listCards: function() {
+        console.log(this.$appState())
         if(this.$state().is("cardsListed"))
             this.$collection("card").find({}, function(err, results) {
                 if($.exists(err)) this.$notify("onCardsListedError", err);

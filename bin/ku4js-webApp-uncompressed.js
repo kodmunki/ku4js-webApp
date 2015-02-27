@@ -100,13 +100,14 @@ $.ku4webApp.controller = function(name, proto) {
     }
 };
 
-function abstractModel(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+function abstractModel(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
     this._mediator = classRefcheck("models", "mediator", mediator);
     this._serviceFactory = classRefcheck("models", "serviceFactory", serviceFactory);
     this._socketFactory = classRefcheck("models", "socketFactory", socketFactory);
     this._storeFactory = classRefcheck("models", "storeFactory", storeFactory);
     this._validatorFactory = classRefcheck("models", "validatorFactory", validatorFactory);
-    this._state = new state();
+    this._appState = appState;
+    this._state = $.ku4webApp.state();
 }
 abstractModel.prototype = {
     $mediator: function() { return this._mediator; },
@@ -118,8 +119,8 @@ abstractModel.prototype = {
     $appState: function(value) {
         //NOTE: This value corresponds  to the global app state and can and will
         //      change the value for all models in the application!
-        if(!$.exists(value)) return __appState;
-        __appState = new state(value);
+        if(!$.exists(value)) return this._appState;
+        this._appState.set(value);
         return this;
     },
     $notify: function() {
@@ -131,14 +132,14 @@ abstractModel.prototype = {
 $.ku4webApp.abstractModel = abstractModel;
 
 $.ku4webApp.model = function(name, proto, subscriptions) {
-    function model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
-        model.base.call(this, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+    function model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
+        model.base.call(this, mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState);
     }
     model.prototype = proto;
     $.Class.extend(model, abstractModel);
 
-    $.ku4webApp.models[name] = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
-        var _model = new model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+    $.ku4webApp.models[name] = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
+        var _model = new model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState);
         if($.exists(subscriptions)) {
             $.hash(subscriptions).each(function(obj) {
                 var key = obj.key,
@@ -236,8 +237,9 @@ state.prototype = {
         return this;
     }
 };
-
-var __appState = new state("__ku4appStarted__");
+$.ku4webApp.state = function(value) {
+    return new state(value);
+};
 
 function store(mediator, config, key, collection) {
     this._mediator = mediator;
@@ -403,7 +405,8 @@ store.prototype = {
         }
     },
     __collection: function(callback, scope) {
-        var collection = this._collection, scp = scope || this;
+        var collection = this._collection,
+            scp = scope || this;
 
         if($.exists(collection)) callback.call(scp, null, collection);
         else this.__store().read(this.__config().name, callback, scp);
@@ -615,7 +618,7 @@ function abstractView(templateFactory, formFactory, navigator) {
     this._templateFactory = classRefcheck("views", "templateFactory", templateFactory);
     this._formFactory = classRefcheck("views", "formFactory", formFactory);
     this._navigator = classRefcheck("views", "navigator", navigator);
-    this._state = new state();
+    this._state = $.ku4webApp.state();
 }
 abstractView.prototype = {
     $template: function(name) { return this._templateFactory.create(name); },
@@ -673,18 +676,18 @@ $.ku4webApp.formFactory = function(config) {
     return new formFactory(config);
 };
 
-function modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
+function modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
     var models = $.hash();
     $.hash($.ku4webApp.models).each(function(obj){
-        models.add(obj.key, obj.value(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory));
+        models.add(obj.key, obj.value(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState));
     }, this);
     this._models = models;
 }
 modelFactory.prototype = {
     create: function(name) { return this._models.find(name); }
 };
-$.ku4webApp.modelFactory = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory) {
-    return new modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+$.ku4webApp.modelFactory = function(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
+    return new modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState);
 };
 
 function serviceFactory(mediator, config) {
@@ -759,7 +762,8 @@ function app(name) {
         storeFactory = app.storeFactory(mediator, app.config.collections),
         validatorFactory = app.validatorFactory(app.config.validators);
 
-    this.modelFactory = app.modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory);
+    this._state = $.ku4webApp.state("__ku4appStarted__");
+    this.modelFactory = app.modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, this._state);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
     this.navigator = app.navigator(this.modelFactory, app.config.navigator);

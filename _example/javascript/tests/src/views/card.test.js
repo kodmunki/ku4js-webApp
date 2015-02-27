@@ -50,28 +50,6 @@ $(function() {
         equal(cardDom1.find(".js-card-photo").attr("src"), card1.photo);
     });
 
-    test("displayCardAdded", function() {
-
-        var card = {
-            "id": "id3",
-            "name": "card3",
-            "description": "description3",
-            "value": 3.00,
-            "photo": "photo3"
-        };
-
-        expect(4);
-        view.displayCardAdded(card);
-
-        var cardDoms = $("#site").find(".js-card"),
-            cardDom = $(cardDoms[0]);
-
-        equal(cardDom.find(".js-card-name").text(), card.name);
-        equal(cardDom.find(".js-card-description").text(), card.description);
-        equal(cardDom.find(".js-card-value").text(), card.value);
-        equal(cardDom.find(".js-card-photo").attr("src"), card.photo);
-    });
-
     test("displayEditCard", function() {
 
         var card = {
