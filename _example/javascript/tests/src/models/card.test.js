@@ -16,43 +16,40 @@ $(function() {
     }];
 
     test("listCards", function() {
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            mediator = bundle.mediator(),
-            model = bundle.model("card");
-
         expect(1);
-        function assertion(data) {
+
+        function onCardsListed(data) {
             deepEqual(data, cardList);
-            mediator.unsubscribe("onCardsListed", 1);
         }
 
-        bundle.collection("card").init(cardList);
-        bundle.onServiceCall("card.list", function() { return cardList; }, null, 1);
-        mediator.subscribe("onCardsListed", assertion, null, 1);
+        var bundle = $.ku4webAppUT.bundle().throwErrors(),
+            model = bundle.model("card");
+
+        bundle
+            .onServiceCall("card.list", function() { return cardList; })
+            .subscribe("onCardsListed", onCardsListed)
+            .collection("card").init(cardList);
+
         model.listCards();
     });
 
     test("createCard", function() {
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            mediator = bundle.mediator(),
-            model = bundle.model("card");
-
         expect(1);
-        function assertion() {
+        function onCreateCard() {
             equal(arguments.length, 0);
-            mediator.unsubscribe("onCreateCard", 1);
         }
 
-        bundle.collection("card").init(cardList);
-        mediator.subscribe("onCreateCard", assertion, null, 1);
+        var bundle = $.ku4webAppUT.bundle().throwErrors(),
+            model = bundle.model("card");
+
+        bundle
+            .subscribe("onCreateCard", onCreateCard)
+            .collection("card").init(cardList);
+
         model.createCard();
     });
 
     test("addCard", function() {
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            mediator = bundle.mediator(),
-            model = bundle.model("card");
-
         var card = $.dto({
                 "name": "card 1",
                 "description": "description1",
@@ -60,40 +57,36 @@ $(function() {
             });
 
         expect(1);
-        function assertion(data) {
+        function onCardAdded(data) {
             deepEqual(data, cardList.concat([card.toObject()]));
-            mediator.unsubscribe("onCardAdded", 1);
         }
 
-        bundle.collection("card").init(cardList);
-        mediator.subscribe("onCardAdded", assertion, null, 1);
-        model.addCard(card);
-    });
-
-
-    test("editCard", function() {
         var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            mediator = bundle.mediator(),
             model = bundle.model("card");
 
+        bundle
+            .subscribe("onCardAdded", onCardAdded)
+            .collection("card").init(cardList);
+
+        model.addCard(card);
+    });
+    test("editCard", function() {
         expect(1);
-        function assertion(data) {
+        function onEditCard(data) {
             deepEqual(data, cardList[0]);
-            mediator
-                .unsubscribe("onCardsListed", 1)
-                .unsubscribe("onEditCard", 1);
         }
-        mediator
-            .subscribe("onCardsListed", function() { }, null, 1)
-            .subscribe("onEditCard", assertion, null, 1);
+
+        var bundle = $.ku4webAppUT.bundle().throwErrors(),
+            model = bundle.model("card");
+
+        bundle
+            .subscribe("onEditCard", onEditCard)
+            .collection("card").init(cardList);
+
         model.listCards().editCard("id1");
     });
 
     test("updateCard", function() {
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            mediator = bundle.mediator(),
-            model = bundle.model("card");
-
         expect(1);
         function onCardUpdated(data) {
             deepEqual(data, [{
@@ -108,11 +101,15 @@ $(function() {
                 "description": "description2",
                 "value": 2.00
             }]);
-            mediator.unsubscribe("onCardUpdated", 1);
         }
 
-        bundle.collection("card").init(cardList);
-        mediator.subscribe("onCardUpdated", onCardUpdated, null, 1);
+        var bundle = $.ku4webAppUT.bundle().throwErrors(),
+            model = bundle.model("card");
+
+        bundle
+            .subscribe("onCardUpdated", onCardUpdated)
+            .collection("card").init(cardList);
+
         model.updateCard($.dto({"id":"id1", "value": 20.15}));
     });
 });

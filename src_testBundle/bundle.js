@@ -42,6 +42,14 @@ bundle.prototype = {
         });
         return this;
     },
+    subscribe: function(name, func, scope, id) {
+        this._mediator.subscribe(name, func, scope, id);
+        return this;
+    },
+    unsubscribe: function(name, id) {
+        this._mediator.subscribe(name, id);
+        return this;
+    },
     clear: function() {
         this._onModelCall.clear();
         this._onServiceCall.clear();
