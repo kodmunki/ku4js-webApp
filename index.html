@@ -48,7 +48,7 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.<
 <h1>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
 
-<p>The following documentation describes each class in the ku4js-data library. It is organized to follow the directory structure found in /src ordered by lowest level constructs first. All constructors are empty unless otherwise noted.</p>
+<p>The following documentation describes each class in the ku4js-webApp library. It is organized to follow the directory structure found in /src ordered by lowest level constructs first. All instantiable classes can be instantiated using the $.className() syntax. All constructors are empty unless otherwise noted.</p>
 
 <p>The API tables in each section of the documentation contain three columns.</p>
 
@@ -62,13 +62,16 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.<
 </thead>
 <tbody>
 <tr>
-<td>This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. An example: $.MethodName(argument:_Type)</td>
+<td>This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. Class/static methods are denoted with the class name, whereas instance level methods will begin with a dot. Example class/static method: <strong>$.math.round(value:<em>Number</em>, nearest:<em>Number</em>)</strong>. Example of an instance method: <strong>.toString()</strong>
+</td>
 <td>The return values type, if any. A value of "this" in this column indicates the return of a reference to self</td>
 <td>This column contains descriptions and any <strong>Gotchas!</strong>
 </td>
 </tr>
 </tbody>
 </table>
+
+<p>An example project can be found in the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">_example/ </a> directory at the project root.</p>
 
 <hr>
 
@@ -87,71 +90,6 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.<
 
 <hr>
 
-<h1>
-<a id="documentation-1" class="anchor" href="#documentation-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
-
-<p>The following is the documentation for the template engine and the MVC application classes. For further information
-check out the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/example">example project</a></p>
-
-<h2>
-<a id="templates" class="anchor" href="#templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Templates</h2>
-
-<p>Has access to the following protected methods and properties:</p>
-
-<table>
-<thead>
-<tr>
-<th>API</th>
-<th>Return</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$config(name:<em>String</em>)</td>
-<td>config</td>
-<td>Retrieves the template config named "name".</td>
-</tr>
-<tr>
-<td>$forms(name:<em>String</em>)</td>
-<td>config</td>
-<td>Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]).</td>
-</tr>
-<tr>
-<td>$views(name:<em>String</em>)</td>
-<td>config</td>
-<td>Retrieves the views templates config named "name" (Shortcut for $config("views")[name]).</td>
-</tr>
-<tr>
-<td>$render(template:<em>String</em>, data:<em>{}</em>)</td>
-<td>String</td>
-<td>Renders the template using object literal or dto data.</td>
-</tr>
-<tr>
-<td>$renderList(template:<em>String</em>, array:<em>Array</em>)</td>
-<td>String</td>
-<td>Renders template using object literal or dto data for each dto in array.</td>
-</tr>
-<tr>
-<td>$renderListWithAction(array:<em>Array</em>, func:<em>Function</em>)</td>
-<td>String</td>
-<td>Calls a specified render function for each dto in array. It is important that the specified action return a string value!</td>
-</tr>
-</tbody>
-</table>
-
-<ul>
-<li>Runtime instantiation requires valid templates config. <em>(This is a potential scenario in advanced development of an
-enterprise applications and should be heeded. For example, if you create a template for generic form fields
-specifically, i.e. $.ku4webApp.template("forms", { /<em>Your methods here</em>/ }, and want to access it from another template,
-you will have to instantiate it on the fly and pass the local config to it: $.ku4webApp.template.forms(this.$config()))</em>.</li>
-</ul>
-
-<div class="highlight highlight-javascript"><pre>$.ku4webApp.template(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
-    <span class="pl-c">//METHODS GO HERE</span>
-    <span class="pl-en">METHOD</span>: <span class="pl-st">function</span>() { }
-});</pre></div>
-
 <h2>
 <a id="models" class="anchor" href="#models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Models</h2>
 
@@ -167,38 +105,38 @@ you will have to instantiate it on the fly and pass the local config to it: $.ku
 </thead>
 <tbody>
 <tr>
-<td>$collection(name:<em>String</em>)</td>
+<td>.$collection(name:<em>String</em>)</td>
 <td>collection</td>
 <td>Retrieves the collection named "name".</td>
 </tr>
 <tr>
-<td>$service(name:<em>String</em>)</td>
+<td>.$service(name:<em>String</em>)</td>
 <td>service</td>
 <td>Retrieves the service named "name".</td>
 </tr>
 <tr>
-<td>$socket(name:<em>String</em>)</td>
+<td>.$socket(name:<em>String</em>)</td>
 <td>service</td>
 <td>Retrieves the socket named "name". <em>(requires socket.io -- not included)</em>
 </td>
 </tr>
 <tr>
-<td>$validator(name:<em>String</em>)</td>
+<td>.$validator(name:<em>String</em>)</td>
 <td>validator</td>
 <td>Retrieves the validator named "name".</td>
 </tr>
 <tr>
-<td>$state()</td>
+<td>.$state()</td>
 <td>state</td>
 <td>Retrieves the local state machine.</td>
 </tr>
 <tr>
-<td>$appState()</td>
+<td>.$appState()</td>
 <td>state</td>
 <td>Retrieves the global state machine.</td>
 </tr>
 <tr>
-<td>$notify(data:<em>Object</em>, NAME, ...)</td>
+<td>.$notify(data:<em>Object</em>, NAME, ...)</td>
 <td>void</td>
 <td>Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify <em>all</em> subscribers!</td>
 </tr>
@@ -235,17 +173,17 @@ very unlikely scenario)</em>.</li>
 </thead>
 <tbody>
 <tr>
-<td>$template(name:<em>String</em>)</td>
+<td>.$template(name:<em>String</em>)</td>
 <td>template</td>
 <td>Retrieves the template named "name".</td>
 </tr>
 <tr>
-<td>$form(name:<em>String</em>)</td>
+<td>.$form(name:<em>String</em>)</td>
 <td>form</td>
 <td>Retrieves the form named "name".</td>
 </tr>
 <tr>
-<td>$navigator()</td>
+<td>.$navigator()</td>
 <td>navigator</td>
 <td>Retrieves the global navigator.</td>
 </tr>
@@ -283,17 +221,17 @@ find a necessary reason, please contact <a href="mailto:support@kodmunki.com">su
 </thead>
 <tbody>
 <tr>
-<td>$model(name:<em>String</em>)</td>
+<td>.$model(name:<em>String</em>)</td>
 <td>model</td>
 <td>Retrieves the model named "name".</td>
 </tr>
 <tr>
-<td>$form(name:<em>String</em>)</td>
+<td>.$form(name:<em>String</em>)</td>
 <td>form</td>
 <td>Retrieves the form named "name".</td>
 </tr>
 <tr>
-<td>$navigator()</td>
+<td>.$navigator()</td>
 <td>navigator</td>
 <td>Retrieves the global navigator.</td>
 </tr>
@@ -334,6 +272,65 @@ controller. For example, if you had implemented a controller with the method "ex
 a button you would add the following HTML into the desired location of your web application:</p>
 
 <div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">button</span> <span class="pl-e">onclick</span>=<span class="pl-s1"><span class="pl-pds">"</span>controller.execute(); return false;<span class="pl-pds">"</span></span>&gt;Execute&lt;/<span class="pl-ent">button</span>&gt;</pre></div>
+
+<h2>
+<a id="templates" class="anchor" href="#templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Templates</h2>
+
+<p>Has access to the following protected methods and properties:</p>
+
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Return</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.$config(name:<em>String</em>)</td>
+<td>config</td>
+<td>Retrieves the template config named "name".</td>
+</tr>
+<tr>
+<td>.$forms(name:<em>String</em>)</td>
+<td>config</td>
+<td>Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]).</td>
+</tr>
+<tr>
+<td>.$views(name:<em>String</em>)</td>
+<td>config</td>
+<td>Retrieves the views templates config named "name" (Shortcut for $config("views")[name]).</td>
+</tr>
+<tr>
+<td>.$render(template:<em>String</em>, data:<em>{}</em>)</td>
+<td>String</td>
+<td>Renders the template using object literal or dto data.</td>
+</tr>
+<tr>
+<td>.$renderList(template:<em>String</em>, array:<em>Array</em>)</td>
+<td>String</td>
+<td>Renders template using object literal or dto data for each dto in array.</td>
+</tr>
+<tr>
+<td>.$renderListWithAction(array:<em>Array</em>, func:<em>Function</em>)</td>
+<td>String</td>
+<td>Calls a specified render function for each dto in array. It is important that the specified action return a string value!</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>Runtime instantiation requires valid templates config. <em>(This is a potential scenario in advanced development of an
+enterprise applications and should be heeded. For example, if you create a template for generic form fields
+specifically, i.e. $.ku4webApp.template("forms", { /<em>Your methods here</em>/ }, and want to access it from another template,
+you will have to instantiate it on the fly and pass the local config to it: $.ku4webApp.template.forms(this.$config()))</em>.</li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre>$.ku4webApp.template(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
+    <span class="pl-c">//METHODS GO HERE</span>
+    <span class="pl-en">METHOD</span>: <span class="pl-st">function</span>() { }
+});</pre></div>
 
 <h2>
 <a id="configurations" class="anchor" href="#configurations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configurations</h2>
