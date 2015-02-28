@@ -5,29 +5,84 @@ $(function() {
 
     module("model.NAME");
 
+    //NOTE: Test bundle data may be placed here, but do know that each bundle
+    //      retains it's own state. So, if you do reuse a bundle across tests
+    //      your tests may fail unexpectedly as the tests are not truly atomic.
+
     var bundle = $.ku4webAppUT.bundle().throwErrors(),
         mediator = bundle.mediator(),
         model = bundle.model("NAME");
 
-    test("new", function() {
-        expect(1);
-        ok(model);
-    });
+    //NOTE: This creates a synchronous QUnit test. See QUnit documentation for
+    //      further detail and instruction. As a reminder, ku4js-web app and
+    //      the associated ku4webApp test bundle are NOT dependent on QUnit.
+    //      You are free to use whichever test framework you would like.
 
     test("UNIT TEST NAME", function() {
         expect(1);
         function assertion(data) {
             equal(data, null);
-            mediator.unsubscribe("NOTIFICATION", 1);
         }
-        bundle.callback(function(data) {
-            //NOTE: This method acts as a stub server. The data argument
-            //      will contain the data that the model method passes to
-            //      the server. Return the data that you expect the server
-            //      to return. This method is optional. If unneeded it can
-            //      be deleted.
+
+        bundle.onServerCall("service.name", function(request) {
+            //NOTE: This method acts as a stub server. The request argument
+            //      will contain the request data that the model method passes
+            //      to the server. You can run unit tests here against the
+            //      request data. This can be very valuable if your model code
+            //      manipulates expected form data before sending it to the
+            //      server. The return value from this function will act as
+            //      the response data and will be passed back to your model
+            //      for it to handle in its success or error handlers.
+            //      This method is optional. If unneeded it can be deleted.
+            //      Also note that you can mock a server exception type
+            //      by returning an Error() from this method. This is valuable
+            //      in to unit test your error scenarios.
         });
-        mediator.subscribe("NOTIFICATION", assertion, null, 1);
-        model.METHOD();
+        bundle.subscribe("NOTIFICATION", assertion);
+        model.METHOD([ARGS]);
+    });
+
+    //NOTE: This creates an asynchronous test in QUnit. Note the use of a
+    //      local bundle. Though not required, it is recommended that you
+    //      use local bundles, especially for asynchronous tests as async
+    //      tests do introduce the possibility of race conditions and,
+    //      therefore increase the risk of incorrect test data for
+    //      non-atomic tests.
+
+    asyncTest("UNIT TEST NAME", function() {
+        expect(1);
+
+        function assertion(data) {
+            equal(data, null);
+            QUnit.start();
+        }
+
+        function onServiceCall(data) {
+            //NOTE: This method acts as a stub server. The request argument
+            //      will contain the request data that the model method passes
+            //      to the server. You can run unit tests here against the
+            //      request data. This can be very valuable if your model code
+            //      manipulates expected form data before sending it to the
+            //      server. The return value from this function will act as
+            //      the response data and will be passed back to your model
+            //      for it to handle in its success or error handlers.
+            //      This method is optional. If unneeded it can be deleted.
+            //      Also note that you can mock a server exception type
+            //      by returning an Error() from this method. This is valuable
+            //      in to unit test your error scenarios.
+        }
+
+        //NOTE: This is a short-hand method of setting up your bundle for the
+        //      test run. The below creates a bundle, sets its collection with
+        //      the proper stub data, sets the "server" that the service will
+        //      call, subscribes to the proper notification of server response,
+        //      creates the appropriate model and calls the method that we
+        //      wish to test.
+
+        $.ku4webAppUT.bundle()
+            .initCollection("NAME", [DATA])
+            .onServiceCall("service.name", onServiceCall)
+            .subscribe("NOTIFICATION", assertion)
+            .model("NAME").METHOD([ARGS]);
     });
 });
