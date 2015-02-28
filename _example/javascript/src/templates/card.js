@@ -19,11 +19,7 @@ $.ku4webApp.template("card", {
         })
     },
     renderCardList: function(data) {
-        var cardList = this.$renderList(this.$views("card"), data, "", function(data) {
-            data.value = $.money.parse(data.value).toString();
-            return data;
-        });
-
+        var cardList = this.$renderListWithAction(data, this.renderCard);
         return this.$render(this.$views("cardList"), { "cardList": cardList });
     }
 });

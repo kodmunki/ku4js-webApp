@@ -576,7 +576,10 @@ abstractTemplate.prototype = {
     $config: function(name) { return ($.exists(name)) ? this._config[name] : this._config; },
     $forms: function(name) { return ($.exists(name)) ? this._config.forms[name] : this._config.forms; },
     $views: function(name) { return ($.exists(name)) ? this._config.views[name] : this._config.views; },
-    $render: function(template, data, alt) { return $.str.render(template, data, alt); },
+    $render: function(template, data, alt, formatFunc) {
+        var _formatFunc = formatFunc || function(value) { return value; };
+        return $.str.render(template, _formatFunc(data), alt);
+    },
     $renderList: function(template, dataList, alt, formatFunc) {
         var rendering = "",
             _alt = (!$.isFunction(alt)) ? alt : null,
