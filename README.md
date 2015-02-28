@@ -25,23 +25,40 @@ The API tables in each section of the documentation contain three columns.
 | --- | --- | --- |
 |This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. Class/static methods are denoted with the class name, whereas instance level methods will begin with a dot. Example class/static method: **$.math.round(value:_Number_, nearest:_Number_)**. Example of an instance method: **.toString()**. Those methods prefixed by a $ are protected and should only be accessed from within a given instance. | The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!** |
 
-An example project can be found in the [_example/ ](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) directory at the project root.
+An example project can be found in the [_example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) directory at the project root.
 
 ---
 
 #Setup
+ku4js-webApp ships with a [_TEMPLATE/](https://github.com/kodmunki/ku4js-webApp/tree/master/_TEMPLATE) so, although there is a dependent directory structure for a ku4js-webApp project, getting started is very simple!
+
 To get your project going simply follow these instructions:
 
 1. Copy the contents of _TEMPLATE into your project.
-2. Update the project name in the build script files.
+2. Update the project name (PROJNAME variable) in the sh and cmd build script files. To do this, simply open these files in a text editor and update the PROJNAME variable found on line 29 of each of these files.
 3. Build the application using the appropriate sh or cmd build script.
-4. Add a reference in the desired HTML page to **_one_** of the artifacts in the /bin directory.
-5. Add a reference in the desired HTML page to the project's app.js file.
+
+You now should have a "compiled" JavaScript artifacts in your /bin directory. One, that is compressed, and one that is not compressed.
+
+To add your app to a web project:
+
+1. Add a reference in the desired HTML page to **_one_** of the artifacts in the /bin directory. _(You will likely add refrence to the minified version)_
+2. Add a reference in the desired HTML page to your ku4js-webApp project's app.js file.
+
+There! You are now set up for development!
 
 ---
 
 ##Models
-Has access to the following protected methods and properties:
+The first component of an MVC application is M (Model). ku4js-webApp projects keep all model files in the models/ directory. Each model represents a core component of the application. Each model has read/write access to the applications state, the client-side NoSQL database, ajax services, sockets, and the application mediator used to notify views of state changes. 
+
+ku4js-webApp models are intended to be the sole driver of application state and the medium through which your application accesses the server and the client-side NoSQL database. Developer implemented ku4js-webApp models can be accessed by ku4js-webApp controllers and ku4js-webApp views, to call methods and read state respectively.
+
+ **For further details you can view the [example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) application or watch the tutorial videos COMING SOON.**
+
+API and template documentation follow:
+
+###ku4js-webApp model API:
 
 | API | Return | Description |
 | --- | --- | --- |
@@ -49,12 +66,12 @@ Has access to the following protected methods and properties:
 | .$service(name:_String_) | service | Retrieves the service named "name". |
 | .$socket(name:_String_) | service | Retrieves the socket named "name". _(included)_|
 | .$validator(name:_String_) | validator | Retrieves the validator named "name". |
-| .$state() | state | Retrieves the local state machine. |
-| .$appState() | state | Retrieves the global state machine. |
-| .$notify(data:_Object_, NAME, ...) | void | Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify _all_ subscribers!|
+| .$state() | state | Retrieves the local state. |
+| .$appState() | state | Retrieves the appliation state. |
+| .$notify(name:_String_, data:_Object_, ...) | void | Sends a notification containg the data argument(s) to the name or names in the name string argument _(multiple names can be passed by seperating them with a comma)_ |
 
-* Runtime instantiation requires a valid mediator, serviceFactory, storeFactory, and validatorFactory. _(This is a
-very unlikely scenario)_.
+###ku4js-webApp model class template:
+A ku4js-webApp models can be defined using a template like the one below. You never have to instantiate a ku4js-webApp model, only define it. ku4js-webApp models are managed by the ku4js-webApp runtime. You have access your defined model in your ku4js-webApp controllers and ku4js-webApp views via the .$model("name") API. _(See the [Controllers](#controllers) and [Views](#views) documentation for more details_
 
 ```javascript
 $.ku4webApp.model("NAME", {
@@ -67,10 +84,19 @@ $.ku4webApp.model("NAME", {
     "SUBSCRIPTION": CALLBACK
 });
 ```
+**For further details you can view the [example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) application or watch the tutorial videos COMING SOON.**
 
 ##Views
 
-Has access to the following protected methods and properties:
+ku4js-webApp views are responsible for interpreting model state and presenting appropriate data to the user. Though you are certain to see other libraries i.e. jQuery being used in the [example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) application due to its excellence in working with the DOM, it must be stressed that ku4js-webApp views just like all of the ku4js-* JavaScript Framework suite, are independed of any other libraries or Frameworks outside of the ku4js-* Framework suite. This frees you to use as many or as few other frameworks as you desire.
+
+ku4js-webApp views will commonly listen for notifications from ku4js-webApp models and then act in accordinance with the data they receive through these notifications.
+
+ **For further details you can view the [example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) application or watch the tutorial videos COMING SOON.**
+
+API and template documentation follow:
+
+###ku4js-webApp view API:
 
 | API | Return | Description |
 | --- | --- | --- |
@@ -78,9 +104,8 @@ Has access to the following protected methods and properties:
 | .$form(name:_String_) | form | Retrieves the form named "name". |
 | .$navigator() | navigator | Retrieves the global navigator. |
 
-* Runtime instantiation requires a valid templateFactory and formFactory. _(This is an absurd scenario. If you require it,
-it is likely that you need to revisit [MVC](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). If you
-find a necessary reason, please contact [support@kodmunki.com](mailto:support@kodmunki.com) to share)_.
+###ku4js-webApp view class template:
+A ku4js-webApp views can be defined using a template like the one below. 
 
 ```javascript
 $.ku4webApp.view("NAME", {
@@ -94,9 +119,16 @@ $.ku4webApp.view("NAME", {
 });
 ```
 
+Your views should be instantiated in the app.js file on app load using the following syntax, where "app" is a refrence to the ku4js-webApp app instance:
+
+```javascript
+$.ku4webApp.view.NAME(app);
+```
+
+ **For further details you can view the [example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) application or watch the tutorial videos COMING SOON.**
+
 ##Controllers
 
-Has access to the following protected methods and properties:
 
 | API | Return | Description |
 | --- | --- | --- |
