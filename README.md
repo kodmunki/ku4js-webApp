@@ -44,7 +44,7 @@ Has access to the following protected methods and properties:
 | --- | --- | --- |
 | .$collection(name:_String_) | collection | Retrieves the collection named "name". |
 | .$service(name:_String_) | service | Retrieves the service named "name". |
-| .$socket(name:_String_) | service | Retrieves the socket named "name". _(requires socket.io -- not included)_|
+| .$socket(name:_String_) | service | Retrieves the socket named "name". _(included)_|
 | .$validator(name:_String_) | validator | Retrieves the validator named "name". |
 | .$state() | state | Retrieves the local state machine. |
 | .$appState() | state | Retrieves the global state machine. |
