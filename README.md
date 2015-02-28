@@ -13,15 +13,16 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.
 <img src="http://www.kodmunki.com/media/logo-small.png" alt="kodmunki" />
 
 ---
-
 #Documentation
-The following documentation describes each class in the ku4js-data library. It is organized to follow the directory structure found in /src ordered by lowest level constructs first. All constructors are empty unless otherwise noted.
+The following documentation describes each class in the ku4js-webApp library. It is organized to follow the directory structure found in /src ordered by lowest level constructs first. All instantiable classes can be instantiated using the $.className() syntax. All constructors are empty unless otherwise noted.
 
 The API tables in each section of the documentation contain three columns.
 
 | API | Return | Description |
 | --- | --- | --- |
-|This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. An example: $.MethodName(argument:_Type)| The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!**  |
+|This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. Class/static methods are denoted with the class name, whereas instance level methods will begin with a dot. Example class/static method: **$.math.round(value:_Number_, nearest:_Number_)**. Example of an instance method: **.toString()** | The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!** |
+
+An example project can be found in the _example/ directory at the project root.
 
 ---
 
@@ -35,34 +36,6 @@ To get your project going simply follow these instructions:
 5. Add a reference in the desired HTML page to the renamed app.js file.
 
 ---
-
-#Documentation
-The following is the documentation for the template engine and the MVC application classes. For further information
-check out the [example project](https://github.com/kodmunki/ku4js-webApp/tree/master/example)
-
-##Templates
-Has access to the following protected methods and properties:
-
-| API | Return | Description |
-| --- | --- | --- |
-| $config(name:_String_) | config | Retrieves the template config named "name". |
-| $forms(name:_String_) | config | Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]). |
-| $views(name:_String_) | config | Retrieves the views templates config named "name" (Shortcut for $config("views")[name]). |
-| $render(template:_String_, data:_{}_) | String | Renders the template using object literal or dto data. |
-| $renderList(template:_String_, array:_Array<dto>_) | String | Renders template using object literal or dto data for each dto in array. |
-| $renderListWithAction(array:_Array<dto>_, func:_Function_) | String | Calls a specified render function for each dto in array. It is important that the specified action return a string value! |
-
-* Runtime instantiation requires valid templates config. _(This is a potential scenario in advanced development of an
-enterprise applications and should be heeded. For example, if you create a template for generic form fields
-specifically, i.e. $.ku4webApp.template("forms", { /*Your methods here*/ }, and want to access it from another template,
- you will have to instantiate it on the fly and pass the local config to it: $.ku4webApp.template.forms(this.$config()))_.
-
-```javascript
-$.ku4webApp.template("NAME", {
-    //METHODS GO HERE
-    METHOD: function() { }
-});
-```
 
 ##Models
 Has access to the following protected methods and properties:
@@ -164,6 +137,30 @@ a button you would add the following HTML into the desired location of your web 
 
 ```html
 <button onclick="controller.execute(); return false;">Execute</button>
+```
+
+##Templates
+Has access to the following protected methods and properties:
+
+| API | Return | Description |
+| --- | --- | --- |
+| $config(name:_String_) | config | Retrieves the template config named "name". |
+| $forms(name:_String_) | config | Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]). |
+| $views(name:_String_) | config | Retrieves the views templates config named "name" (Shortcut for $config("views")[name]). |
+| $render(template:_String_, data:_{}_) | String | Renders the template using object literal or dto data. |
+| $renderList(template:_String_, array:_Array<dto>_) | String | Renders template using object literal or dto data for each dto in array. |
+| $renderListWithAction(array:_Array<dto>_, func:_Function_) | String | Calls a specified render function for each dto in array. It is important that the specified action return a string value! |
+
+* Runtime instantiation requires valid templates config. _(This is a potential scenario in advanced development of an
+enterprise applications and should be heeded. For example, if you create a template for generic form fields
+specifically, i.e. $.ku4webApp.template("forms", { /*Your methods here*/ }, and want to access it from another template,
+ you will have to instantiate it on the fly and pass the local config to it: $.ku4webApp.template.forms(this.$config()))_.
+
+```javascript
+$.ku4webApp.template("NAME", {
+    //METHODS GO HERE
+    METHOD: function() { }
+});
 ```
 
 ##Configurations
