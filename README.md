@@ -23,7 +23,7 @@ The API tables in each section of the documentation contain three columns.
 
 | API | Return | Description |
 | --- | --- | --- |
-|This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. Class/static methods are denoted with the class name, whereas instance level methods will begin with a dot. Example class/static method: **$.math.round(value:_Number_, nearest:_Number_)**. Example of an instance method: **.toString()**. Those methods prefixed by a $ are protected and should only be accessed from within a given instance. | The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!** |
+| This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. Class/static methods are denoted with the class name, whereas instance level methods will begin with a dot. Example class/static method: **$.math.round(value:_Number_, nearest:_Number_)**. Example of an instance method: **.toString()**. Those methods prefixed by a $ are protected and should only be accessed from within a given instance. | The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!** |
 
 An example project can be found in the [_example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) directory at the project root.
 
