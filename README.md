@@ -14,13 +14,16 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.
 
 ---
 #Documentation
-The following documentation describes each class in the ku4js-webApp library. It is organized to follow the directory structure found in /src ordered by lowest level constructs first. All instantiable classes can be instantiated using the $.className() syntax. All constructors are empty unless otherwise noted.
+
+The ku4js-webApp library, at its core, consists of Models, Views, Controllers, Templates, and Configs. The following documentation discusses each of these parts, their roll in a ku4js-webApp application and their various components.
+
+This documentation also disucsses the incredibly powerful ku4webApp Test Bundle. This test bundle enables developers to follow a TDD workflow and write deep, atomic unit tests for every aspect of their ku4js-webApp web application.
 
 The API tables in each section of the documentation contain three columns.
 
 | API | Return | Description |
 | --- | --- | --- |
-|This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. Class/static methods are denoted with the class name, whereas instance level methods will begin with a dot. Example class/static method: **$.math.round(value:_Number_, nearest:_Number_)**. Example of an instance method: **.toString()** | The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!** |
+|This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. Class/static methods are denoted with the class name, whereas instance level methods will begin with a dot. Example class/static method: **$.math.round(value:_Number_, nearest:_Number_)**. Example of an instance method: **.toString()**. Those methods prefixed by a $ are protected and should only be accessed from within a given instance. | The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!** |
 
 An example project can be found in the [_example/ ](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) directory at the project root.
 
@@ -30,10 +33,10 @@ An example project can be found in the [_example/ ](https://github.com/kodmunki/
 To get your project going simply follow these instructions:
 
 1. Copy the contents of _TEMPLATE into your project.
-2. Update the project name in the build scripts.
+2. Update the project name in the build script files.
 3. Build the application using the appropriate sh or cmd build script.
 4. Add a reference in the desired HTML page to **_one_** of the artifacts in the /bin directory.
-5. Add a reference in the desired HTML page to the renamed app.js file.
+5. Add a reference in the desired HTML page to the project's app.js file.
 
 ---
 
