@@ -22,7 +22,7 @@ The API tables in each section of the documentation contain three columns.
 | --- | --- | --- |
 |This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. Class/static methods are denoted with the class name, whereas instance level methods will begin with a dot. Example class/static method: **$.math.round(value:_Number_, nearest:_Number_)**. Example of an instance method: **.toString()** | The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!** |
 
-An example project can be found in the _example/ directory at the project root.
+An example project can be found in the [_example/ ](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) directory at the project root.
 
 ---
 
@@ -42,13 +42,13 @@ Has access to the following protected methods and properties:
 
 | API | Return | Description |
 | --- | --- | --- |
-| $collection(name:_String_) | collection | Retrieves the collection named "name". |
-| $service(name:_String_) | service | Retrieves the service named "name". |
-| $socket(name:_String_) | service | Retrieves the socket named "name". _(requires socket.io -- not included)_|
-| $validator(name:_String_) | validator | Retrieves the validator named "name". |
-| $state() | state | Retrieves the local state machine. |
-| $appState() | state | Retrieves the global state machine. |
-| $notify(data:_Object_, NAME, ...) | void | Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify _all_ subscribers!|
+| .$collection(name:_String_) | collection | Retrieves the collection named "name". |
+| .$service(name:_String_) | service | Retrieves the service named "name". |
+| .$socket(name:_String_) | service | Retrieves the socket named "name". _(requires socket.io -- not included)_|
+| .$validator(name:_String_) | validator | Retrieves the validator named "name". |
+| .$state() | state | Retrieves the local state machine. |
+| .$appState() | state | Retrieves the global state machine. |
+| .$notify(data:_Object_, NAME, ...) | void | Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify _all_ subscribers!|
 
 * Runtime instantiation requires a valid mediator, serviceFactory, storeFactory, and validatorFactory. _(This is a
 very unlikely scenario)_.
@@ -71,9 +71,9 @@ Has access to the following protected methods and properties:
 
 | API | Return | Description |
 | --- | --- | --- |
-| $template(name:_String_) | template | Retrieves the template named "name". |
-| $form(name:_String_) | form | Retrieves the form named "name". |
-| $navigator() | navigator | Retrieves the global navigator. |
+| .$template(name:_String_) | template | Retrieves the template named "name". |
+| .$form(name:_String_) | form | Retrieves the form named "name". |
+| .$navigator() | navigator | Retrieves the global navigator. |
 
 * Runtime instantiation requires a valid templateFactory and formFactory. _(This is an absurd scenario. If you require it,
 it is likely that you need to revisit [MVC](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). If you
@@ -97,9 +97,9 @@ Has access to the following protected methods and properties:
 
 | API | Return | Description |
 | --- | --- | --- |
-| $model(name:_String_) | model | Retrieves the model named "name". |
-| $form(name:_String_) | form | Retrieves the form named "name". |
-| $navigator() | navigator | Retrieves the global navigator. |
+| .$model(name:_String_) | model | Retrieves the model named "name". |
+| .$form(name:_String_) | form | Retrieves the form named "name". |
+| .$navigator() | navigator | Retrieves the global navigator. |
 
 * Runtime instantiation requires a valid modelFactory and formFactory.
 
@@ -144,12 +144,12 @@ Has access to the following protected methods and properties:
 
 | API | Return | Description |
 | --- | --- | --- |
-| $config(name:_String_) | config | Retrieves the template config named "name". |
-| $forms(name:_String_) | config | Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]). |
-| $views(name:_String_) | config | Retrieves the views templates config named "name" (Shortcut for $config("views")[name]). |
-| $render(template:_String_, data:_{}_) | String | Renders the template using object literal or dto data. |
-| $renderList(template:_String_, array:_Array<dto>_) | String | Renders template using object literal or dto data for each dto in array. |
-| $renderListWithAction(array:_Array<dto>_, func:_Function_) | String | Calls a specified render function for each dto in array. It is important that the specified action return a string value! |
+| .$config(name:_String_) | config | Retrieves the template config named "name". |
+| .$forms(name:_String_) | config | Retrieves the forms templates config named "name" (Shortcut for $config("forms")[name]). |
+| .$views(name:_String_) | config | Retrieves the views templates config named "name" (Shortcut for $config("views")[name]). |
+| .$render(template:_String_, data:_{}_) | String | Renders the template using object literal or dto data. |
+| .$renderList(template:_String_, array:_Array<dto>_) | String | Renders template using object literal or dto data for each dto in array. |
+| .$renderListWithAction(array:_Array<dto>_, func:_Function_) | String | Calls a specified render function for each dto in array. It is important that the specified action return a string value! |
 
 * Runtime instantiation requires valid templates config. _(This is a potential scenario in advanced development of an
 enterprise applications and should be heeded. For example, if you create a template for generic form fields
