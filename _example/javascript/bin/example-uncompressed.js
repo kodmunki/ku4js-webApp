@@ -299,9 +299,7 @@ $.ku4webApp.template("card", {
     },
     renderCard: function(data) {
         return this.$render(this.$views("card"), data, "", function(data) {
-            console.log(data);
             data.value = $.money.parse(data.value).toString();
-            console.log(data);
             return data;
         })
     },
