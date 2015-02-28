@@ -33,13 +33,7 @@
 
 <p>kodmunki™ utilities for js Web Applications.</p>
 
-<p>This project contains everything needed to create a compact and powerful MVC client application using kodmunki tools
-for JavaScript. A Web Application created with this project will contain html templating engines,
-ajax services, local persistence that leverages HTML5 localStorage, form reading, writing and validation, and an
-incredible suite of excellent JavaScript tools including specifcation patterns and DTO (Data Transfer Objects),
-brought to you by <a href="https://github.com/kodmunki/ku4js-kernel">ku4js-kernel</a> and
-<a href="https://github.com/kodmunki/ku4js-data">ku4js-data</a>. All of these technologies are rooted in SOLID OO
-principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.</p>
+<p>This project contains everything needed to create a compact and powerful MVC client application using kodmunki tools for JavaScript. A Web Application created with this project will contain html templating engines, ajax services, local persistence that leverages HTML5 localStorage, form reading, writing and validation, and an incredible suite of excellent JavaScript tools including specifcation patterns and DTO (Data Transfer Objects), brought to you by <a href="https://github.com/kodmunki/ku4js-kernel">ku4js-kernel</a> and <a href="https://github.com/kodmunki/ku4js-data">ku4js-data</a>. All of these technologies are rooted in SOLID OO principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.</p>
 
 <p><img src="http://www.kodmunki.com/media/logo-small.png" alt="kodmunki"></p>
 
@@ -186,7 +180,7 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.<
 <h2>
 <a id="views" class="anchor" href="#views" aria-hidden="true"><span class="octicon octicon-link"></span></a>Views</h2>
 
-<p>ku4js-webApp views are responsible for interpreting model state and presenting appropriate data to the user. Though you are certain to see other libraries i.e. jQuery being used in the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application due to its excellence in working with the DOM, it must be stressed that ku4js-webApp views just like all of the ku4js-* JavaScript Framework suite, are independed of any other libraries or Frameworks outside of the ku4js-* Framework suite. This frees you to use as many or as few other frameworks as you desire.</p>
+<p>The V in MVC is for Views. ku4js-webApp views are responsible for interpreting model state and presenting appropriate data to the user. Though you are certain to see other libraries i.e. jQuery being used in the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application due to its excellence in working with the DOM, it must be stressed that ku4js-webApp views just like all of the ku4js-* JavaScript Framework suite, are independed of any other libraries or Frameworks outside of the ku4js-* Framework suite. This frees you to use as many or as few other frameworks as you desire.</p>
 
 <p>ku4js-webApp views will commonly listen for notifications from ku4js-webApp models and then act in accordinance with the data they receive through these notifications.</p>
 
@@ -241,12 +235,18 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.<
 
 <p>Your views should be instantiated in the app.js file on app load using the following syntax, where "app" is a refrence to the ku4js-webApp app instance:</p>
 
-<div class="highlight highlight-javascript"><pre>$.ku4webApp.view.NAME(app);</pre></div>
+<div class="highlight highlight-javascript"><pre>$.ku4webApp.views.NAME(app);</pre></div>
 
 <p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
 
 <h2>
 <a id="controllers" class="anchor" href="#controllers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Controllers</h2>
+
+<p>Controllers are the C in MVC. ku4js-controllers are intended to expose an API to DOM so that web pages and web apps can call your ku4js-webApp. Controllers are defined much like ku4js-webApp <a href="#models">Models</a> and <a href="#views">Views</a>, and like ku4js-webApp views they should be instantiated in your app.js file, and referenced by a variable scoped so that DOM elements can access it.</p>
+
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
+<p>API and template documentation follow:</p>
 
 <table>
 <thead>
@@ -275,18 +275,27 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.<
 </tbody>
 </table>
 
-<ul>
-<li>Runtime instantiation requires a valid modelFactory and formFactory.</li>
-</ul>
+<h3>
+<a id="ku4js-webapp-controller-class-template" class="anchor" href="#ku4js-webapp-controller-class-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>ku4js-webApp controller class template:</h3>
+
+<p>A ku4js-webApp controllers can be defined using a template like the one below. </p>
 
 <div class="highlight highlight-javascript"><pre>$.ku4webApp.controller(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
     <span class="pl-c">//METHODS GO HERE</span>
 });</pre></div>
 
-<h2>
-<a id="applications-files" class="anchor" href="#applications-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applications/ files</h2>
+<p>Your controllers should be instantiated in the app.js file on app load using the following syntax, where "app" is a refrence to the ku4js-webApp app instance:</p>
 
-<p>These files are where you will initialize your controllers and views and expose your controller to the HTML page.</p>
+<div class="highlight highlight-javascript"><pre>$.ku4webApp.<span class="pl-sc">controllers</span>.NAME(app);</pre></div>
+
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
+<h2>
+<a id="appjs-file" class="anchor" href="#appjs-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>app.js file</h2>
+
+<p>This is the file in which you will build your application. If you are familiar with building Object Oriented models and then building up applications in an application layer using your various model classes this should be fairly straight forward. If you are unfamiliar with this workflow, the basic idea is to create models, views, controllers, and any other necessary classes in small testible, encapsulated, units, that express what it is they do via their API and are concerned with one specific concept or task. You then take all of those tools that you have developed and unit tested and leverage them in your application file, or in the case of a ku4js-webApp, your app.js file to build your applicaiton.</p>
+
+<p>A template of an app.js file can be seen below. It is not necessary that your app.js file follow this format, though, for simple applications it is certainly a viable format. Some points of note to take away from the template in any case are the controller var that is exposed outside of the document load function, and the instatiation of the view as described in the <a href="#views">Views</a> section of this document.</p>
 
 <div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> controller;
 $(<span class="pl-st">function</span>(){
@@ -303,6 +312,8 @@ $(<span class="pl-st">function</span>(){
 
 });</pre></div>
 
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
 <p>When you have successfully integrated ku4js-webApp into your application you will be able to call your controller
 methods by calling "controller.yourMethod" where "yourMethod" is some method that you have created in your custom
 controller. For example, if you had implemented a controller with the method "execute" and wished to call it from
@@ -313,7 +324,11 @@ a button you would add the following HTML into the desired location of your web 
 <h2>
 <a id="templates" class="anchor" href="#templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Templates</h2>
 
-<p>Has access to the following protected methods and properties:</p>
+<p>ku4js-webApp templates are classes that collect and compile and render the text and HTML that you will likely use in your web appliation. These classes are intended to take on this, often ugly, task. Why not just do this in the views you might ask. ku4js-webApp views have different concerns and should be used to track view state, listen for model notifications, and set up runtime events to name a few. Templates allow views to offload the ofter verbose task of building up the actual content that will be displayed. Templates can collect the data that they need to create meaningful content from the <a href="">template view configs</a> and <a href="">template form configs</a>, or they can also collect this data from HTML files or even call the server for this data. In any event, it is the job of the ku4js-webApp template to gather all necessary data and compile it into something meaningful that can be presented by the view. Furthermore, templates will be called by ku4js-webApp views who can pass data retreived from ku4js-webApp models to dynamically fill their compiled content with meaningful dynamic data.</p>
+
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
+<p>API and template documentation follow:</p>
 
 <table>
 <thead>
@@ -357,12 +372,10 @@ a button you would add the following HTML into the desired location of your web 
 </tbody>
 </table>
 
-<ul>
-<li>Runtime instantiation requires valid templates config. <em>(This is a potential scenario in advanced development of an
-enterprise applications and should be heeded. For example, if you create a template for generic form fields
-specifically, i.e. $.ku4webApp.template("forms", { /<em>Your methods here</em>/ }, and want to access it from another template,
-you will have to instantiate it on the fly and pass the local config to it: $.ku4webApp.template.forms(this.$config()))</em>.</li>
-</ul>
+<h3>
+<a id="ku4js-webapp-view-class-template-1" class="anchor" href="#ku4js-webapp-view-class-template-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>ku4js-webApp view class template:</h3>
+
+<p>A ku4js-webApp templates can be defined using a template like the one below. You never have to instantiate a ku4js-webApp template, only define it. ku4js-webApp templates, like ku4hjs-webApp <a href="#models">models</a>, are managed by the ku4js-webApp runtime. You have access your defined templates in your ku4js-webApp views via the .$template("name") API.</p>
 
 <div class="highlight highlight-javascript"><pre>$.ku4webApp.template(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
     <span class="pl-c">//METHODS GO HERE</span>
@@ -372,24 +385,23 @@ you will have to instantiate it on the fly and pass the local config to it: $.ku
 <h2>
 <a id="configurations" class="anchor" href="#configurations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configurations</h2>
 
-<p>The dependency injection of ku4js-webApp is largely dependent upon the configuration files. These files are required
-for a ku4js-webApp project to work successfully. They are very simple files to configure. The ones listed here
-are required and must be included in your ku4js-web app. You can add more of them as you need making ku4js-webApp
+<p>ku4js-webApp is largely dependent upon the ku4js-webApp config files found in the config/ directory of a ku4js-webApp application. These files are required
+for a ku4js-webApp project to work successfully. They are very simple files to configure. The ones listed here are required and must be included in your ku4js-web app. You can add more of them as you need making ku4js-webApp
 <strong><em>very</em></strong> extensible! Documentation for each of the required configuration follows:</p>
 
 <h3>
 <a id="configcollections" class="anchor" href="#configcollections" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.collections</h3>
 
-<p>Configures the local client-side persistence callback structure.</p>
+<p>The collections configuration file configures the NoSQL database collections that can be accessed by your ku4js-webApp models. You must set a unique key as this will be the value by which your models access the collection via the .$collection("NAME") API. The only value that is required is a "COLLECTION NAME", this is often simply the same name as your NAME key. The other values are optional and simply defined notifiers that your classes, namely your models, can subscribe to and be notified when one of associated tasks completes. Because it is most likey that collections will be accessed unsing the asynchronous API from within the model, these options are unlikely to be used, though available if needed.</p>
 
 <div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
 <span class="pl-c">    //COLLECTION</span>
 <span class="pl-c">    NAME: {</span>
 <span class="pl-c">        name: "COLLECTION NAME",</span>
-<span class="pl-c">        insert: "ON CREATED",</span>
-<span class="pl-c">        find: "ON FOUND",</span>
-<span class="pl-c">        update: "ON UPDATED",</span>
-<span class="pl-c">        remove: "ON REMOVED"</span>
+<span class="pl-c">        insert: "ON CREATED", //(OPTIONAL)</span>
+<span class="pl-c">        find: "ON FOUND",  //(OPTIONAL)</span>
+<span class="pl-c">        update: "ON UPDATED",  //(OPTIONAL)</span>
+<span class="pl-c">        remove: "ON REMOVED"  //(OPTIONAL)</span>
 <span class="pl-c">    }</span>
 <span class="pl-c"> */</span>
 
@@ -397,10 +409,12 @@ $.ku4webApp.config.collections <span class="pl-k">=</span> {
     <span class="pl-c">//ADD YOUR COLLECTIONS HERE</span>
 };</pre></div>
 
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
 <h3>
 <a id="configservices" class="anchor" href="#configservices" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.services</h3>
 
-<p>Configures the ajax services</p>
+<p>The ku4js-webApp services configuration file configures ajax servers that are available to your models using the .$service("NAME") API. These services act as your models portal to your server and help keep your ku4js-webApp applications highly responsive. Note that XSS and CORS calls can be made by simply using the .$service("NAME").xss() and $.service("NAME").cors() API respectively, though note that XSS and CORS will require some server-side setup.</p>
 
 <div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
 <span class="pl-c">    NAME: {</span>
@@ -415,11 +429,13 @@ $.ku4webApp.config.services <span class="pl-k">=</span> {
     <span class="pl-c">//ADD YOUR SERVICES HERE</span>
 };</pre></div>
 
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
 <h4>
 <a id="service-processid" class="anchor" href="#service-processid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Service processId</h4>
 
-<p>Sometimes a developer retains state across service calls and in their architecture must be infomed which service call is
-responsible for making the callback. ku4webApp service calls contain a processId for developers to use in this case.
+<p>Sometimes developers retain state across service calls and must be infomed which service call is
+responsible for making a callback. ku4webApp service calls contain a processId for developers to use in this case.
 This processId is returned when invoking the call method. This processId can be used to inform the system as to which
 service call is making a notification of its callback. When a service makes a notification of its callback it will
 notify each subscriber by passing any server data that was returned as a first argument and its processId as the second
@@ -433,7 +449,7 @@ arguments. Note the example callback method below:</p>
 <h3>
 <a id="configsockets" class="anchor" href="#configsockets" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.sockets</h3>
 
-<p>Configures the ajax services</p>
+<p>This file configures web sockets leveraging socket.io (included). Do note that sockets to require some server-side work .</p>
 
 <div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
 <span class="pl-c">    NAME: {</span>
@@ -446,10 +462,12 @@ $.ku4webApp.config.sockets <span class="pl-k">=</span> {
     <span class="pl-c">//ADD YOUR SERVICES HERE</span>
 };</pre></div>
 
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
 <h3>
 <a id="configforms" class="anchor" href="#configforms" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.forms</h3>
 
-<p>Configures the forms that your controllers will read from when calling model methods that require user input, and that
+<p>ku4js-webApp forms configurations configure the forms that your controllers will read when calling model methods that require user input, and those that
 your views will write to when there is data coming from the server that should be placed into the form on load, e.g.
 when a user is editing information that they have already provided.</p>
 
@@ -472,11 +490,12 @@ $.ku4webApp.config.<span class="pl-sc">forms</span> <span class="pl-k">=</span> 
     <span class="pl-c">//ADD YOUR FORMS HERE</span>
 };</pre></div>
 
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
 <h3>
 <a id="configvalidators" class="anchor" href="#configvalidators" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.validators</h3>
 
-<p>Configures the validation rules that your models can use to validate operation classes before they are transmitted
-to the server.</p>
+<p>ku4js-webApp validator configurations configure the validation rules that your models can use to validate data passed to them before they are transmit the data to the server. Often times in other architectures this validation is directly tied to the forms. In ku4js-webApps this functionality is decopled from the DOM and make available to both be unit tested and be leveraged for all incoming data whether from a form or anyother data source.</p>
 
 <div class="highlight highlight-javascript"><pre><span class="pl-c">/*</span>
 <span class="pl-c">    //VALIDATOR</span>
@@ -498,11 +517,12 @@ $.ku4webApp.config.validators <span class="pl-k">=</span> {
     <span class="pl-c">//ADD YOUR VALIDATORS HERE</span>
 };</pre></div>
 
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
 <h3>
 <a id="configtemplates" class="anchor" href="#configtemplates" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.templates</h3>
 
-<p>Configures the templates in your web application. config.templates.forms and config.templates.views are required
-template configurations.</p>
+<p>ku4js-webApp template configurations are one means to store HTML templates that your ku4js-webApp <a href="#templates">templates</a> can use to gather HTML templates and other textual data to compile meaningful data for their views. These are separated into two separate files file by default: forms, and views. Others can be added as needed.</p>
 
 <h4>
 <a id="configtemplatesforms" class="anchor" href="#configtemplatesforms" aria-hidden="true"><span class="octicon octicon-link"></span></a>config.templates.forms</h4>
@@ -525,6 +545,8 @@ $.ku4webApp.config.templates.<span class="pl-sc">forms</span> <span class="pl-k"
 $.ku4webApp.config.templates.views <span class="pl-k">=</span> {
     <span class="pl-c">//ADD YOUR VIEW TEMPLATES HERE</span>
 };</pre></div>
+
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
 
 <h1>
 <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h1>
