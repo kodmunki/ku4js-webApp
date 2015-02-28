@@ -22,15 +22,11 @@ $(function() {
             deepEqual(data, cardList);
         }
 
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            model = bundle.model("card");
-
-        bundle
+        var bundle = $.ku4webAppUT.bundle()
+            .initCollection("card", cardList)
             .onServiceCall("card.list", function() { return cardList; })
             .subscribe("onCardsListed", onCardsListed)
-            .collection("card").init(cardList);
-
-        model.listCards();
+            .model("card").listCards();
     });
 
     test("createCard", function() {
@@ -39,14 +35,10 @@ $(function() {
             equal(arguments.length, 0);
         }
 
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            model = bundle.model("card");
-
-        bundle
+        $.ku4webAppUT.bundle()
+            .initCollection("card", cardList)
             .subscribe("onCreateCard", onCreateCard)
-            .collection("card").init(cardList);
-
-        model.createCard();
+            .model("card").createCard();
     });
 
     test("addCard", function() {
@@ -61,14 +53,10 @@ $(function() {
             deepEqual(data, cardList.concat([card.toObject()]));
         }
 
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            model = bundle.model("card");
-
-        bundle
+        $.ku4webAppUT.bundle()
+            .initCollection("card", cardList)
             .subscribe("onCardAdded", onCardAdded)
-            .collection("card").init(cardList);
-
-        model.addCard(card);
+            .model("card").addCard(card);
     });
     test("editCard", function() {
         expect(1);
@@ -76,14 +64,10 @@ $(function() {
             deepEqual(data, cardList[0]);
         }
 
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            model = bundle.model("card");
-
-        bundle
+        $.ku4webAppUT.bundle()
+            .initCollection("card", cardList)
             .subscribe("onEditCard", onEditCard)
-            .collection("card").init(cardList);
-
-        model.listCards().editCard("id1");
+            .model("card").editCard("id1");
     });
 
     test("updateCard", function() {
@@ -103,13 +87,9 @@ $(function() {
             }]);
         }
 
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            model = bundle.model("card");
-
-        bundle
+        $.ku4webAppUT.bundle()
+            .initCollection("card", cardList)
             .subscribe("onCardUpdated", onCardUpdated)
-            .collection("card").init(cardList);
-
-        model.updateCard($.dto({"id":"id1", "value": 20.15}));
+            .model("card").updateCard($.dto({"id":"id1", "value": 20.15}));
     });
 });

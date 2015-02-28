@@ -426,6 +426,7 @@ function navigator(modelFactory, config) {
 
     var me = this;
     function onhashchange(e) {
+        $.evt.mute(e);
         if(!me._mute) me.execute(me.read());
         me._mute = false;
     }

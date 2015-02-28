@@ -11,6 +11,8 @@ function bundle() {
 
     app.onModelCall(this._onModelCall)
        .onServiceCall(this._onServiceCall);
+
+    this.throwErrors();
 }
 bundle.prototype = {
     mediator: function() { return this._mediator; },
@@ -48,6 +50,10 @@ bundle.prototype = {
     },
     unsubscribe: function(name, id) {
         this._mediator.subscribe(name, id);
+        return this;
+    },
+    initCollection: function(name, data) {
+        this.collection(name).init(data);
         return this;
     },
     clear: function() {
