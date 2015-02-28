@@ -72,29 +72,50 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.<
 </tbody>
 </table>
 
-<p>An example project can be found in the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">_example/ </a> directory at the project root.</p>
+<p>An example project can be found in the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">_example/</a> directory at the project root.</p>
 
 <hr>
 
 <h1>
 <a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h1>
 
+<p>ku4js-webApp ships with a <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_TEMPLATE">_TEMPLATE/</a> so, although there is a dependent directory structure for a ku4js-webApp project, getting started is very simple!</p>
+
 <p>To get your project going simply follow these instructions:</p>
 
 <ol>
 <li>Copy the contents of _TEMPLATE into your project.</li>
-<li>Update the project name in the build script files.</li>
+<li>Update the project name (PROJNAME variable) in the sh and cmd build script files. To do this, simply open these files in a text editor and update the PROJNAME variable found on line 29 of each of these files.</li>
 <li>Build the application using the appropriate sh or cmd build script.</li>
-<li>Add a reference in the desired HTML page to <strong><em>one</em></strong> of the artifacts in the /bin directory.</li>
-<li>Add a reference in the desired HTML page to the project's app.js file.</li>
 </ol>
+
+<p>You now should have a "compiled" JavaScript artifacts in your /bin directory. One, that is compressed, and one that is not compressed.</p>
+
+<p>To add your app to a web project:</p>
+
+<ol>
+<li>Add a reference in the desired HTML page to <strong><em>one</em></strong> of the artifacts in the /bin directory. <em>(You will likely add refrence to the minified version)</em>
+</li>
+<li>Add a reference in the desired HTML page to your ku4js-webApp project's app.js file.</li>
+</ol>
+
+<p>There! You are now set up for development!</p>
 
 <hr>
 
 <h2>
 <a id="models" class="anchor" href="#models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Models</h2>
 
-<p>Has access to the following protected methods and properties:</p>
+<p>The first component of an MVC application is M (Model). ku4js-webApp projects keep all model files in the models/ directory. Each model represents a core component of the application. Each model has read/write access to the applications state, the client-side NoSQL database, ajax services, sockets, and the application mediator used to notify views of state changes. </p>
+
+<p>ku4js-webApp models are intended to be the sole driver of application state and the medium through which your application accesses the server and the client-side NoSQL database. Developer implemented ku4js-webApp models can be accessed by ku4js-webApp controllers and ku4js-webApp views, to call methods and read state respectively.</p>
+
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
+<p>API and template documentation follow:</p>
+
+<h3>
+<a id="ku4js-webapp-model-api" class="anchor" href="#ku4js-webapp-model-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>ku4js-webApp model API:</h3>
 
 <table>
 <thead>
@@ -129,25 +150,26 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.<
 <tr>
 <td>.$state()</td>
 <td>state</td>
-<td>Retrieves the local state machine.</td>
+<td>Retrieves the local state.</td>
 </tr>
 <tr>
 <td>.$appState()</td>
 <td>state</td>
-<td>Retrieves the global state machine.</td>
+<td>Retrieves the appliation state.</td>
 </tr>
 <tr>
-<td>.$notify(data:<em>Object</em>, NAME, ...)</td>
+<td>.$notify(name:<em>String</em>, data:<em>Object</em>, ...)</td>
 <td>void</td>
-<td>Notifies the subscribers in the list or arguments passing data if supplied. Calling this function without a list of subscribers will notify <em>all</em> subscribers!</td>
+<td>Sends a notification containg the data argument(s) to the name or names in the name string argument <em>(multiple names can be passed by seperating them with a comma)</em>
+</td>
 </tr>
 </tbody>
 </table>
 
-<ul>
-<li>Runtime instantiation requires a valid mediator, serviceFactory, storeFactory, and validatorFactory. <em>(This is a
-very unlikely scenario)</em>.</li>
-</ul>
+<h3>
+<a id="ku4js-webapp-model-class-template" class="anchor" href="#ku4js-webapp-model-class-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>ku4js-webApp model class template:</h3>
+
+<p>A ku4js-webApp models can be defined using a template like the one below. You never have to instantiate a ku4js-webApp model, only define it. ku4js-webApp models are managed by the ku4js-webApp runtime. You have access your defined model in your ku4js-webApp controllers and ku4js-webApp views via the .$model("name") API. <em>(See the <a href="#controllers">Controllers</a> and <a href="#views">Views</a> documentation for more details</em></p>
 
 <div class="highlight highlight-javascript"><pre>$.ku4webApp.model(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
     <span class="pl-c">//METHODS GO HERE</span>
@@ -159,10 +181,21 @@ very unlikely scenario)</em>.</li>
     <span class="pl-s1"><span class="pl-pds">"</span>SUBSCRIPTION<span class="pl-pds">"</span></span><span class="pl-k">:</span> CALLBACK
 });</pre></div>
 
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
 <h2>
 <a id="views" class="anchor" href="#views" aria-hidden="true"><span class="octicon octicon-link"></span></a>Views</h2>
 
-<p>Has access to the following protected methods and properties:</p>
+<p>ku4js-webApp views are responsible for interpreting model state and presenting appropriate data to the user. Though you are certain to see other libraries i.e. jQuery being used in the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application due to its excellence in working with the DOM, it must be stressed that ku4js-webApp views just like all of the ku4js-* JavaScript Framework suite, are independed of any other libraries or Frameworks outside of the ku4js-* Framework suite. This frees you to use as many or as few other frameworks as you desire.</p>
+
+<p>ku4js-webApp views will commonly listen for notifications from ku4js-webApp models and then act in accordinance with the data they receive through these notifications.</p>
+
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
+<p>API and template documentation follow:</p>
+
+<h3>
+<a id="ku4js-webapp-view-api" class="anchor" href="#ku4js-webapp-view-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>ku4js-webApp view API:</h3>
 
 <table>
 <thead>
@@ -191,11 +224,10 @@ very unlikely scenario)</em>.</li>
 </tbody>
 </table>
 
-<ul>
-<li>Runtime instantiation requires a valid templateFactory and formFactory. <em>(This is an absurd scenario. If you require it,
-it is likely that you need to revisit <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a>. If you
-find a necessary reason, please contact <a href="mailto:support@kodmunki.com">support@kodmunki.com</a> to share)</em>.</li>
-</ul>
+<h3>
+<a id="ku4js-webapp-view-class-template" class="anchor" href="#ku4js-webapp-view-class-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>ku4js-webApp view class template:</h3>
+
+<p>A ku4js-webApp views can be defined using a template like the one below. </p>
 
 <div class="highlight highlight-javascript"><pre>$.ku4webApp.view(<span class="pl-s1"><span class="pl-pds">"</span>NAME<span class="pl-pds">"</span></span>, {
     <span class="pl-c">//METHODS GO HERE</span>
@@ -207,10 +239,14 @@ find a necessary reason, please contact <a href="mailto:support@kodmunki.com">su
     <span class="pl-s1"><span class="pl-pds">"</span>SUBSCRIPTION<span class="pl-pds">"</span></span><span class="pl-k">:</span> CALLBACK
 });</pre></div>
 
+<p>Your views should be instantiated in the app.js file on app load using the following syntax, where "app" is a refrence to the ku4js-webApp app instance:</p>
+
+<div class="highlight highlight-javascript"><pre>$.ku4webApp.view.NAME(app);</pre></div>
+
+<p><strong>For further details you can view the <a href="https://github.com/kodmunki/ku4js-webApp/tree/master/_example">example/</a> application or watch the tutorial videos COMING SOON.</strong></p>
+
 <h2>
 <a id="controllers" class="anchor" href="#controllers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Controllers</h2>
-
-<p>Has access to the following protected methods and properties:</p>
 
 <table>
 <thead>
