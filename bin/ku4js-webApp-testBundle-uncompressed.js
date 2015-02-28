@@ -148,6 +148,11 @@ function service(mediator, name, config, onServiceCall) {
     this._onServiceCall = onServiceCall;
 }
 service.prototype = {
+    cache: function() { return this; },
+    noCache: function() { return this; },
+    lock: function() { return this; },
+    unlock: function() { return this; },
+    abort: function() { return this; },
     call: function(data) {
         var config = this._config,
             callback = this._onServiceCall.find(this._name),
