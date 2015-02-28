@@ -14,22 +14,14 @@ principles and thoughtful observation of JavaScript, HTML, and CSS SoC and IoC.
 
 ---
 
-#kodmunki™ build process
+#Documentation
+The following documentation describes each class in the ku4js-data library. It is organized to follow the directory structure found in /src ordered by lowest level constructs first. All constructors are empty unless otherwise noted.
 
-This build process is dependent upon yuicompressor and a specific directory structure:
+The API tables in each section of the documentation contain three columns.
 
-* root  
- * _build (This build script and the yuicompressor)
- * bin (The compiled scripts will appear here)
- * src (All script files go here)
-
-The following variables found in setup () are
-expected to be changed by the developer running
-this process:
-
-* PROJNAME (The name of your project)
-* STARTMSG (A message to echo at start of build)
-* ENDMSG (A message to echo at end of build)
+| API | Return | Description |
+| --- | --- | --- |
+|This column contains the actual JavaScript API of the property or method in question. Proper syntax is depicted. Argument types are displyed in italics. An example: $.MethodName(argument:_Type)| The return values type, if any. A value of "this" in this column indicates the return of a reference to self | This column contains descriptions and any **Gotchas!**  |
 
 ---
 
@@ -38,13 +30,9 @@ To get your project going simply follow these instructions:
 
 1. Copy the contents of _TEMPLATE into your project.
 2. Update the project name in the build scripts.
-3. Rename the /src/-ProjectFiles- directory to the name that you set for the project name in #2 above.
-4. Enter your app name per the instructions found on line 3 of the /application/-Application-.js file.
-5. Rename the /application/-Application-.js file to a desired name.
-6. Build the application using the appropriate sh or cmd build script.
-7. Add a reference in the desired HTML page to **_one_** of the artifacts in the /bin directory.
-8. Add a reference in the desired HTML page to the renamed -Application-.js file.
-9. ROCK AND ROLL!
+3. Build the application using the appropriate sh or cmd build script.
+4. Add a reference in the desired HTML page to **_one_** of the artifacts in the /bin directory.
+5. Add a reference in the desired HTML page to the renamed app.js file.
 
 ---
 
