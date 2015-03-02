@@ -132,6 +132,7 @@ API and template documentation follow:
 | API | Return | Description |
 | --- | --- | --- |
 | .$model(name:_String_) | model | Retrieves the model named "name". |
+| .$stateMachine() | stateMachine | Retrieves the state machine, if one is defined. _(See [State Machine](#stateMachine) for details. |
 | .$form(name:_String_) | form | Retrieves the form named "name". |
 | .$navigator() | navigator | Retrieves the global navigator. |
 
@@ -150,6 +151,30 @@ Your controllers should be instantiated in the app.js file on app load using the
 $.ku4webApp.controllers.NAME(app);
 ```
  **For further details you can view the [example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) application or watch the tutorial videos COMING SOON.**
+
+##State Machine
+State machines are incredibly valuable in all kinds of applications, but they are paramount in any stateful enterprise-level application. Because of this ku4js-webApp contains a **_very_** simple and straight-forward, yet sophisticated state machine that is easy to implement, maintain and unit test. The ku4js-webApp state machine also makes a great improvement on traditional state machines as it can be implemented post-facto. Whereas, many times, an architect must forsee the state machine and implement it at the get go, or undergo extensive refactoring efforts if it is implemented retroactively, the ku4js-webApp state machine simply leverages the models that the developer has already implemented, therefore it can simply be "plugged-in" at anytime in the future when it is deemed necessary!  
+
+ **For further details you can view the [example/](https://github.com/kodmunki/ku4js-webApp/tree/master/_example) application or watch the tutorial videos COMING SOON.**
+
+API and template documentation follow:
+
+| API | Return | Description |
+| --- | --- | --- |
+| .$model(name:_String_) | model | Retrieves the model named "name". |
+| .is(value:_String_) | Boolean | Returns true if the current state is the current value. |
+| .set(value:_String_) | this | Sets the current state. |
+| .read(key:_String_) | Object | Returns the value stored at key. |
+| .write(key:_String_, value:_Object_) | this | Writes a value to store at key. |
+
+###ku4js-webApp state machine template:
+A ku4js-webApp state machine can be defined using a template like the one below. You never have to instantiate a ku4js-webApp state machine, only define it. ku4js-webApp state machine is managed by the ku4js-webApp runtime. You have access your defined state machine in your ku4js-webApp controllers via the .$stateMachine() API. _(See the [Controllers](#controllers) documentation for more details_
+
+```javascript
+$.ku4webApp.stateMachine({
+    //METHODS GO HERE
+});
+```
 
 ##app.js file
 

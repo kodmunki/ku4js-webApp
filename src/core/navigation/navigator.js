@@ -99,7 +99,7 @@ navigator.prototype = {
             model = ($.exists(stateMachine))
                 ? this._stateMachine
                 : this._modelFactory.create(modelName);
-                
+
         if (($.exists(stateMachine) || $.exists(modelName)) && $.exists(methodName)) {
             try {
                 model[methodName].apply(model, args);
