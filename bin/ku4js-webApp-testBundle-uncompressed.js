@@ -107,9 +107,13 @@ app.prototype = {
     stubModel: function() {
         this.modelFactory = $.ku4webApp_testBundle.stubModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this._onModelCall);
         var app = $.ku4webApp,
-            stateMachine = $.ku4webApp.$stateMachine;
+            stateMachine = $.ku4webApp.$stateMachine,
+            currentState = ($.exists(this.stateMachine)) ? this.stateMachine._state._value : null;
+
         this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.mediator, this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
+
+        if($.exists(this.stateMachine)) this.stateMachine.set(currentState);
 
         this._configureExceptionRule();
         return this;
@@ -117,9 +121,13 @@ app.prototype = {
     prodModel: function() {
         this.modelFactory = $.ku4webApp_testBundle.testModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this.state);
         var app = $.ku4webApp,
-            stateMachine = $.ku4webApp.$stateMachine;
+            stateMachine = $.ku4webApp.$stateMachine,
+            currentState = ($.exists(this.stateMachine)) ? this.stateMachine._state._value : null;
+
         this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.mediator, this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
+
+        if($.exists(this.stateMachine)) this.stateMachine.set(currentState);
 
         this._configureExceptionRule();
         return this;
