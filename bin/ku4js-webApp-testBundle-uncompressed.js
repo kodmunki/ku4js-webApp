@@ -14,9 +14,9 @@ function bundle() {
        .onServiceCall(this._onServiceCall);
 }
 bundle.prototype = {
-    throwErrors: function() { this._app.throwErrors(); },
-    logErrors: function() { this._app.logErrors(); },
-    catchErrors: function() { this._app.catchErrors(); },
+    throwErrors: function() { this._app.throwErrors(); return this; },
+    logErrors: function() { this._app.logErrors(); return this; },
+    catchErrors: function() { this._app.catchErrors(); return this; },
     onModelCall: function(methodName, func, scope) {
         this._onModelCall.subscribe(methodName, function() {
             func.apply(scope, arguments);
