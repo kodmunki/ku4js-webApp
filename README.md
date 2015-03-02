@@ -173,6 +173,8 @@ A ku4js-webApp state machine can be defined using a template like the one below.
 ```javascript
 $.ku4webApp.stateMachine({
     //METHODS GO HERE
+    METHOD: function() { },
+    CALLBACK: function() { }
 },
 {
     //MEDIATOR SUBSCRIPTIONS GO HERE
