@@ -44,7 +44,7 @@
 
 <p>The ku4js-webApp library, at its core, consists of Models, Views, Controllers, Templates, and Configs. The following documentation discusses each of these parts, their roll in a ku4js-webApp application and their various components.</p>
 
-<p>This documentation also disucsses the incredibly powerful ku4webApp Test Bundle. This test bundle enables developers to follow a TDD workflow and write deep, atomic unit tests for every aspect of their ku4js-webApp web application.</p>
+<p>This documentation also discusses the incredibly powerful ku4webApp Test Bundle. This test bundle enables developers to follow a TDD workflow and write deep, atomic unit tests for every aspect of their ku4js-webApp web application.</p>
 
 <p>The API tables in each section of the documentation contain three columns.</p>
 
@@ -348,6 +348,12 @@
 
 <div class="highlight highlight-javascript"><pre>$.ku4webApp.stateMachine({
     <span class="pl-c">//METHODS GO HERE</span>
+    <span class="pl-en">METHOD</span>: <span class="pl-st">function</span>() { },
+    <span class="pl-en">CALLBACK</span>: <span class="pl-st">function</span>() { }
+},
+{
+    <span class="pl-c">//MEDIATOR SUBSCRIPTIONS GO HERE</span>
+    <span class="pl-s1"><span class="pl-pds">"</span>SUBSCRIPTION<span class="pl-pds">"</span></span><span class="pl-k">:</span> CALLBACK
 });</pre></div>
 
 <h2>
