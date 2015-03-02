@@ -55,15 +55,15 @@ $.ku4webApp.config.navigator = {
         "ku4default":   "card.list"
     },
     "card.list": {
-        model: "card",
+        stateMachine: "",
         method: "listCards"
     },
     "card.add": {
-        model: "card",
+        stateMachine: "",
         method: "createCard"
     },
     "card.edit": {
-        model: "card",
+        stateMachine: "",
         method: "editCard"
     }
 };
@@ -139,6 +139,7 @@ $.ku4webApp.config.validators = {
 
 $.ku4webApp.controller("card", {
     list: function() {
+        console.log(this.$stateMachine())
         this.$stateMachine().listCards();
         return this;
     },
@@ -313,10 +314,10 @@ $.ku4webApp.stateMachine({
         return this;
     },
     updateCard: function(dto) {
-        if(this.is("UpdateCard")) return this;
+        if(!(this.is("AddCard") || this.is("EditCard"))) return this;
 
         this.$model("card").updateCard(dto);
-        this.set("UpdateCard");
+        this.set("CardsListed");
         return this;
     }
 });

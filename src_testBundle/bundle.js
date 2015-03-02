@@ -67,6 +67,9 @@ bundle.prototype = {
         var app = this._app.prodModel();
         return $.ku4webApp.models[name](this._mediator, app.serviceFactory.onServiceCall(this._onServiceCall), app.socketFactory, app.storeFactory, app.validatorFactory, this._app.state);
     },
+    stateMachine: function() {
+        return $.ku4webApp.$stateMachine(this._app.prodModel().modelFactory);
+    },
     view: function(name) {
         return $.ku4webApp.views[name](this._app.prodModel());
     },

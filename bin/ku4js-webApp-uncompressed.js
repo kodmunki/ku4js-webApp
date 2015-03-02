@@ -440,8 +440,9 @@ $.ku4webApp.store = function(mediator, config, key, collection) {
     return new store(mediator, config, key, collection);
 };
 
-function navigator(modelFactory, config) {
+function navigator(modelFactory, config, stateMachine) {
     this._modelFactory = modelFactory;
+    this._stateMachine = stateMachine;
     this._config = config;
     this._routes = ($.exists(config)) ? $.hash(config.ku4routes) : $.hash();
     this._catchAll = this._routes.find("ku4default");
@@ -534,11 +535,14 @@ navigator.prototype = {
             confg = config[key];
 
         if (!$.exists(confg)) return this;
-        var modelName = confg.model,
+        var stateMachine = confg.stateMachine,
+            modelName = confg.model,
             methodName = confg.method,
-            model = this._modelFactory.create(modelName);
-
-        if ($.exists(modelName) && $.exists(methodName)) {
+            model = ($.exists(stateMachine))
+                ? this._stateMachine
+                : this._modelFactory.create(modelName);
+                
+        if (($.exists(stateMachine) || $.exists(modelName)) && $.exists(methodName)) {
             try {
                 model[methodName].apply(model, args);
             }
@@ -578,8 +582,8 @@ navigator.prototype = {
     }
 };
 
-$.ku4webApp.navigator = function(modelFactory, config) {
-    return new navigator(modelFactory, config);
+$.ku4webApp.navigator = function(modelFactory, config, stateMachine) {
+    return new navigator(modelFactory, config, stateMachine);
 };
 
 function abstractTemplate(config) {
@@ -783,11 +787,11 @@ function app(name) {
     this.modelFactory = app.modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, this._state);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
-    this.navigator = app.navigator(this.modelFactory, app.config.navigator);
     this.mediator = mediator;
 
     var stateMachine = $.ku4webApp.$stateMachine;
     this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
+    this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 }
 app.prototype = {
     logErrors: function() {

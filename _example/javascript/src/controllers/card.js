@@ -1,5 +1,6 @@
 $.ku4webApp.controller("card", {
     list: function() {
+        console.log(this.$stateMachine())
         this.$stateMachine().listCards();
         return this;
     },

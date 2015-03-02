@@ -1,5 +1,6 @@
-function navigator(modelFactory, config) {
+function navigator(modelFactory, config, stateMachine) {
     this._modelFactory = modelFactory;
+    this._stateMachine = stateMachine;
     this._config = config;
     this._routes = ($.exists(config)) ? $.hash(config.ku4routes) : $.hash();
     this._catchAll = this._routes.find("ku4default");
@@ -92,11 +93,14 @@ navigator.prototype = {
             confg = config[key];
 
         if (!$.exists(confg)) return this;
-        var modelName = confg.model,
+        var stateMachine = confg.stateMachine,
+            modelName = confg.model,
             methodName = confg.method,
-            model = this._modelFactory.create(modelName);
-
-        if ($.exists(modelName) && $.exists(methodName)) {
+            model = ($.exists(stateMachine))
+                ? this._stateMachine
+                : this._modelFactory.create(modelName);
+                
+        if (($.exists(stateMachine) || $.exists(modelName)) && $.exists(methodName)) {
             try {
                 model[methodName].apply(model, args);
             }
@@ -136,6 +140,6 @@ navigator.prototype = {
     }
 };
 
-$.ku4webApp.navigator = function(modelFactory, config) {
-    return new navigator(modelFactory, config);
+$.ku4webApp.navigator = function(modelFactory, config, stateMachine) {
+    return new navigator(modelFactory, config, stateMachine);
 };

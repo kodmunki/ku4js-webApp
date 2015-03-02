@@ -70,6 +70,9 @@ bundle.prototype = {
         var app = this._app.prodModel();
         return $.ku4webApp.models[name](this._mediator, app.serviceFactory.onServiceCall(this._onServiceCall), app.socketFactory, app.storeFactory, app.validatorFactory, this._app.state);
     },
+    stateMachine: function() {
+        return $.ku4webApp.$stateMachine(this._app.prodModel().modelFactory);
+    },
     view: function(name) {
         return $.ku4webApp.views[name](this._app.prodModel());
     },
@@ -96,20 +99,26 @@ function app() {
     this.validatorFactory = app.validatorFactory(app.config.validators);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
-    this.navigator = app.navigator(this.prodModel().modelFactory, app.config.navigator);
-
-    var stateMachine = $.ku4webApp.$stateMachine;
-    this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.stubModel().modelFactory) : null;
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },
     throwErrors: function() { this.mediator.throwErrors(); return this; },
     stubModel: function() {
         this.modelFactory = $.ku4webApp_testBundle.stubModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this._onModelCall);
+
+        var stateMachine = $.ku4webApp.$stateMachine;
+        this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
+        this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
+
         return this;
     },
     prodModel: function() {
         this.modelFactory = $.ku4webApp_testBundle.testModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this.state);
+
+        var stateMachine = $.ku4webApp.$stateMachine;
+        this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
+        this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
+
         return this;
     },
     onModelCall: function(onModelCall) { this._onModelCall = onModelCall; return this; },

@@ -4,15 +4,15 @@ $.ku4webApp.config.navigator = {
         "ku4default":   "card.list"
     },
     "card.list": {
-        model: "card",
+        stateMachine: "",
         method: "listCards"
     },
     "card.add": {
-        model: "card",
+        stateMachine: "",
         method: "createCard"
     },
     "card.edit": {
-        model: "card",
+        stateMachine: "",
         method: "editCard"
     }
 };

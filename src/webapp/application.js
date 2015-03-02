@@ -11,11 +11,11 @@ function app(name) {
     this.modelFactory = app.modelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, this._state);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
-    this.navigator = app.navigator(this.modelFactory, app.config.navigator);
     this.mediator = mediator;
 
     var stateMachine = $.ku4webApp.$stateMachine;
     this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
+    this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 }
 app.prototype = {
     logErrors: function() {
