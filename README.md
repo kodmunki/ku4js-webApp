@@ -11,7 +11,7 @@ This project contains everything needed to create a compact and powerful MVC cli
 
 The ku4js-webApp library, at its core, consists of Models, Views, Controllers, Templates, and Configs. The following documentation discusses each of these parts, their roll in a ku4js-webApp application and their various components.
 
-This documentation also disucsses the incredibly powerful ku4webApp Test Bundle. This test bundle enables developers to follow a TDD workflow and write deep, atomic unit tests for every aspect of their ku4js-webApp web application.
+This documentation also discusses the incredibly powerful ku4webApp Test Bundle. This test bundle enables developers to follow a TDD workflow and write deep, atomic unit tests for every aspect of their ku4js-webApp web application.
 
 The API tables in each section of the documentation contain three columns.
 
