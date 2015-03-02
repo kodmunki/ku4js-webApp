@@ -7,12 +7,35 @@ $(function() {
 
     test("UNIT TEST NAME", function() {
         expect(1);
-        var bundle = $.ku4webAppUT.bundle().throwErrors(),
-            controller = bundle.controller("NAME");
 
-        bundle.onModelCall("MODEL_METHOD_NAME", function (data) {
-            equal(data, null);
-        });
-        controller.METHOD();
+        //NOTE: Though the test bundle data could be set outside of an individual
+        //      test and made global for the module, it is strongly discouraged
+        //      as the moment stateful concepts are introduced it can lead to
+        //      confusion in test development due to the lack of atomicity.
+
+        var bundle = $.ku4webAppUT.bundle();
+
+        //NOTE: For tests that require the reading of form data, you can easily
+        //      create a stub form from your existing templates using the bundle,
+        //      place it on the test DOM, write to it, and then call your methods.
+        //      The example below appends your template returned from render method
+        //      METHOD at template NAME to the #qunit-fixture. The following line
+        //      writes DATA to the form configured with NAME in your form config.
+
+         $("#qunit-fixture").append(bundle.template("NAME").METHOD());
+        bundle.form("NAME").write(DATA);
+
+        //NOTE: You can implement assertions to run after the controller calls the
+        //      expected stateMachine or model method named METHOD_NAME. The
+        //      passed assertion function will be called when the stateMachine or
+        //      model method named METHOD_NAME is called enabling you to investigate
+        //      what data your controller is passing to the expected stateMachine
+        //      or model
+
+        bundle
+            .onModelCall("METHOD_NAME", function (data) {
+                equal(data, null);
+            });
+            .controller("NAME").METHOD();
     });
 });
