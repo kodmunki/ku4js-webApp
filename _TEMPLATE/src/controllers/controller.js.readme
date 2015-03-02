@@ -1,6 +1,8 @@
 /* Has access to the following protected methods
     $model(NAME): Retrieves the model named NAME
+    $stateMachine(): Retrieves the stateMachine is defined
     $form(NAME): Retrieves the form named NAME
+    $navigator(): Retrieves global navigator
  */
 
 $.ku4webApp.controller("NAME", {

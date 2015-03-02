@@ -1,0 +1,17 @@
+/* Has access to the following protected methods
+    $model(NAME): Retrieves the model named NAME
+    is(value:String) Returns true if the current state is the current value
+    set(value:String) Sets the current state
+    read(key:String) Returns the value stored at key
+    write(key:String, value:Object) Writes a value to store at key
+ */
+
+$.ku4webApp.stateMachine({
+    //METHODS GO HERE
+    METHOD: function() { },
+    CALLBACK: function() { }
+},
+{
+    //MEDIATOR SUBSCRIPTIONS GO HERE
+    "SUBSCRIPTION": CALLBACK
+});

@@ -1,6 +1,7 @@
 /* Has access to the following protected methods
     $template(NAME): Retrieves the template named NAME
     $form(NAME): Retrieves the form named NAME
+    $navigator(): Retrieves global navigator
  */
 
 $.ku4webApp.view("NAME", {
