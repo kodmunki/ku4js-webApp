@@ -5,16 +5,11 @@ $(function() {
 
     module("controller.NAME");
 
-    var bundle = $.ku4webAppUT.bundle().throwErrors(),
-        controller = bundle.controller("NAME");
-
-    test("new", function() {
-        expect(1);
-        ok(controller);
-    });
-
     test("UNIT TEST NAME", function() {
         expect(1);
+        var bundle = $.ku4webAppUT.bundle().throwErrors(),
+            controller = bundle.controller("NAME");
+
         bundle.onModelCall("MODEL_METHOD_NAME", function (data) {
             equal(data, null);
         });

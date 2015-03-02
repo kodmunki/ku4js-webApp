@@ -27,15 +27,17 @@ $(function() {
     });
 
     test("add", function() {
-        $("#qunit-fixture").append(bundle.template("card").renderAddCardForm());
+        expect(1);
 
         var card = {
             "description": "description1",
             "name": "card1",
             "value": 1.00
         };
-        expect(1);
+
+        $("#qunit-fixture").append(bundle.template("card").renderAddCardForm());
         bundle.form("card").write(card);
+
         bundle.onModelCall("addCard", function (dto) {
             deepEqual(dto.toObject(), card);
         });
