@@ -63,6 +63,7 @@ bundle.prototype = {
     },
     setState: function(value) {
         this._app.stateMachine._state.set(value);
+        return this;
     },
     template: function(name) {
         return this._app.prodModel().templateFactory.create(name);
