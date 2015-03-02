@@ -2,7 +2,7 @@ $(function() {
 
     module("$.ku4webApp.navigator");
 
-    var app = $.ku4webApp_testBundle.app(),
+    var app = $.ku4webApp_testBundle.app().throwErrors(),
         mediator = $.mediator(),
         serviceFactory = app.serviceFactory,
         socketFactory = app.socketFactory,
@@ -42,16 +42,23 @@ $(function() {
     });
 
     test("execute", function () {
-        expect(1);
+        expect(2);
 
         function assert1() {
             deepEqual($.list(arguments).toArray(), [1,2,3,4,5,6]);
             mediator.unsubscribe("onMethod2", 1);
         }
+
+        function assert2() {
+            equal(arguments.length, 0);
+            mediator.unsubscribe("onMethod0", 1);
+        }
+
         mediator.subscribe("onMethod2", assert1, null, 1);
         navigator.execute("test.hash2_ku4_WzEsMiwzLDQsNSw2XQ==");
 
-        //raises(function() { navigator.execute("test.hash2_ku4_WzEsMiwzLDQs") });
+        mediator.subscribe("onMethod0", assert2, null, 1);
+        navigator.execute("test.hash2_ku4_WzEsMiwzLDQs");
     });
 
     test("executeOrDefault", function () {

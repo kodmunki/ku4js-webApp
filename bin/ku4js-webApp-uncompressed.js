@@ -446,7 +446,7 @@ function navigator(modelFactory, config, stateMachine) {
     this._config = config;
     this._routes = ($.exists(config)) ? $.hash(config.ku4routes) : $.hash();
     this._catchAll = this._routes.find("ku4default");
-    this._throwErrors = 0;
+    this._exceptionRule = 0;
     this._mute = false;
 
     var me = this;
@@ -460,9 +460,9 @@ function navigator(modelFactory, config, stateMachine) {
     else if($.exists(window.attachEvent)) window.attachEvent("onhashchange", onhashchange);
 }
 navigator.prototype = {
-    throwErrors: function() { this._throwErrors = 2; return this; },
-    logErrors: function() { this._throwErrors = 1; return this; },
-    catchErrors: function() { this._throwErrors = 0; return this; },
+    throwErrors: function() { this._exceptionRule = 2; return this; },
+    logErrors: function() { this._exceptionRule = 1; return this; },
+    catchErrors: function() { this._exceptionRule = 0; return this; },
 
     hashEquals: function(value) {
         return this.read() == value;
@@ -550,6 +550,7 @@ navigator.prototype = {
                 try {
                     var catchAll = config[this._catchAll],
                         catchAllModel = this._modelFactory.create(catchAll.model);
+
                     catchAllModel[catchAll.method]();
                 }
                 catch(e) {
@@ -574,7 +575,7 @@ navigator.prototype = {
         setTimeout(function() { callback(); }, 800);
     },
     _alertException: function(e, modelName, methodName) {
-        var t = this._throwErrors,
+        var t = this._exceptionRule,
             exception = $.ku4exception("$.ku4webApp.navigator",
                 $.str.format("{0}. Model: {1}, Method: {2}", e.message, modelName, methodName));
         if(t == 2) throw exception;

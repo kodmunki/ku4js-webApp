@@ -5,8 +5,6 @@ $.ku4webAppUT = { };
 
 function bundle() {
     var app = $.ku4webApp_testBundle.app();
-    this._mediator = app.mediator;
-    this._navigator = app.navigator;
     this._app = app;
 
     this._onModelCall = $.mediator();
@@ -16,23 +14,9 @@ function bundle() {
        .onServiceCall(this._onServiceCall);
 }
 bundle.prototype = {
-    mediator: function() { return this._mediator; },
-    navigator: function() { return this._navigator; },
-    logErrors: function() {
-        this._mediator.logErrors();
-        this._navigator.logErrors();
-        return this;
-    },
-    throwErrors: function() {
-        this._mediator.throwErrors();
-        this._navigator.throwErrors();
-        return this;
-    },
-    catchErrors: function() {
-        this._mediator.catchErrors();
-        this._navigator.catchErrors();
-        return this;
-    },
+    throwErrors: function() { this._app.throwErrors(); },
+    logErrors: function() { this._app.logErrors(); },
+    catchErrors: function() { this._app.catchErrors(); },
     onModelCall: function(methodName, func, scope) {
         this._onModelCall.subscribe(methodName, function() {
             func.apply(scope, arguments);
@@ -97,21 +81,23 @@ function app() {
     this.validatorFactory = app.validatorFactory(app.config.validators);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
+
+    this.prodModel().throwErrors();
 }
 app.prototype = {
-    logErrors: function() {
-        this._mediator.logErrors();
-        this._navigator.logErrors();
+    throwErrors: function() {
+        this._exceptionRule = 2;
+        this._configureExceptionRule();
         return this;
     },
-    throwErrors: function() {
-        this._mediator.throwErrors();
-        this._navigator.throwErrors();
+    logErrors: function() {
+        this._exceptionRule = 1;
+        this._configureExceptionRule();
         return this;
     },
     catchErrors: function() {
-        this._mediator.catchErrors();
-        this._navigator.catchErrors();
+        this._exceptionRule = 0;
+        this._configureExceptionRule();
         return this;
     },
     stubModel: function() {
@@ -121,6 +107,7 @@ app.prototype = {
         this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 
+        this._configureExceptionRule();
         return this;
     },
     prodModel: function() {
@@ -130,10 +117,20 @@ app.prototype = {
         this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 
+        this._configureExceptionRule();
         return this;
     },
     onModelCall: function(onModelCall) { this._onModelCall = onModelCall; return this; },
-    onServiceCall: function(onServiceCall) { this._onServiceCall = onServiceCall; return this; }
+    onServiceCall: function(onServiceCall) { this._onServiceCall = onServiceCall; return this; },
+
+    _configureExceptionRule: function() {
+        var m = this.mediator, n = this.navigator;
+        switch (this._exceptionRule) {
+            case 2: m.throwErrors(); n.throwErrors(); break;
+            case 1: m.logErrors(); n.logErrors(); break;
+            case 0: m.catchErrors(); n.catchErrors(); break;
+        }
+    }
 };
 $.ku4webApp_testBundle.app = function() { return new app(); };
 

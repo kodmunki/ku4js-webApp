@@ -10,7 +10,6 @@ $(function() {
     //      your tests may fail unexpectedly as the tests are not truly atomic.
 
     var bundle = $.ku4webAppUT.bundle().throwErrors(),
-        mediator = bundle.mediator(),
         model = bundle.model("NAME");
 
     //NOTE: This creates a synchronous QUnit test. See QUnit documentation for
