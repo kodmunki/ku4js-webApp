@@ -1,0 +1,17 @@
+/*  You can define your states here as an enumeration.
+ *  This prevents errors due mistyping strings. Simply
+ *  add your states here and then call for them in your
+ *  call for them in your state machine.
+ *
+ *  Heeding the example code below, you could check your
+ *  current stateMachine state by calling:
+ *
+ *      this.is(appState.LoggedOut);
+ *
+ *  From within one of your stateMachine methods.
+ */
+
+var appState = $.enumeration([
+    "LoggedOut",
+    "LoggedIn"
+]);
