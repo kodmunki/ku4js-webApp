@@ -2,7 +2,7 @@ $(function() {
 
     module("$.ku4webApp.navigator");
 
-    var app = $.ku4webApp_testBundle.app().throwErrors(),
+    var app = $.ku4webApp_testBundle.app(),
         mediator = $.mediator(),
         serviceFactory = app.serviceFactory,
         socketFactory = app.socketFactory,

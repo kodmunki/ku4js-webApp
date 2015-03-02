@@ -14,8 +14,6 @@ function bundle() {
 
     app.onModelCall(this._onModelCall)
        .onServiceCall(this._onServiceCall);
-
-    this.throwErrors();
 }
 bundle.prototype = {
     mediator: function() { return this._mediator; },
@@ -101,12 +99,25 @@ function app() {
     this.formFactory = app.formFactory(app.config.forms);
 }
 app.prototype = {
-    logErrors: function() { this.mediator.logErrors(); return this; },
-    throwErrors: function() { this.mediator.throwErrors(); return this; },
+    logErrors: function() {
+        this._mediator.logErrors();
+        this._navigator.logErrors();
+        return this;
+    },
+    throwErrors: function() {
+        this._mediator.throwErrors();
+        this._navigator.throwErrors();
+        return this;
+    },
+    catchErrors: function() {
+        this._mediator.catchErrors();
+        this._navigator.catchErrors();
+        return this;
+    },
     stubModel: function() {
         this.modelFactory = $.ku4webApp_testBundle.stubModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this._onModelCall);
-
-        var stateMachine = $.ku4webApp.$stateMachine;
+        var app = $.ku4webApp,
+            stateMachine = $.ku4webApp.$stateMachine;
         this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 
@@ -114,8 +125,8 @@ app.prototype = {
     },
     prodModel: function() {
         this.modelFactory = $.ku4webApp_testBundle.testModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this.state);
-
-        var stateMachine = $.ku4webApp.$stateMachine;
+        var app = $.ku4webApp,
+            stateMachine = $.ku4webApp.$stateMachine;
         this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 

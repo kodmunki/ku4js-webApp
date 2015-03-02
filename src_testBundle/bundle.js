@@ -11,8 +11,6 @@ function bundle() {
 
     app.onModelCall(this._onModelCall)
        .onServiceCall(this._onServiceCall);
-
-    this.throwErrors();
 }
 bundle.prototype = {
     mediator: function() { return this._mediator; },

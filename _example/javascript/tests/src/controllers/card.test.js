@@ -2,7 +2,7 @@ $(function() {
 
     module("controller.card");
 
-    var bundle = $.ku4webAppUT.bundle().throwErrors(),
+    var bundle = $.ku4webAppUT.bundle(),
         controller = bundle.controller("card");
 
     test("new", function() {
