@@ -30,11 +30,11 @@ bundle.prototype = {
         return this;
     },
     subscribe: function(name, func, scope, id) {
-        this._mediator.subscribe(name, func, scope, id);
+        this._app.mediator.subscribe(name, func, scope, id);
         return this;
     },
     unsubscribe: function(name, id) {
-        this._mediator.subscribe(name, id);
+        this._app.mediator.subscribe(name, id);
         return this;
     },
     initCollection: function(name, data) {
@@ -50,7 +50,7 @@ bundle.prototype = {
     },
     model: function(name) {
         var app = this._app.prodModel();
-        return $.ku4webApp.models[name](this._mediator, app.serviceFactory.onServiceCall(this._onServiceCall), app.socketFactory, app.storeFactory, app.validatorFactory, this._app.state);
+        return $.ku4webApp.models[name](this._app.mediator, app.serviceFactory.onServiceCall(this._onServiceCall), app.socketFactory, app.storeFactory, app.validatorFactory, this._app.state);
     },
     stateMachine: function() {
         return $.ku4webApp.$stateMachine(this._app.prodModel().modelFactory);
