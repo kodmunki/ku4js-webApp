@@ -132,7 +132,7 @@ API and template documentation follow:
 | API | Return | Description |
 | --- | --- | --- |
 | .$model(name:_String_) | model | Retrieves the model named "name". |
-| .$stateMachine() | stateMachine | Retrieves the state machine, if one is defined. _(See [State Machine](#stateMachine) for details. |
+| .$stateMachine() | stateMachine | Retrieves the state machine, if one is defined. _(See [State Machine](#state-machine) for details. |
 | .$form(name:_String_) | form | Retrieves the form named "name". |
 | .$navigator() | navigator | Retrieves the global navigator. |
 
