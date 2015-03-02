@@ -253,15 +253,34 @@ $.ku4webApp.state = function(value) {
     return new state(value);
 };
 
-$.ku4webApp.stateMachine = function(proto) {
+$.ku4webApp.stateMachine = function(proto, subscriptions) {
     function stateMachine(modelFactory) {
         stateMachine.base.call(this, modelFactory);
     }
     stateMachine.prototype = proto;
     $.Class.extend(stateMachine, abstractStateMachine);
 
-    $.ku4webApp.$stateMachine = function(modelFactory) {
-        return new stateMachine(modelFactory);
+    $.ku4webApp.$stateMachine = function(mediator, modelFactory) {
+        var _stateMachine = new stateMachine(modelFactory);
+
+        if($.exists(subscriptions)) {
+            $.hash(subscriptions).each(function (obj) {
+                var key = obj.key,
+                    value = obj.value,
+                    id = $.str.format("ku4webApp.stateMachine.{0}", value),
+                    method = _stateMachine[value];
+
+                try {
+                    mediator
+                        .unsubscribe(key, id)
+                        .subscribe(key, method, _stateMachine, id);
+                }
+                catch (e) {
+                    throw $.ku4exception("$.ku4webApp.stateMachine", $.str.format("$.ku4webApp.stateMachine cannot subscribe to mediator with name: {0} or method: {1}.\n\nmessage:{2}\n\n", key, value, e.message));
+                }
+            });
+        }
+        return _stateMachine;
     }
 };
 
@@ -536,7 +555,7 @@ navigator.prototype = {
 
         if (!$.exists(confg)) return this;
         var stateMachine = confg.stateMachine,
-            modelName = confg.model,
+            modelName = $.exists(stateMachine) ? "stateMachine" : confg.model,
             methodName = confg.method,
             model = ($.exists(stateMachine))
                 ? this._stateMachine
@@ -549,7 +568,9 @@ navigator.prototype = {
             catch (e) {
                 try {
                     var catchAll = config[this._catchAll],
-                        catchAllModel = this._modelFactory.create(catchAll.model);
+                        catchAllModel = ($.exists(stateMachine))
+                            ? this._stateMachine
+                            : this._modelFactory.create(catchAll.model);
 
                     catchAllModel[catchAll.method]();
                 }
@@ -791,7 +812,7 @@ function app(name) {
     this.mediator = mediator;
 
     var stateMachine = $.ku4webApp.$stateMachine;
-    this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
+    this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(mediator, this.modelFactory) : null;
     this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 }
 app.prototype = {

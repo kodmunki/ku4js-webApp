@@ -31,7 +31,7 @@ app.prototype = {
         this.modelFactory = $.ku4webApp_testBundle.stubModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this._onModelCall);
         var app = $.ku4webApp,
             stateMachine = $.ku4webApp.$stateMachine;
-        this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
+        this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.mediator, this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 
         this._configureExceptionRule();
@@ -41,7 +41,7 @@ app.prototype = {
         this.modelFactory = $.ku4webApp_testBundle.testModelFactory(this.mediator, this.serviceFactory.onServiceCall(this._onServiceCall), this.socketFactory, this.storeFactory, this.validatorFactory, this.state);
         var app = $.ku4webApp,
             stateMachine = $.ku4webApp.$stateMachine;
-        this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
+        this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.mediator, this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 
         this._configureExceptionRule();

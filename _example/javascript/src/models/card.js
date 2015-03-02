@@ -100,7 +100,6 @@ $.ku4webApp.model("card", {
                 }
             }, this);
         }, this);
-
     },
 
     onCardAdded: function(serverResponse) {

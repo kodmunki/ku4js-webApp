@@ -14,7 +14,7 @@ function app(name) {
     this.mediator = mediator;
 
     var stateMachine = $.ku4webApp.$stateMachine;
-    this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
+    this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(mediator, this.modelFactory) : null;
     this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
 }
 app.prototype = {

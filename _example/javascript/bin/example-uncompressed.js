@@ -139,7 +139,6 @@ $.ku4webApp.config.validators = {
 
 $.ku4webApp.controller("card", {
     list: function() {
-        console.log(this.$stateMachine())
         this.$stateMachine().listCards();
         return this;
     },
@@ -263,7 +262,6 @@ $.ku4webApp.model("card", {
                 }
             }, this);
         }, this);
-
     },
 
     onCardAdded: function(serverResponse) {

@@ -94,7 +94,7 @@ navigator.prototype = {
 
         if (!$.exists(confg)) return this;
         var stateMachine = confg.stateMachine,
-            modelName = confg.model,
+            modelName = $.exists(stateMachine) ? "stateMachine" : confg.model,
             methodName = confg.method,
             model = ($.exists(stateMachine))
                 ? this._stateMachine
@@ -107,7 +107,9 @@ navigator.prototype = {
             catch (e) {
                 try {
                     var catchAll = config[this._catchAll],
-                        catchAllModel = this._modelFactory.create(catchAll.model);
+                        catchAllModel = ($.exists(stateMachine))
+                            ? this._stateMachine
+                            : this._modelFactory.create(catchAll.model);
 
                     catchAllModel[catchAll.method]();
                 }
