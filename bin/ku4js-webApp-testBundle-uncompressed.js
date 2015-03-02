@@ -52,14 +52,17 @@ bundle.prototype = {
         var app = this._app.prodModel();
         return $.ku4webApp.models[name](this._app.mediator, app.serviceFactory.onServiceCall(this._onServiceCall), app.socketFactory, app.storeFactory, app.validatorFactory, this._app.state);
     },
-    stateMachine: function() {
-        return $.ku4webApp.$stateMachine(this._app.prodModel().modelFactory);
-    },
     view: function(name) {
         return $.ku4webApp.views[name](this._app.prodModel());
     },
     controller: function(name) {
         return $.ku4webApp.controllers[name](this._app.stubModel());
+    },
+    stateMachine: function() {
+        return $.ku4webApp.$stateMachine(this._app.prodModel().modelFactory);
+    },
+    setState: function(value) {
+        this._app.stateMachine._state.set(value);
     },
     template: function(name) {
         return this._app.prodModel().templateFactory.create(name);
