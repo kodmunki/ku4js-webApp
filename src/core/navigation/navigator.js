@@ -70,12 +70,12 @@ navigator.prototype = {
         catch(e) { this.execute(hash); }
     },
     forward: function(callback) {
-        if($.exists(callback)) this._setEventListener(callback);
+        if($.exists(callback)) this._setCallback(callback);
         window.history.forward();
         return this;
     },
     back: function(callback) {
-        if($.exists(callback)) this._setEventListener(callback);
+        if($.exists(callback)) this._setCallback(callback);
         window.history.back();
         return this;
     },
@@ -124,19 +124,8 @@ navigator.prototype = {
         if($.isNullOrEmpty(value)) return "";
         return $.json.deserialize($.str.decodeBase64(value));
     },
-    _setEventListener: function(callback) {
-        if($.exists(window.addEventListener)) {
-            window.addEventListener("hashchange", function(e) {
-                window.removeEventListener("hashchange", arguments.callee);
-                setTimeout(function() { callback(); }, 800);
-            });
-        }
-        else if($.exists(window.attachEvent)) {
-            window.attachEvent("onhashchange", function(e) {
-                window.detachEvent("onhashchange", arguments.callee);
-                setTimeout(function() { callback(); }, 800);
-            });
-        }
+    _setCallback: function(callback) {
+        setTimeout(function() { callback(); }, 800);
     },
     _alertException: function(e, modelName, methodName) {
         var t = this._throwErrors,

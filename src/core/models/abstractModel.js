@@ -27,4 +27,3 @@ abstractModel.prototype = {
         return this;
     }
 };
-$.ku4webApp.abstractModel = abstractModel;

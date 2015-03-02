@@ -8,8 +8,10 @@ function app() {
     this.validatorFactory = app.validatorFactory(app.config.validators);
     this.templateFactory = app.templateFactory(app.config.templates);
     this.formFactory = app.formFactory(app.config.forms);
-    this.prodModel();
-    this.navigator = app.navigator(this.modelFactory, app.config.navigator);
+    this.navigator = app.navigator(this.prodModel().modelFactory, app.config.navigator);
+
+    var stateMachine = $.ku4webApp.$stateMachine;
+    this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.stubModel().modelFactory) : null;
 }
 app.prototype = {
     logErrors: function() { this.mediator.logErrors(); return this; },

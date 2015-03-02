@@ -139,23 +139,23 @@ $.ku4webApp.config.validators = {
 
 $.ku4webApp.controller("card", {
     list: function() {
-        this.$model("card").listCards();
+        this.$stateMachine().listCards();
         return this;
     },
     create: function() {
-        this.$model("card").createCard();
+        this.$stateMachine().createCard();
         return this;
     },
     add: function() {
-        this.$model("card").addCard(this.$form("card").read().remove("id"));
+        this.$stateMachine().addCard(this.$form("card").read().remove("id"));
         return this;
     },
     edit: function(id) {
-        this.$model("card").editCard(id);
+        this.$stateMachine().editCard(id);
         return this;
     },
     update: function() {
-        this.$model("card").updateCard(this.$form("card").read());
+        this.$stateMachine().updateCard(this.$form("card").read());
         return this;
     }
 });
@@ -281,6 +281,44 @@ $.ku4webApp.model("card", {
 {
     "svc+cardsListed": "onCardsListed",
     "svc-cardsListed": "onCardsListedError"
+});
+
+$.ku4webApp.stateMachine({
+    listCards: function() {
+        if(this.is("CardsListed")) return this;
+
+        this.$model("card").listCards();
+        this.set("CardsListed");
+        return this;
+    },
+    createCard:  function() {
+        if(this.is("CreateCard")) return this;
+
+        this.$model("card").createCard();
+        this.set("CreateCard");
+        return this;
+    },
+    addCard: function(dto) {
+        if(this.is("AddCard")) return this;
+
+        this.$model("card").addCard(dto);
+        this.set("AddCard");
+        return this;
+    },
+    editCard: function(id) {
+        if(this.is("EditCard")) return this;
+
+        this.$model("card").editCard(id);
+        this.set("EditCard");
+        return this;
+    },
+    updateCard: function(dto) {
+        if(this.is("UpdateCard")) return this;
+
+        this.$model("card").updateCard(dto);
+        this.set("UpdateCard");
+        return this;
+    }
 });
 
 $.ku4webApp.template("card", {

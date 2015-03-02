@@ -1,22 +1,22 @@
 $.ku4webApp.controller("card", {
     list: function() {
-        this.$model("card").listCards();
+        this.$stateMachine().listCards();
         return this;
     },
     create: function() {
-        this.$model("card").createCard();
+        this.$stateMachine().createCard();
         return this;
     },
     add: function() {
-        this.$model("card").addCard(this.$form("card").read().remove("id"));
+        this.$stateMachine().addCard(this.$form("card").read().remove("id"));
         return this;
     },
     edit: function(id) {
-        this.$model("card").editCard(id);
+        this.$stateMachine().editCard(id);
         return this;
     },
     update: function() {
-        this.$model("card").updateCard(this.$form("card").read());
+        this.$stateMachine().updateCard(this.$form("card").read());
         return this;
     }
 });

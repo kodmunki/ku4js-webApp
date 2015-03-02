@@ -72,22 +72,22 @@ $.ku4webApp.validator = function(config) {
     return new validator(config);
 };
 
-function abstractController(modelFactory, formFactory, navigator) {
+function abstractController(modelFactory, formFactory, navigator, stateMachine) {
     this._modelFactory = classRefcheck("controllers", "modelFactory", modelFactory);
     this._formFactory = classRefcheck("controllers", "formFactory", formFactory);
     this._navigator = navigator;
+    this._stateMachine = stateMachine;
 }
 abstractController.prototype = {
     $model: function(name) { return this._modelFactory.create(name); },
     $form: function(name) { return this._formFactory.create(name); },
-    $navigator: function() { return this._navigator; }
+    $navigator: function() { return this._navigator; },
+    $stateMachine: function() { return this._stateMachine; }
 };
-$.ku4webApp.abstractController = abstractController;
 
 $.ku4webApp.controller = function(name, proto) {
-
-    function controller(modelFactory, formFactory, navigator) {
-        controller.base.call(this, modelFactory, formFactory, navigator);
+    function controller(modelFactory, formFactory, navigator, stateMachine) {
+        controller.base.call(this, modelFactory, formFactory, navigator, stateMachine);
     }
     controller.prototype = proto;
     $.Class.extend(controller, abstractController);
@@ -96,7 +96,7 @@ $.ku4webApp.controller = function(name, proto) {
         var className = $.str.format("$.ku4webApp.controllers.{0}", name),
             message = $.str.format("Requires a valid app. app= {0}", app);
         if(!$.exists(app)) throw $.ku4exception(className, message);
-        return new controller(app.modelFactory, app.formFactory, app.navigator);
+        return new controller(app.modelFactory, app.formFactory, app.navigator, app.stateMachine);
     }
 };
 
@@ -129,7 +129,19 @@ abstractModel.prototype = {
         return this;
     }
 };
-$.ku4webApp.abstractModel = abstractModel;
+
+function abstractStateMachine(modelFactory) {
+    this._modelFactory = classRefcheck("stateMachine", "modelFactory", modelFactory);
+    this._state = $.ku4webApp.state();
+}
+
+abstractStateMachine.prototype = {
+    is: function(value) { return this._state.is(value); },
+    set: function(value) { this._state.set(value); return this; },
+    read: function(key) { return this._state.read(key); },
+    write: function(key, value) { this._state.write(key, value); return this; },
+    $model: function(name) { return this._modelFactory.create(name); }
+};
 
 $.ku4webApp.model = function(name, proto, subscriptions) {
     function model(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, appState) {
@@ -239,6 +251,18 @@ state.prototype = {
 };
 $.ku4webApp.state = function(value) {
     return new state(value);
+};
+
+$.ku4webApp.stateMachine = function(proto) {
+    function stateMachine(modelFactory) {
+        stateMachine.base.call(this, modelFactory);
+    }
+    stateMachine.prototype = proto;
+    $.Class.extend(stateMachine, abstractStateMachine);
+
+    $.ku4webApp.$stateMachine = function(modelFactory) {
+        return new stateMachine(modelFactory);
+    }
 };
 
 function store(mediator, config, key, collection) {
@@ -488,12 +512,12 @@ navigator.prototype = {
         catch(e) { this.execute(hash); }
     },
     forward: function(callback) {
-        if($.exists(callback)) this._setEventListener(callback);
+        if($.exists(callback)) this._setCallback(callback);
         window.history.forward();
         return this;
     },
     back: function(callback) {
-        if($.exists(callback)) this._setEventListener(callback);
+        if($.exists(callback)) this._setCallback(callback);
         window.history.back();
         return this;
     },
@@ -542,19 +566,8 @@ navigator.prototype = {
         if($.isNullOrEmpty(value)) return "";
         return $.json.deserialize($.str.decodeBase64(value));
     },
-    _setEventListener: function(callback) {
-        if($.exists(window.addEventListener)) {
-            window.addEventListener("hashchange", function(e) {
-                window.removeEventListener("hashchange", arguments.callee);
-                setTimeout(function() { callback(); }, 800);
-            });
-        }
-        else if($.exists(window.attachEvent)) {
-            window.attachEvent("onhashchange", function(e) {
-                window.detachEvent("onhashchange", arguments.callee);
-                setTimeout(function() { callback(); }, 800);
-            });
-        }
+    _setCallback: function(callback) {
+        setTimeout(function() { callback(); }, 800);
     },
     _alertException: function(e, modelName, methodName) {
         var t = this._throwErrors,
@@ -772,6 +785,9 @@ function app(name) {
     this.formFactory = app.formFactory(app.config.forms);
     this.navigator = app.navigator(this.modelFactory, app.config.navigator);
     this.mediator = mediator;
+
+    var stateMachine = $.ku4webApp.$stateMachine;
+    this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
 }
 app.prototype = {
     logErrors: function() {

@@ -13,6 +13,9 @@ function app(name) {
     this.formFactory = app.formFactory(app.config.forms);
     this.navigator = app.navigator(this.modelFactory, app.config.navigator);
     this.mediator = mediator;
+
+    var stateMachine = $.ku4webApp.$stateMachine;
+    this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.modelFactory) : null;
 }
 app.prototype = {
     logErrors: function() {
