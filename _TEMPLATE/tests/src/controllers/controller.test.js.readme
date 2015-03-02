@@ -15,7 +15,7 @@ $(function() {
 
     test("UNIT TEST NAME", function() {
         expect(1);
-        bundle.onModelCall(function (data) {
+        bundle.onModelCall("MODEL_METHOD_NAME", function (data) {
             equal(data, null);
         });
         controller.METHOD();
