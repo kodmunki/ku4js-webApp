@@ -62,7 +62,6 @@ bundle.prototype = {
         return $.ku4webApp.$stateMachine(this._app.prodModel().modelFactory);
     },
     setState: function(value) {
-        console.log("SETSTATE: ", value)
         this._app.stateMachine._state.set(value);
         return this;
     },
@@ -113,8 +112,6 @@ app.prototype = {
 
         this.stateMachine = ($.isFunction(stateMachine)) ? stateMachine(this.mediator, this.modelFactory) : null;
         this.navigator = app.navigator(this.modelFactory, app.config.navigator, this.stateMachine);
-
-        console.log("STUBMODEL: ", this.stateMachine)
 
         if($.exists(this.stateMachine)) this.stateMachine.set(currentState);
 
