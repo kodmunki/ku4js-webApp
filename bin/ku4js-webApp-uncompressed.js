@@ -133,6 +133,7 @@ abstractModel.prototype = {
 function abstractStateMachine(modelFactory) {
     this._modelFactory = classRefcheck("stateMachine", "modelFactory", modelFactory);
     this._state = $.ku4webApp.state();
+    this._securityLock = $.lock();
 }
 
 abstractStateMachine.prototype = {
@@ -140,7 +141,12 @@ abstractStateMachine.prototype = {
     is: function(value) { return this._state.is(value); },
     set: function(value) { this._state.set(value); return this; },
     read: function(key) { return this._state.read(key); },
-    write: function(key, value) { this._state.write(key, value); return this; }
+    write: function(key, value) { this._state.write(key, value); return this; },
+    lock: function() { this._securityLock.lock(); return this; },
+    unlock: function() { this._securityLock.unlock(); return this; },
+    isLocked: function() { return this._securityLock.isLocked(); },
+    isUnlocked: function() { return !this.isLocked(); },
+    value: function() { return this._state.value(); }
 };
 
 $.ku4webApp.model = function(name, proto, subscriptions) {
@@ -188,9 +194,13 @@ function service(mediator, name, config) {
             mediator.notify(config.error, data, service.processId());
         }, this, config.success);
 
-        if($.exists(config.complete)) service.onError(function(data){
+        if($.exists(config.complete)) service.onComplete(function(data){
             mediator.notify(config.complete, data, service.processId());
         }, this, config.complete);
+
+        if($.exists(config.abort)) service.onAbort(function(data){
+            mediator.notify(config.abort, data, service.processId());
+        }, this, config.abort);
 
     this._service = service;
 }
@@ -247,6 +257,9 @@ state.prototype = {
     write: function(key, value) {
         this._data.update(key, value);
         return this;
+    },
+    value: function() {
+        return this._value;
     }
 };
 $.ku4webApp.state = function(value) {

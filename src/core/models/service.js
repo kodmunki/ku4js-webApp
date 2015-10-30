@@ -13,9 +13,13 @@ function service(mediator, name, config) {
             mediator.notify(config.error, data, service.processId());
         }, this, config.success);
 
-        if($.exists(config.complete)) service.onError(function(data){
+        if($.exists(config.complete)) service.onComplete(function(data){
             mediator.notify(config.complete, data, service.processId());
         }, this, config.complete);
+
+        if($.exists(config.abort)) service.onAbort(function(data){
+            mediator.notify(config.abort, data, service.processId());
+        }, this, config.abort);
 
     this._service = service;
 }

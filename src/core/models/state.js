@@ -14,6 +14,9 @@ state.prototype = {
     write: function(key, value) {
         this._data.update(key, value);
         return this;
+    },
+    value: function() {
+        return this._value;
     }
 };
 $.ku4webApp.state = function(value) {
