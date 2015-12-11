@@ -1,4 +1,4 @@
-(function(l){
+(function($){
 $.ku4webApp_testBundle = { };
 
 $.ku4webAppUT = { };
@@ -272,4 +272,4 @@ $.ku4webApp_testBundle.stubModelFactory = function(mediator, serviceFactory, soc
     return new stubModelFactory(mediator, serviceFactory, socketFactory, storeFactory, validatorFactory, onModelCall);
 };
 
-})();
+})(ku4js);

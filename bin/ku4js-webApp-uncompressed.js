@@ -1,4 +1,4 @@
-(function(l){
+(function($){
 $.ku4webApp = {
     config: {
         templates: { }
@@ -854,4 +854,4 @@ function classRefcheck(className, propertyName, property) {
     else return property;
 }
 
-})();
+})(ku4js);
