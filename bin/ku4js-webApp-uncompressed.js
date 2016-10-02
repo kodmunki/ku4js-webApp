@@ -19,7 +19,7 @@ form.prototype = {
         if($.exists(fieldConfig.spec)) field.spec(fieldConfig.spec);
         if($.exists(fieldConfig.maxDims)) field.maxDims(fieldConfig.maxDims);
         if((fieldConfig.required === true) && $.isFunction(field.required)) field.required();
-        if($.exists(fieldConfig.format) && $.isFunction(field.format)) field.format(fieldConfig.format);
+        if($.exists(fieldConfig.format) && $.isFunction(fieldConfig.format)) field.format(fieldConfig.format);
 
         if($.isNullOrEmpty(field.dom().name))
             throw $.ku4exception("form", "Form requires all field DOM elements have a valid 'name' attribute");
@@ -216,7 +216,13 @@ service.prototype = {
     lock: function() { this._service.lock(); return this; },
     unlock: function() { this._service.unlock(); return this; },
     abort: function() { this._service.abort(); return this; },
-    call: function(params) { this._service.call(params); return this; }
+    setRequestHeader: function(key, value) { this._service.setRequestHeader(key, value); return this; },
+    csrfToken: function(token) { this.setRequestHeader("X-Csrf-Token", token); return this; },
+    call: function(params) {
+        var csrf = $.cookie.find("csrf-token");
+        if($.exists(csrf)) this.csrfToken(csrf.replace("csrf-token=",""));
+        this._service.call(params); return this;
+    }
 };
 $.ku4webApp.service = function(mediator, name, config) {
     return new service(mediator, name, config);
