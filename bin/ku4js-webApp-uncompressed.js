@@ -202,6 +202,12 @@ function service(mediator, name, config) {
             mediator.notify(config.abort, data, service.processId());
         }, this, config.abort);
 
+        if($.exists(config.timeout)) service.onTimeout(function(data){
+            mediator.notify(config.timeout, data, service.processId());
+        }, this, config.abort);
+
+        if($.exists(config.timeoutms)) service.timeout(config.timeoutms);
+
     this._service = service;
 }
 service.prototype = {
@@ -215,6 +221,7 @@ service.prototype = {
 $.ku4webApp.service = function(mediator, name, config) {
     return new service(mediator, name, config);
 };
+
 
 var __ku4socket, io;
 function socketInstance() {
