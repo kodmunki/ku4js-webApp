@@ -29,7 +29,13 @@ service.prototype = {
     lock: function() { this._service.lock(); return this; },
     unlock: function() { this._service.unlock(); return this; },
     abort: function() { this._service.abort(); return this; },
-    call: function(params) { this._service.call(params); return this; }
+    setRequestHeader: function(key, value) { this._service.setRequestHeader(key, value); return this; },
+    csrfToken: function(token) { this.setRequestHeader("X-Csrf-Token", token); return this; },
+    call: function(params) {
+        var csrf = $.cookie.find("csrf-token");
+        if($.exists(csrf)) this.csrfToken(csrf.replace("csrf-token=",""));
+        this._service.call(params); return this;
+    }
 };
 $.ku4webApp.service = function(mediator, name, config) {
     return new service(mediator, name, config);
