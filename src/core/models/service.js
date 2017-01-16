@@ -26,6 +26,7 @@ function service(mediator, name, config) {
         }, this, config.abort);
 
         if($.exists(config.timeoutms)) service.timeout(config.timeoutms);
+        if($.exists(config.retries)) service.maxAttempts(config.retries);
 
     this._service = service;
 }
@@ -35,6 +36,7 @@ service.prototype = {
     lock: function() { this._service.lock(); return this; },
     unlock: function() { this._service.unlock(); return this; },
     abort: function() { this._service.abort(); return this; },
+    maxAttempts: function(value) { this._service.maxAttempts(value); return this; },
     setRequestHeader: function(key, value) { this._service.setRequestHeader(key, value); return this; },
     csrfToken: function(token) { this.setRequestHeader("X-Csrf-Token", token); return this; },
     call: function(params) {
